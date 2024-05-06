@@ -96,9 +96,9 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-img {
+.pimage {
   display: block;
-  max-width: 25em;
+  max-width: 15em;
   height: auto;
   margin-right: 1em;
 }
