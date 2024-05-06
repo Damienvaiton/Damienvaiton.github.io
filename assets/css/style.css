@@ -45,6 +45,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Raleway", sans-serif;
 }
 
+
+
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
@@ -92,6 +94,13 @@ h1, h2, h3, h4, h5, h6 {
 #header img {
   padding: 0;
   margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 25em;
+  height: auto;
+  margin-right: 1em;
 }
 
 #header .social-links {
