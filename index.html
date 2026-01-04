@@ -1,518 +1,887 @@
 <!DOCTYPE html>
 <html lang="fr">
+	<head>
+		<script>
+			(function (w, d, s, l, i) {
+				w[l] = w[l] || [];
+				w[l].push({
+					"gtm.start": new Date().getTime(),
+					event: "gtm.js",
+				});
+				var f = d.getElementsByTagName(s)[0],
+					j = d.createElement(s),
+					dl = l != "dataLayer" ? "&l=" + l : "";
+				j.async = true;
+				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+				f.parentNode.insertBefore(j, f);
+			})(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+		</script>
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-<head>
-  <script>(function (w, d, s, l, i) {
-    w[l] = w[l] || []; w[l].push({
-      'gtm.start':
-              new Date().getTime(), event: 'gtm.js'
-    }); var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-            'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-  })(window, document, 'script', 'dataLayer', 'GTM-5BB8W2X');</script>
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+		<title>
+			Damien Vaiton | Développeur Fullstack PHP Symfony à Bourg-en-Bresse
+		</title>
+		<meta
+			name="description"
+			content="Développeur Fullstack diplômé d'un BUT Informatique. Expert PHP, Symfony et mobile à Bourg-en-Bresse. Découvrez mes projets, mes compétences et mon CV."
+		/>
+		<meta
+			name="keywords"
+			content="Damien Vaiton, Développeur, Fullstack, PHP, Symfony, Bourg-en-Bresse, Portfolio, Android, Java, Stage, Alternance"
+		/>
+		<meta name="author" content="Damien Vaiton" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+			rel="stylesheet"
+		/>
 
-  <title>Damien Vaiton | Développeur Fullstack PHP Symfony à Bourg-en-Bresse</title>
-  <meta name="description" content="Développeur Fullstack diplômé d'un BUT Informatique. Expert PHP, Symfony et mobile à Bourg-en-Bresse. Découvrez mes projets, mes compétences et mon CV.">
-  <meta name="keywords" content="Damien Vaiton, Développeur, Fullstack, PHP, Symfony, Bourg-en-Bresse, Portfolio, Android, Java, Stage, Alternance">
-  <meta name="author" content="Damien Vaiton">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+		<link
+			href="assets/vendor/bootstrap/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet" />
+		<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+		<link
+			href="assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+			rel="stylesheet"
+		/>
+		<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+		<link href="assets/vendor/venobox/venobox.css" rel="stylesheet" />
 
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+		<link href="assets/css/style.css" rel="stylesheet" />
 
-  <link href="assets/css/style.css" rel="stylesheet">
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+			gtag("config", "UA-169007209-3");
+		</script>
+	</head>
 
-    gtag('config', 'UA-169007209-3');
-  </script>
-</head>
+	<body>
+		<noscript
+			><iframe
+				src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+				height="0"
+				width="0"
+				style="display: none; visibility: hidden"
+			></iframe
+		></noscript>
+		<header id="header" class="header-tops">
+			<div class="container">
+				<h1><a href="index.html">Damien Vaiton</a></h1>
+				<h2 style="color: #fff">
+					Je suis <span class="typing" style="color: #12d640"></span>
+				</h2>
 
-<body>
+				<nav class="nav-menu d-none d-lg-block">
+					<ul>
+						<li class="active">
+							<a href="#header"> <span>Accueil</span></a>
+						</li>
+						<li>
+							<a href="#about"><span>À propos</span></a>
+						</li>
+						<li>
+							<a href="#education"> <span>Formation</span></a>
+						</li>
+						<li>
+							<a href="#experience"> <span>Expériences</span></a>
+						</li>
+						<li>
+							<a href="#portfolio"> <span>Mes projets</span></a>
+						</li>
+						<li>
+							<a href="#skills"> <span>Compétences</span></a>
+						</li>
+						<li>
+							<a
+								href="https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing"
+								target="_blank"
+							>
+								<span>Mon CV</span></a
+							>
+						</li>
+						<li>
+							<a href="#contacts"> <span>Contact</span></a>
+						</li>
+					</ul>
+				</nav>
 
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X" height="0" width="0"
-                  style="display:none;visibility:hidden"></iframe></noscript>
-<header id="header" class="header-tops">
+				<div class="social-links">
+					<a
+						href="https://www.linkedin.com/in/damien-vaiton/"
+						target="_blank"
+						class="linkedin"
+						><i class="bx bxl-linkedin"></i
+					></a>
+					<a
+						href="https://github.com/Damienvaiton"
+						target="_blank"
+						class="github"
+						><i class="bx bxl-github"></i
+					></a>
+					<a
+						href="mailto:damien.vaiton01@gmail.com"
+						target="_blank"
+						class="google"
+						><i class="bx bxl-google"></i
+					></a>
+				</div>
+			</div>
+		</header>
+		<section id="about" class="about">
+			<div class="about-me container">
+				<div class="section-title">
+					<h2>À propos</h2>
+				</div>
 
-  <div class="container">
+				<div class="row">
+					<div class="col-lg-4" data-aos="fade-right">
+						<img
+							src="assets/img/profile.jpg"
+							class="img-fluid"
+							alt="Portrait de Damien Vaiton, Développeur Fullstack à Bourg-en-Bresse"
+						/>
+					</div>
+					<div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+						<p>
+							Bonjour, je m'appelle Damien Vaiton. Diplomé d'un
+							<strong>BUT Informatique</strong> à l'Université Lyon 1 (Campus de
+							Bourg-en-Bresse). Je suis à la recherche d'un poste de developpeur
+							<br /><br />
+							Passionné par l'informatique depuis mon enfance, j'ai
+							naturellement choisi de m'orienter vers le métier de développeur
+							logiciel.
+							<br /><br />
+							En dehors du code, j'ai de nombreuses autres passions comme les
+							voyages, le sport (principalement le basket) et un fort intérêt
+							pour le secteur médical, transmis par mes parents.
+						</p>
+						<div class="row">
+							<div class="col-lg-6">
+								<ul>
+									<li>
+										<i class="icofont-rounded-right"></i>
+										<strong>Né le :</strong> 7 octobre 2003
+									</li>
+									<li>
+										<i class="icofont-rounded-right"></i>
+										<strong>Tél :</strong> +33 7 84 32 42 62
+									</li>
+								</ul>
+							</div>
+							<div class="col-lg-6">
+								<ul>
+									<li>
+										<i class="icofont-rounded-right"></i>
+										<strong>Ville :</strong> Bourg-en-Bresse, Auvergne
+										Rhône-Alpes
+									</li>
+									<li>
+										<i class="icofont-rounded-right"></i>
+										<strong>Email :</strong> damien.vaiton01@gmail.com
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="interests container">
+				<div class="section-title">
+					<h2>Centres d'intérêt</h2>
+				</div>
 
-    <h1><a href="index.html">Damien Vaiton</a></h1>
-    <h2 style="color:#fff">Je suis <span class="typing" style="color:#12D640"></span></h2>
+				<div class="row">
+					<div class="col-lg-3 col-md-4">
+						<div class="icon-box">
+							<i class="ri-global-line" style="color: #baf0f0"></i>
+							<h3>Dév. Logiciel</h3>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+						<div class="icon-box">
+							<i class="ri-dribbble-line" style="color: #ff6600"></i>
+							<h3>Basketball</h3>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+						<div class="icon-box">
+							<i class="ri-football-fill" style="color: black"></i>
+							<h3>Football</h3>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+						<div class="icon-box">
+							<i class="ri-heart-fill" style="color: #ff0f0f"></i>
+							<h3>Secteur Médical</h3>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 mt-4">
+						<div class="icon-box">
+							<i class="ri-compass-line" style="color: #f2d117"></i>
+							<h3>Voyages</h3>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 mt-4">
+						<div class="icon-box">
+							<i class="ri-music-2-fill" style="color: #25d865"></i>
+							<h3>Musique</h3>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 mt-4">
+						<div class="icon-box">
+							<i class="ri-gamepad-fill" style="color: white"></i>
+							<h3>Jeux Vidéo</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="education" class="services">
+			<div class="container">
+				<div class="section-title">
+					<h2>Formation</h2>
+				</div>
+				<div class="row">
+					<div
+						class="col-lg-12"
+						data-aos="fade-up"
+						style="display: inline-block"
+					>
+						<div
+							class="col-md-4 mt-4 mt-md-0 icon-box"
+							data-aos="fade-up"
+							data-aos-delay="100"
+							style="
+								padding: 0px 0px;
+								padding-bottom: 5px;
+								display: inline-block;
+							"
+						>
+							<img
+								src="assets/img/education/IUT.jpeg"
+								class="img-fluid"
+								alt="Logo IUT Lyon 1"
+							/>
+							<p style="text-align: left; color: #fff; padding: 5px 10px">
+								<em>BUT Informatique</em>
+							</p>
+							<h5 style="text-align: left; padding: 0px 10px">
+								Septembre 2021 - Juillet 2025
+							</h5>
+							<h6 style="text-align: left; color: #fff; padding: 0px 10px">
+								Enseignements clés
+							</h6>
+							<ul style="text-align: left; color: #fff">
+								<li>Développement logiciel</li>
+								<li>Communication & Gestion d'équipe</li>
+								<li>Bases de données</li>
+							</ul>
+						</div>
 
-    <nav class="nav-menu d-none d-lg-block">
-      <ul>
-        <li class="active"><a href="#header"> <span>Accueil</span></a></li>
-        <li><a href="#about"><span>À propos</span></a></li>
-        <li><a href="#education"> <span>Formation</span></a></li>
-        <li><a href="#experience"> <span>Expériences</span></a></li>
-        <li><a href="#portfolio"> <span>Mes projets</span></a></li>
-        <li><a href="#skills"> <span>Compétences</span></a></li>
-        <li><a href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing"
-               target="_blank"> <span>Mon CV</span></a></li>
-        <li><a href="#contacts"> <span>Contact</span></a></li>
-      </ul>
-    </nav>
+						<div
+							class="col-md-4 mt-4 mt-md-0 icon-box"
+							data-aos="fade-up"
+							data-aos-delay="100"
+							style="
+								padding: 0px 0px;
+								padding-bottom: 5px;
+								display: inline-block;
+							"
+						>
+							<img
+								src="assets/img/education/Carriat.PNG"
+								class="img-fluid"
+								alt="Lycée Joseph Marie Carriat"
+							/>
+							<p style="text-align: left; color: #fff; padding: 5px 10px">
+								<em>Baccalauréat</em>
+							</p>
+							<h5 style="text-align: left; padding: 0px 10px">
+								Septembre 2018 - Juin 2021
+							</h5>
+							<h6 style="text-align: left; color: #fff; padding: 0px 10px">
+								Spécialités
+							</h6>
+							<ul style="text-align: left; color: #fff">
+								<li>Mathématiques</li>
+								<li>Numérique & Sciences Informatiques (NSI)</li>
+								<li>Section Européenne Anglais / SI</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <div class="social-links">
-      <a href="https://www.linkedin.com/in/damien-vaiton/" target="_blank" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-      <a href="https://github.com/Damienvaiton" target="_blank" class="github"><i class="bx bxl-github"></i></a>
-      <a href="mailto:damien.vaiton01@gmail.com" target="_blank" class="google"><i class="bx bxl-google"></i></a>
-    </div>
+			<div class="portfolio">
+				<div class="container">
+					<div class="section-title">
+						<h2>Certifications</h2>
+					</div>
 
-  </div>
-</header><section id="about" class="about">
+					<div
+						class="row portfolio-container"
+						style="position: relative; height: 437.75px"
+					>
+						<div
+							class="col-lg-4 col-md-6 portfolio-item personnal-projects"
+							style="position: absolute; left: 0px; top: 0px"
+						>
+							<div class="portfolio-wrap">
+								<img
+									src="assets/img/certification/TOEIC.jpg"
+									class="img-fluid"
+									alt="Certification TOEIC"
+								/>
+								<div class="portfolio-info">
+									<h4>TOEIC</h4>
+									<div class="portfolio-links">
+										<a
+											href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing"
+											target="_blank"
+											title="Voir le certificat"
+											><i class="bx bx-link"></i
+										></a>
+									</div>
+								</div>
+							</div>
+						</div>
 
-  <div class="about-me container">
+						<div
+							class="col-lg-4 col-md-6 portfolio-item personnal-projects"
+							style="position: absolute; left: 0px; top: 0px"
+						>
+							<div class="portfolio-wrap">
+								<img
+									src="assets/img/certification/CNIL.jpg"
+									class="img-fluid"
+									alt="Certification DPO CNIL"
+								/>
+								<div class="portfolio-info">
+									<h4>Certification DPO (RGPD)</h4>
+									<div class="portfolio-links">
+										<a
+											href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link"
+											target="_blank"
+											title="Voir le certificat"
+											><i class="bx bx-link"></i
+										></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="experience" class="services">
+			<div class="container">
+				<div class="section-title">
+					<h2>Expérience Pro</h2>
+				</div>
+				<div class="row">
+					<div class="col-lg-12" data-aos="fade-up">
+						<div
+							class="col-md-12 mt-4 mt-md-0 icon-box"
+							data-aos="fade-up"
+							data-aos-delay="100"
+						>
+							<h4 style="text-align: left">
+								<a
+									href="https://lalemant.com/"
+									style="color: #12d640"
+									target="_blank"
+									>Lalemant France</a
+								><br />
+							</h4>
+							<h5 style="text-align: left">Novembre 2024 - Mars 2025</h5>
+							<p style="text-align: left; color: #fff">
+								<em>Stagiaire Développeur Fullstack</em>
+							</p>
+							<ul style="text-align: left">
+								<li>
+									Développement de fonctionnalités sur l'application interne
+									(outil de cotations et appels d'offres) en utilisant PHP et
+									JavaScript.
+								</li>
+								<li>
+									Maintenance corrective proactive (bug fixing) sur la base de
+									tickets, assurant la stabilité et la fiabilité de
+									l'application.
+								</li>
+								<li>
+									Travail en étroite collaboration avec l'équipe pour garantir
+									la cohérence des développements et le respect des objectifs
+									projet.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12" data-aos="fade-up">
+						<div
+							class="col-md-12 mt-4 mt-md-0 icon-box"
+							data-aos="fade-up"
+							data-aos-delay="100"
+						>
+							<h4 style="text-align: left">
+								<a
+									href="https://www.effetb.com/"
+									style="color: #12d640"
+									target="_blank"
+									>Effet B</a
+								><br />
+							</h4>
+							<h5 style="text-align: left">Avril 2023 - Juin 2023</h5>
+							<p style="text-align: left; color: #fff">
+								<em>Stagiaire Développeur Fullstack</em>
+							</p>
+							<ul style="text-align: left">
+								<li>
+									Découverte du monde de l'entreprise et des processus de
+									développement.
+								</li>
+								<li>
+									Maintenance corrective et évolutive d'un progiciel de gestion
+									dédié aux alternants.
+								</li>
+								<li>
+									Impact : 6650 utilisateurs à la rentrée 2023, déployé dans 41
+									établissements de formation.
+								</li>
+								<li>
+									Participation aux réunions de conception technique et suivi de
+									projet.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="portfolio" class="portfolio">
+			<div class="container">
+				<div class="section-title">
+					<h2>Mes Projets</h2>
+				</div>
 
-    <div class="section-title">
-      <h2>À propos</h2>
-    </div>
+				<div class="row">
+					<div class="col-lg-12 d-flex justify-content-center">
+						<ul id="portfolio-flters">
+							<li data-filter="*" class="filter-active">Tout</li>
+							<li data-filter=".personnal-projects">Projets Personnels</li>
+							<li data-filter=".professional-projects">
+								Projets Pros / Scolaires
+							</li>
+						</ul>
+					</div>
+				</div>
 
-    <div class="row">
-      <div class="col-lg-4" data-aos="fade-right">
-        <img src="assets/img/profile.jpg" class="img-fluid" alt="Portrait de Damien Vaiton, Développeur Fullstack à Bourg-en-Bresse">
-      </div>
-      <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-        <p>
-          Bonjour, je m'appelle Damien Vaiton. Diplomé d' un <strong>BUT Informatique</strong> à l'Université Lyon 1 (Campus de Bourg-en-Bresse). Je suis à la recherche d'un poste de developpeur
-          <br><br>
-          Passionné par l'informatique depuis mon enfance, j'ai naturellement choisi de m'orienter vers le métier de développeur logiciel.
-          <br><br>
-          En dehors du code, j'ai de nombreuses autres passions comme les voyages, le sport (principalement le basket) et un fort intérêt pour le secteur médical, transmis par mes parents.
-        </p>
-        <div class="row">
-          <div class="col-lg-6">
-            <ul>
-              <li><i class="icofont-rounded-right"></i> <strong>Né le :</strong> 7 octobre 2003</li>
-              <li><i class="icofont-rounded-right"></i> <strong>Tél :</strong> +33 7 84 32 42 62</li> </ul>
-          </div>
-          <div class="col-lg-6">
-            <ul>
-              <li><i class="icofont-rounded-right"></i> <strong>Ville :</strong> Bourg-en-Bresse, Auvergne Rhône-Alpes</li>
-              <li><i class="icofont-rounded-right"></i> <strong>Email :</strong> damien.vaiton01@gmail.com</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+				<div class="row portfolio-container">
+					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
+						<center>
+							<h4>FastTrack</h4>
+						</center>
+						<div class="portfolio-wrap">
+							<img
+								src="assets/img/project/FastTrack.jpg"
+								class="img-fluid"
+								alt="FastTrack - Application mobile sur la Formule 1"
+							/>
+							<div class="portfolio-info">
+								<div class="portfolio-links">
+									<a
+										href="projects/fasttrack.html"
+										data-gall="portfolioDetailsGallery"
+										data-vbtype="iframe"
+										class="venobox"
+										title="Voir les détails du projet FastTrack"
+										><i class="bx bx-info-circle"></i
+									></a>
+								</div>
+							</div>
+						</div>
+					</div>
 
-  </div><div class="interests container">
-
-  <div class="section-title">
-    <h2>Centres d'intérêt</h2>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-3 col-md-4">
-      <div class="icon-box">
-        <i class="ri-global-line" style="color: #BAF0F0;"></i>
-        <h3>Dév. Logiciel</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-      <div class="icon-box">
-        <i class="ri-dribbble-line" style="color: #FF6600;"></i>
-        <h3>Basketball</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-      <div class="icon-box">
-        <i class="ri-football-fill" style="color: black;"></i>
-        <h3>Football</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-      <div class="icon-box">
-        <i class="ri-heart-fill" style="color: #FF0F0F;"></i>
-        <h3>Secteur Médical</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 ">
-      <div class="icon-box">
-        <i class="ri-compass-line" style="color: #F2D117;"></i>
-        <h3>Voyages</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 ">
-      <div class="icon-box">
-        <i class="ri-music-2-fill" style="color: #25D865;"></i>
-        <h3>Musique</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 ">
-      <div class="icon-box">
-        <i class="ri-restaurant-fill" style="color: #A31BA4;"></i>
-        <h3>Gastronomie</h3>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-4 mt-4 ">
-      <div class="icon-box">
-        <i class="ri-gamepad-fill" style="color: white;"></i>
-        <h3>Jeux Vidéo</h3>
-      </div>
-    </div>
-
-  </div>
-
-</div></section><section id="education" class="services">
-  <div class="container">
-    <div class="section-title">
-      <h2>Formation</h2>
-    </div>
-    <div class="row">
-      <div class="col-lg-12" data-aos="fade-up" style="display: inline-block;">
-
-        <div class="col-md-4 mt-4 mt-md-0 icon-box" data-aos="fade-up" data-aos-delay="100"
-             style="padding:0px 0px;padding-bottom: 5px;display: inline-block;">
-          <img src="assets/img/education/IUT.jpeg" class="img-fluid" alt="Logo IUT Lyon 1">
-          <p style="text-align:left;color:#fff;padding: 5px 10px;"><em>BUT Informatique</em></p>
-          <h5 style="text-align:left;padding: 0px 10px;">Septembre 2021 - Juillet 2025</h5>
-          <h6 style="text-align:left;color:#fff;padding: 0px 10px;">Enseignements clés</h6>
-          <ul style="text-align:left;color:#fff;">
-            <li>Développement logiciel</li>
-            <li>Communication & Gestion d'équipe</li>
-            <li>Bases de données</li>
-          </ul>
-        </div>
-
-        <div class="col-md-4 mt-4 mt-md-0 icon-box" data-aos="fade-up" data-aos-delay="100"
-             style="padding:0px 0px;padding-bottom: 5px;display: inline-block;">
-          <img src="assets/img/education/Carriat.PNG" class="img-fluid" alt="Lycée Joseph Marie Carriat">
-          <p style="text-align:left;color:#fff;padding: 5px 10px;"><em>Baccalauréat</em></p>
-          <h5 style="text-align:left;padding: 0px 10px;">Septembre 2018 - Juin 2021</h5>
-          <h6 style="text-align:left;color:#fff;padding: 0px 10px;">Spécialités</h6>
-          <ul style="text-align:left;color:#fff;">
-            <li>Mathématiques</li>
-            <li>Numérique & Sciences Informatiques (NSI)</li>
-            <li>Section Européenne Anglais / SI</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="portfolio">
-    <div class="container">
-      <div class="section-title">
-        <h2>Certifications</h2>
-      </div>
-
-      <div class="row portfolio-container" style="position: relative; height: 437.75px;">
-
-        <div class="col-lg-4 col-md-6 portfolio-item personnal-projects"
-             style="position: absolute; left: 0px; top: 0px;">
-          <div class="portfolio-wrap">
-            <img src="assets/img/certification/TOEIC.jpg" class="img-fluid" alt="Certification TOEIC">
-            <div class="portfolio-info">
-              <h4>TOEIC</h4>
-              <div class="portfolio-links">
-                <a href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing"
-                   target="_blank" title="Voir le certificat"><i class="bx bx-link"></i></a>
+          <div class="col-lg-4 col-md-6 portfolio-item personnal-projects">
+            <center>
+              <h4>So crève to 1989</h4>
+            </center>
+            <div class="portfolio-wrap">
+              <img
+                src="assets/img/project/crève.jpg"
+                class="img-fluid"
+                alt="So crève to 1989 - Bot Discord musical"
+              />
+              <div class="portfolio-info">
+                <div class="portfolio-links">
+                  <a
+                    href="projects/crève.html"
+                    data-gall="portfolioDetailsGallery"
+                    data-vbtype="iframe"
+                    class="venobox"
+                    title="Voir les détails du projet So crève to 1989"
+                    ><i class="bx bx-info-circle"></i
+                  ></a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-4 col-md-6 portfolio-item personnal-projects"
-             style="position: absolute; left: 0px; top: 0px;">
-          <div class="portfolio-wrap">
-            <img src="assets/img/certification/CNIL.jpg" class="img-fluid" alt="Certification DPO CNIL">
-            <div class="portfolio-info">
-              <h4>Certification DPO (RGPD)</h4>
-              <div class="portfolio-links">
-                <a href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link"
-                   target="_blank" title="Voir le certificat"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
 
-      </div>
-    </div>
-  </div>
-</section>
-<section id="experience" class="services">
-  <div class="container">
-    <div class="section-title">
-      <h2>Expérience Pro</h2>
-    </div>
-    <div class="row">
-      <div class="col-lg-12" data-aos="fade-up">
-        <div class="col-md-12 mt-4 mt-md-0 icon-box" data-aos="fade-up" data-aos-delay="100">
-          <h4 style="text-align:left;"><a href="https://www.effetb.com/" style="color:#12d640" target="_blank">Effet B</a><br> </h4>
-          <h5 style="text-align:left;">Avril 2023 - Juin 2023</h5>
-          <p style="text-align:left;color:#fff"><em>Stagiaire Développeur Fullstack</em></p>
-          <ul style="text-align:left;">
-            <li>Découverte du monde de l'entreprise et des processus de développement.</li>
-            <li>Maintenance corrective et évolutive d'un progiciel de gestion dédié aux alternants.</li>
-            <li>Impact : 6650 utilisateurs à la rentrée 2023, déployé dans 41 établissements de formation.</li>
-            <li>Participation aux réunions de conception technique et suivi de projet.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section id="portfolio" class="portfolio">
-  <div class="container">
+					<div class="col-lg-4 col-md-6 portfolio-item personnal-projects">
+						<center>
+							<h4>Mangeuse de Kinoa</h4>
+						</center>
+						<div class="portfolio-wrap">
+							<img
+								src="assets/img/project/Kinoa.jpg"
+								class="img-fluid"
+								alt="Mangeuse de Kinoa - Jeu vidéo ou application ludique"
+							/>
+							<div class="portfolio-info">
+								<div class="portfolio-links">
+									<a
+										href="projects/kinoa.html"
+										data-gall="portfolioDetailsGallery"
+										data-vbtype="iframe"
+										class="venobox"
+										title="Voir les détails du projet Mangeuse de Kinoa"
+										><i class="bx bx-info-circle"></i
+									></a>
+								</div>
+							</div>
+						</div>
+					</div>
 
-    <div class="section-title">
-      <h2>Mes Projets</h2>
-    </div>
+					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
+						<center>
+							<h4>Mcdo_surfer</h4>
+						</center>
+						<div class="portfolio-wrap">
+							<img
+								src="assets/img/project/mcdosurfer.jpg"
+								class="img-fluid"
+								alt="Mcdo_surfer - Projet web"
+							/>
+							<div class="portfolio-info">
+								<div class="portfolio-links">
+									<a
+										href="projects/mcdosurfer.html"
+										data-gall="portfolioDetailsGallery"
+										data-vbtype="iframe"
+										class="venobox"
+										title="Voir les détails du projet Mcdo_surfer"
+										><i class="bx bx-info-circle"></i
+									></a>
+								</div>
+							</div>
+						</div>
+					</div>
 
-    <div class="row">
-      <div class="col-lg-12 d-flex justify-content-center">
-        <ul id="portfolio-flters">
-          <li data-filter="*" class="filter-active">Tout</li>
-          <li data-filter=".personnal-projects">Projets Personnels</li>
-          <li data-filter=".professional-projects">Projets Pros / Scolaires</li>
-        </ul>
-      </div>
-    </div>
+					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
+						<center>
+							<h4>Edukid</h4>
+						</center>
+						<div class="portfolio-wrap">
+							<img
+								src="assets/img/project/edukid.jpg"
+								class="img-fluid"
+								alt="Edukid - Application éducative pour enfants"
+							/>
+							<div class="portfolio-info">
+								<div class="portfolio-links">
+									<a
+										href="projects/edukid.html"
+										data-gall="portfolioDetailsGallery"
+										data-vbtype="iframe"
+										class="venobox"
+										title="Voir les détails du projet Edukid"
+										><i class="bx bx-info-circle"></i
+									></a>
+								</div>
+							</div>
+						</div>
+					</div>
 
-    <div class="row portfolio-container">
+					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
+						<center>
+							<h4>Vegetabillis Auditor</h4>
+						</center>
+						<div class="portfolio-wrap">
+							<img
+								src="assets/img/project/va.jpg"
+								class="img-fluid"
+								alt="Vegetabillis Auditor - Projet de capture de données et audit"
+							/>
+							<div class="portfolio-info">
+								<div class="portfolio-links">
+									<a
+										href="projects/vegetabillisauditor.html"
+										data-gall="portfolioDetailsGallery"
+										data-vbtype="iframe"
+										class="venobox"
+										title="Voir les détails du projet Vegetabillis Auditor"
+										><i class="bx bx-info-circle"></i
+									></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="skills" class="services">
+			<div class="container">
+				<div class="section-title">
+					<h2>Compétences</h2>
+				</div>
+				<div class="row">
+					<div class="col-lg-12" data-aos="fade-up">
+						<div
+							class="col-md-12 mt-4 mt-md-0 icon-box"
+							data-aos="fade-up"
+							data-aos-delay="100"
+							style="background: #fff"
+						>
+							<h4 style="text-align: left; color: #09203a">
+								Langages & Bases de données
+							</h4>
+							<div class="skills-content">
+								<img
+									src="https://www.vectorlogo.zone/logos/kotlinlang/kotlinlang-ar21.svg"
+									alt="Logo Kotlin"
+									title="Kotlin"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/java/java-horizontal.svg"
+									alt="Logo Java"
+									title="Java"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/w3_html5/w3_html5-ar21.svg"
+									alt="Logo HTML5"
+									title="HTML5"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/w3_css/w3_css-ar21.svg"
+									alt="Logo CSS3"
+									title="CSS3"
+								/>
+								<img
+									src="https://logos-marques.com/wp-content/uploads/2021/03/JavaScript-Logo.png"
+									alt="Logo JavaScript"
+									title="JavaScript"
+								/>
+								<img
+									src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/1200px-ISO_C%2B%2B_Logo.svg.png"
+									alt="Logo C++"
+									title="C++"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/flutterio/flutterio-ar21.svg"
+									alt="Logo Flutter"
+									title="Flutter"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/sqlite/sqlite-ar21.svg"
+									alt="Logo SQLite"
+									title="SQLite"
+								/>
+							</div>
+						</div>
 
-      <div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-        <center>
-          <h4>FastTrack</h4>
-        </center>
-        <div class="portfolio-wrap">
-          <img src="assets/img/project/FastTrack.jpg" class="img-fluid" alt="FastTrack - Application mobile sur la Formule 1">
-          <div class="portfolio-info">
-            <div class="portfolio-links">
-              <a href="projects/fasttrack.html" data-gall="portfolioDetailsGallery" data-vbtype="iframe"
-                 class="venobox" title="Voir les détails du projet FastTrack"><i class="bx bx-info-circle"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+						<div
+							class="col-md-12 mt-4 mt-md-0 icon-box"
+							data-aos="lefade-up"
+							data-aos-delay="100"
+							style="background: #fff"
+						>
+							<h4 style="text-align: left; color: #09203a">Frameworks</h4>
+							<p style="text-align: left">
+								<img
+									src="https://www.vectorlogo.zone/logos/symfony/symfony-ar21.svg"
+									alt="Logo Framework Symfony"
+									title="Symfony"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/unity3d/unity3d-ar21.svg"
+									alt="Logo Unity 3D"
+									title="Unity"
+								/>
+							</p>
+						</div>
 
-      <div class="col-lg-4 col-md-6 portfolio-item personnal-projects">
-        <center>
-          <h4>CaddieCollab</h4>
-        </center>
-        <div class="portfolio-wrap">
-          <img src="assets/img/project/caddiecollab.jpg" class="img-fluid" alt="CaddieCollab - Projet de développement web collaboratif">
-          <div class="portfolio-info">
-            <div class="portfolio-links">
-              <a href="projects/caddiecollab.html" data-gall="portfolioDetailsGallery" data-vbtype="iframe"
-                 class="venobox" title="Voir les détails du projet CaddieCollab"><i class="bx bx-info-circle"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+						<div
+							class="col-md-12 mt-4 mt-md-0 icon-box"
+							data-aos="lefade-up"
+							data-aos-delay="100"
+							style="background: #fff"
+						>
+							<h4 style="text-align: left; color: #09203a">Outils & IDE</h4>
+							<p style="text-align: left">
+								<img
+									src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhYqPshtcc72LfIovmL7yYsotZbN8e67Ck10WVIux1e6WjjkdgCFH5_KWRB9RfBKogO6vJgt1peMuuqEyUBsMv20xohGPyZFOBiuLU-Rn27Eq33biA0lUObGvd8ToAnNuygNSoRBpBmltRADd0vpaMXGklP7L_xB9LqIlZ1fjSN6vK1i2vc_0KP-aTo/w1200-h630-p-k-no-nu/Android%20Studio%20-%20Social.png"
+									alt="Logo Android Studio"
+									height="50"
+									width="120"
+									title="Android Studio"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/visualstudio_code/visualstudio_code-ar21.svg"
+									alt="Logo VS Code"
+									title="Visual Studio Code"
+								/>
+								<img
+									src="https://www.vectorlogo.zone/logos/git-scm/git-scm-ar21.svg"
+									alt="Logo Git"
+									title="Git"
+								/>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="links" class="services">
+			<div class="container">
+				<div class="section-title">
+					<h2>Mon CV</h2>
+				</div>
+				<div class="row">
+					<div
+						class="col-md-3 mt-4 mt-md-0 icon-box"
+						data-aos="fade-up"
+						data-aos-delay="100"
+					>
+						<a
+							href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing"
+							target="_blank"
+						>
+							<div class="icon"><i class="icofont-page"></i></div>
+						</a>
+						<h4 class="title">
+							<a
+								href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing"
+								target="_blank"
+								>CV (PDF)</a
+							>
+						</h4>
+						<p class="description" style="color: #fff">
+							Télécharger mon CV au format PDF
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="contacts" class="contact">
+			<div class="container">
+				<div class="section-title">
+					<h2>Me Contacter</h2>
+				</div>
 
-      <div class="col-lg-4 col-md-6 portfolio-item personnal-projects">
-        <center>
-          <h4>Mangeuse de Kinoa</h4>
-        </center>
-        <div class="portfolio-wrap">
-          <img src="assets/img/project/Kinoa.jpg" class="img-fluid" alt="Mangeuse de Kinoa - Jeu vidéo ou application ludique">
-          <div class="portfolio-info">
-            <div class="portfolio-links">
-              <a href="projects/kinoa.html" data-gall="portfolioDetailsGallery" data-vbtype="iframe"
-                 class="venobox" title="Voir les détails du projet Mangeuse de Kinoa"><i class="bx bx-info-circle"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+				<div class="row mt-2">
+					<div class="col-md-6 mt-4 mt-md-0 d-flex align-items-stretch">
+						<div class="info-box">
+							<i class="bx bx-share-alt"></i>
+							<h3>Réseaux Sociaux</h3>
+							<div class="social-links">
+								<a
+									href="https://www.linkedin.com/in/damien-vaiton/"
+									target="_blank"
+									class="linkedin"
+									><i class="bx bxl-linkedin"></i
+								></a>
+								<a
+									href="https://github.com/Damienvaiton"
+									target="_blank"
+									class="github"
+									><i class="bx bxl-github"></i
+								></a>
+								<a
+									href="mailto:damien.vaiton01@gmail.com"
+									target="_blank"
+									class="google"
+									><i class="bx bxl-google"></i
+								></a>
+							</div>
+						</div>
+					</div>
 
-      <div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-        <center>
-          <h4>Mcdo_surfer</h4>
-        </center>
-        <div class="portfolio-wrap">
-          <img src="assets/img/project/mcdosurfer.jpg" class="img-fluid" alt="Mcdo_surfer - Projet web">
-          <div class="portfolio-info">
-            <div class="portfolio-links">
-              <a href="projects/mcdosurfer.html" data-gall="portfolioDetailsGallery" data-vbtype="iframe"
-                 class="venobox" title="Voir les détails du projet Mcdo_surfer"><i class="bx bx-info-circle"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+					<div class="col-md-6 mt-4 d-flex align-items-stretch">
+						<div class="info-box">
+							<i class="bx bx-envelope"></i>
+							<h3>Email</h3>
+							<p>damien.vaiton01@gmail.com</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<script src="assets/vendor/jquery/jquery.min.js"></script>
+		<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+		<script src="assets/vendor/php-email-form/validate.js"></script>
+		<script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+		<script src="assets/vendor/counterup/counterup.min.js"></script>
+		<script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+		<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+		<script src="assets/vendor/venobox/venobox.min.js"></script>
+		<script src="assets/vendor/typed.js/typed.min.js"></script>
 
-      <div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-        <center>
-          <h4>Edukid</h4>
-        </center>
-        <div class="portfolio-wrap">
-          <img src="assets/img/project/edukid.jpg" class="img-fluid" alt="Edukid - Application éducative pour enfants">
-          <div class="portfolio-info">
-            <div class="portfolio-links">
-              <a href="projects/edukid.html" data-gall="portfolioDetailsGallery" data-vbtype="iframe" class="venobox"
-                 title="Voir les détails du projet Edukid"><i class="bx bx-info-circle"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+		<script type="text/javascript">
+			// J'ai traduit les textes qui défilent aussi
+			var typed = new Typed(".typing", {
+				strings: ["Développeur", "Développeur Fullstack", "Passionné"],
+				loop: true,
+				typeSpeed: 65,
+				backSpeed: 65,
+			});
+		</script>
 
-      <div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-        <center>
-          <h4>Vegetabillis Auditor</h4>
-        </center>
-        <div class="portfolio-wrap">
-          <img src="assets/img/project/va.jpg" class="img-fluid" alt="Vegetabillis Auditor - Projet de capture de données et audit">
-          <div class="portfolio-info">
-            <div class="portfolio-links">
-              <a href="projects/vegetabillisauditor.html" data-gall="portfolioDetailsGallery" data-vbtype="iframe"
-                 class="venobox" title="Voir les détails du projet Vegetabillis Auditor"><i class="bx bx-info-circle"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
+		<script src="assets/js/main.js"></script>
 
-    </div>
-  </div>
-</section>
-<section id="skills" class="services">
-  <div class="container">
-    <div class="section-title">
-      <h2>Compétences</h2>
-    </div>
-    <div class="row">
-      <div class="col-lg-12" data-aos="fade-up">
-
-        <div class="col-md-12 mt-4 mt-md-0 icon-box" data-aos="fade-up" data-aos-delay="100" style="background:#fff">
-          <h4 style="text-align:left;color:#09203a">Langages & Bases de données</h4>
-          <p style="text-align:left;">
-            <img src="https://www.vectorlogo.zone/logos/kotlinlang/kotlinlang-ar21.svg" alt="Logo Kotlin" title="Kotlin">
-            <img src="https://www.vectorlogo.zone/logos/java/java-horizontal.svg" alt="Logo Java" height="50" width="120" title="Java">
-            <img src="https://www.vectorlogo.zone/logos/w3_html5/w3_html5-ar21.svg" alt="Logo HTML5" title="HTML5">
-            <img src="https://www.vectorlogo.zone/logos/w3_css/w3_css-ar21.svg" alt="Logo CSS3" title="CSS3">
-            <img src="https://i0.wp.com/theicom.org/wp-content/uploads/2016/03/js-logo.png?fit=500%2C500&ssl=1&w=640" alt="Logo JavaScript" height="70" width="70" title="JavaScript">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/1200px-ISO_C%2B%2B_Logo.svg.png" alt="Logo C++" height="70" width="70" title="C++">
-            <img src="https://www.vectorlogo.zone/logos/flutterio/flutterio-ar21.svg" alt="Logo Flutter" title="Flutter">
-            <img src="https://www.vectorlogo.zone/logos/sqlite/sqlite-ar21.svg" alt="Logo SQLite" title="SQLite">
-          </p>
-        </div>
-
-        <div class="col-md-12 mt-4 mt-md-0 icon-box" data-aos="lefade-up" data-aos-delay="100" style="background:#fff">
-          <h4 style="text-align:left;color:#09203a">Frameworks</h4>
-          <p style="text-align:left;">
-            <img src="https://www.vectorlogo.zone/logos/symfony/symfony-ar21.svg" alt="Logo Framework Symfony" title="Symfony">
-            <img src="https://www.vectorlogo.zone/logos/unity3d/unity3d-ar21.svg" alt="Logo Unity 3D" title="Unity">
-          </p>
-        </div>
-
-        <div class="col-md-12 mt-4 mt-md-0 icon-box" data-aos="lefade-up" data-aos-delay="100" style="background:#fff">
-          <h4 style="text-align:left;color:#09203a">Outils & IDE</h4>
-          <p style="text-align:left;">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhYqPshtcc72LfIovmL7yYsotZbN8e67Ck10WVIux1e6WjjkdgCFH5_KWRB9RfBKogO6vJgt1peMuuqEyUBsMv20xohGPyZFOBiuLU-Rn27Eq33biA0lUObGvd8ToAnNuygNSoRBpBmltRADd0vpaMXGklP7L_xB9LqIlZ1fjSN6vK1i2vc_0KP-aTo/w1200-h630-p-k-no-nu/Android%20Studio%20-%20Social.png" alt="Logo Android Studio" height="50" width="120" title="Android Studio">
-            <img src="https://www.vectorlogo.zone/logos/visualstudio_code/visualstudio_code-ar21.svg" alt="Logo VS Code" title="Visual Studio Code">
-            <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-ar21.svg" alt="Logo Git" title="Git">
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-<section id="links" class="services">
-  <div class="container">
-    <div class="section-title">
-      <h2>Mon CV</h2>
-    </div>
-    <div class="row">
-      <div class="col-md-3 mt-4 mt-md-0 icon-box" data-aos="fade-up" data-aos-delay="100">
-        <a href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing" target="_blank">
-          <div class="icon"><i class="icofont-page"></i></div>
-        </a>
-        <h4 class="title"><a href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing"
-                             target="_blank">CV (PDF)</a></h4>
-        <p class="description" style="color:#fff;">Télécharger mon CV au format PDF</p>
-      </div>
-    </div>
-  </div>
-</section>
-<section id="contacts" class="contact">
-  <div class="container">
-
-    <div class="section-title">
-      <h2>Me Contacter</h2>
-    </div>
-
-    <div class="row mt-2">
-      <div class="col-md-6 mt-4 mt-md-0 d-flex align-items-stretch">
-        <div class="info-box">
-          <i class="bx bx-share-alt"></i>
-          <h3>Réseaux Sociaux</h3>
-          <div class="social-links">
-            <a href="https://www.linkedin.com/in/damien-vaiton/" target="_blank" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-            <a href="https://github.com/Damienvaiton" target="_blank" class="github"><i class="bx bxl-github"></i></a>
-            <a href="mailto:damien.vaiton01@gmail.com" target="_blank" class="google"><i class="bx bxl-google"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 mt-4 d-flex align-items-stretch">
-        <div class="info-box">
-          <i class="bx bx-envelope"></i>
-          <h3>Email</h3>
-          <p>damien.vaiton01@gmail.com</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<script src="assets/vendor/jquery/jquery.min.js"></script>
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
-<script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
-<script src="assets/vendor/counterup/counterup.min.js"></script>
-<script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
-<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="assets/vendor/venobox/venobox.min.js"></script>
-<script src="assets/vendor/typed.js/typed.min.js"></script>
-
-<script type="text/javascript">
-  // J'ai traduit les textes qui défilent aussi
-  var typed = new Typed('.typing', {
-    strings: ["Développeur", "Développeur Fullstack", "Passionné"],
-    loop: true,
-    typeSpeed: 65,
-    backSpeed: 65
-  });
-</script>
-
-<script src="assets/js/main.js"></script>
-
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Damien Vaiton",
-    "url": "https://damienvaiton.github.io/",
-    "jobTitle": "Développeur Fullstack",
-    "alumniOf": {
-      "@type": "EducationalOrganization",
-      "name": "IUT Lyon 1 - Bourg-en-Bresse"
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Bourg-en-Bresse",
-      "addressRegion": "Auvergne-Rhône-Alpes",
-      "addressCountry": "FR"
-    },
-    "sameAs": [
-      "https://www.linkedin.com/in/damien-vaiton/",
-      "https://github.com/Damienvaiton"
-    ],
-    "knowsAbout": ["PHP", "Symfony", "JavaScript", "SQL", "Développement Web"]
-  }
-</script>
-
-</body>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Person",
+				"name": "Damien Vaiton",
+				"url": "https://damienvaiton.github.io/",
+				"jobTitle": "Développeur Fullstack",
+				"alumniOf": {
+					"@type": "EducationalOrganization",
+					"name": "IUT Lyon 1 - Bourg-en-Bresse"
+				},
+				"address": {
+					"@type": "PostalAddress",
+					"addressLocality": "Bourg-en-Bresse",
+					"addressRegion": "Auvergne-Rhône-Alpes",
+					"addressCountry": "FR"
+				},
+				"sameAs": [
+					"https://www.linkedin.com/in/damien-vaiton/",
+					"https://github.com/Damienvaiton"
+				],
+				"knowsAbout": [
+					"PHP",
+					"Symfony",
+					"JavaScript",
+					"SQL",
+					"Développement Web"
+				]
+			}
+		</script>
+	</body>
 </html>
