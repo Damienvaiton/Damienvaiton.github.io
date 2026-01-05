@@ -1,129 +1,204 @@
+<!DOCTYPE html>
 <html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<title>Damien Vaiton | Projet Edukid (Android & Kotlin)</title>
+		<meta
+			name="description"
+			content="Découvrez Edukid : une application mobile Android éducative pour les enfants de moins de 6 ans, développée par Damien Vaiton, Axel Gailliard et Yohan Lapierre."
+		/>
+		<link rel="canonical" href="https://damienvaiton.fr/projects/edukid.html" />
 
-    <title>Damien Vaiton | Edukid</title>
-    <meta content="Application mobile Android éducative pour enfants de moins de 6 ans, avec plusieurs mini-jeux pour apprendre en s'amusant." name="description" />
-    <link rel="canonical" href="https://damienvaiton.fr/projects/edukid.html" />
-    <meta content="" name="keywords" />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+			gtag("config", "UA-169007209-3");
+		</script>
 
-    <!-- Favicons -->
-    <link href="../assets/img/favicon.png" rel="icon" />
-    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700"
+			rel="stylesheet"
+		/>
+		<link
+			href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link
+			href="../assets/vendor/boxicons/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
+		<link href="../assets/css/style.css" rel="stylesheet" />
+	</head>
 
-    <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet" />
+	<body style="background-color: #040b14; color: #fff">
+		<main id="main">
+			<div class="container-fluid pb-4">
+				<div class="project-card">
+					<div class="row">
+						<div class="col-lg-12">
+							<h2 class="project-title-custom">
+								<i class="bx bx-face"></i> Edukid
+							</h2>
 
-    <!-- Vendor CSS Files -->
-    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet" />
-    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
-    <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet" />
-    <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
-    <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
+							<div class="row mt-4">
+								<div class="col-md-6">
+									<span class="section-label-custom"
+										>Technologies Utilisées</span
+									>
+									<div class="mb-4">
+										<span class="tech-badge">Kotlin</span>
+										<span class="tech-badge">MVVM</span>
+										<span class="tech-badge">Room</span>
+										<span class="tech-badge">LiveData</span>
+										<span class="tech-badge">Coroutines</span>
+									</div>
 
-    <!-- Template Main CSS File -->
-    <link href="../assets/css/style.css" rel="stylesheet" />
+									<span class="section-label-custom">Liens du Projet</span>
+									<div class="d-flex flex-wrap">
+										<a
+											href="https://github.com/Damienvaiton/SAE3A"
+											target="_blank"
+											class="github-btn-custom mr-2 mb-2"
+										>
+											<i class="bx bxl-github mr-2"></i> GitHub
+										</a>
+										<a
+											href="https://app.bitrise.io/app/5aa8d4e8-d0b8-47cf-9ee7-02065340c39b/build/a209a65f-26e1-411d-9c3a-be1163237c0d/artifact/619ee3252115abdd/p/b3fd5e16609a176c88006b6c38ab6c0c"
+											target="_blank"
+											class="github-btn-custom mb-2"
+											style="background: #12d640"
+										>
+											<i class="bx bx-download mr-2"></i> Télécharger l'APK
+										</a>
+									</div>
+								</div>
+								<div class="col-md-6 mt-4 mt-md-0">
+									<span class="section-label-custom">Contexte du Projet</span>
+									<p>
+										Développé lors de ma
+										<strong>3ème année de BUT Informatique</strong>. Edukid est
+										une application Android conçue pour les enfants de moins de
+										6 ans, offrant un environnement d'apprentissage ludique et
+										sécurisé.
+									</p>
+								</div>
+							</div>
 
-    <!-- =======================================================
-    * Template Name: Personal - v2.2.0
-    * Template URL: https://bootstrapmade.com/personal-free-resume-bootstrap-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-</head>
+							<hr class="my-5" style="border-color: rgba(255, 255, 255, 0.1)" />
 
-<body data-gr-c-s-loaded="true">
-    <main id="main">
-        <div id="portfolio-details" class="portfolio-details">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 portfolio-info">
-                        <br />
-                        <h2 style="color: #12d640">Edukid</h2>
-                        <ul>
-                            <li><strong>Tech Stack</strong>: Kotlin, MVVM, Room, LiveData, Coroutines
-                            </li>
-                            <li>
-                                <strong>Github URL</strong>:
-                                <a href="https://github.com/Damienvaiton/SAE3A" target="_blank">Project Link</a>
-                            </li>
-                            <li>
-                                <strong>APK</strong>:
-                                <a href="https://app.bitrise.io/app/5aa8d4e8-d0b8-47cf-9ee7-02065340c39b/build/a209a65f-26e1-411d-9c3a-be1163237c0d/artifact/619ee3252115abdd/p/b3fd5e16609a176c88006b6c38ab6c0c"
-                                    target="_blank">Download</a>
-                            </li>
-                        </ul>
+							<div class="row">
+								<div class="col-md-12">
+									<h4 style="color: #12d640" class="mb-4 text-uppercase">
+										Expérience Ludique
+									</h4>
+									<div class="row mt-4">
+										<div class="col-md-6 mb-3">
+											<h5>
+												<i class="bx bx-joystick feature-icon-custom"></i>
+												Mini-jeux variés
+											</h5>
+											<p class="text-white-50 small">
+												L'application propose de nombreux jeux répartis en
+												catégories : animaux, couleurs, formes, chiffres et
+												lettres.
+											</p>
+										</div>
+										<div class="col-md-6 mb-3">
+											<h5>
+												<i class="bx bx-happy-alt feature-icon-custom"></i>
+												Interface Ergonomique
+											</h5>
+											<p class="text-white-50 small">
+												Conception pensée spécifiquement pour être intuitive et
+												facile à utiliser par de très jeunes enfants.
+											</p>
+										</div>
+										<div class="col-md-6 mb-3">
+											<h5>
+												<i class="bx bx-brain feature-icon-custom"></i>
+												Apprentissage Actif
+											</h5>
+											<p class="text-white-50 small">
+												Permet aux tout-petits de développer leurs connaissances
+												de base tout en s'amusant.
+											</p>
+										</div>
+										<div class="col-md-6 mb-3">
+											<h5>
+												<i class="bx bx-save feature-icon-custom"></i>
+												Persistence des données
+											</h5>
+											<p class="text-white-50 small">
+												Utilisation de la bibliothèque Room pour la gestion
+												locale des données et du suivi.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
 
-                        <p>
-                            This project was carried out as part of a semester-long project during the 3rd year of BUT informatique. 
-                        </p>
-                        <p>
-                            The project, called Edukid, is an Android mobile application designed for children (aged up to 6) and their parents. Children will be able to learn in a fun way, thanks to multiple mini-games divided into several categories. The application is quite ergonomic for young children.
-                        </p>
-                        <p>
-                            The application is divided into several categories: animals, colors, shapes, numbers, and letters. Each category has several mini-games that allow children to learn while having fun.
-                        </p>
-                        
-                        
-                            <h2>Game Screenshots</h2>
-                            <div class="d-flex img-fluid">
+							<div class="mt-5 text-center">
+								<h4 style="color: #12d640" class="mb-4 text-uppercase">
+									Captures d'écran
+								</h4>
+								<div class="row justify-content-center">
+									<div class="col-md-4 mb-3">
+										<img
+											src="../assets/img/project/images/edukidhome.jpg"
+											class="img-fluid screenshot-img-custom"
+											alt="Écran d'accueil Edukid"
+										/>
+									</div>
+									<div class="col-md-4 mb-3">
+										<img
+											src="../assets/img/project/images/edukidtheme.jpg"
+											class="img-fluid screenshot-img-custom"
+											alt="Thèmes Edukid"
+										/>
+									</div>
+									<div class="col-md-4 mb-3">
+										<img
+											src="../assets/img/project/images/edukidgame.jpg"
+											class="img-fluid screenshot-img-custom"
+											alt="Mini-jeu Edukid"
+										/>
+									</div>
+								</div>
+							</div>
 
-                                <img src="../assets/img/project/images/edukidhome.jpg" class="pimage">
-                                <img src="../assets/img/project/images/edukidtheme.jpg" class="pimage">
-                                <img src="../assets/img/project/images/edukidgame.jpg" class="pimage">
-                            </div>
+							<div class="text-center mt-5">
+								<a
+									href="https://damienvaiton.fr"
+									target="_top"
+									class="btn"
+									style="
+										color: #12d640;
+										border: 1px solid #12d640;
+										border-radius: 50px;
+										padding: 10px 30px;
+									"
+								>
+									<i class="bx bx-left-arrow-alt"></i> Retour au Portfolio
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
 
-                    
-                    </div>
-                </div>
-            </div>
-    </main>
-
-    <!-- Vendor JS Files -->
-    <script async="" src="//www.google-analytics.com/analytics.js"></script>
-    <script src="assets/vendor/jquery/jquery.min.js"></script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-    <script src="../assets/vendor/php-email-form/validate.js"></script>
-    <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
-    <script src="../assets/vendor/counterup/counterup.min.js"></script>
-    <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
-    <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="../assets/vendor/venobox/venobox.min.js"></script>
-
-    <!-- Template Main JS File -->
-    <script src="../assets/js/main.js"></script>
-
-    <script>
-        if (window.self == window.top) {
-            (function (i, s, o, g, r, a, m) {
-                i["GoogleAnalyticsObject"] = r;
-                (i[r] =
-                    i[r] ||
-                    function () {
-                        (i[r].q = i[r].q || []).push(arguments);
-                    }),
-                    (i[r].l = 1 * new Date());
-                (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m);
-            })(
-                window,
-                document,
-                "script",
-                "//www.google-analytics.com/analytics.js",
-                "ga"
-            );
-            ga("create", "UA-55234356-4", "auto");
-            ga("send", "pageview");
-        }
-    </script>
-</body>
-
+		<script src="../assets/vendor/jquery/jquery.min.js"></script>
+		<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="../assets/js/main.js"></script>
+	</body>
 </html>
