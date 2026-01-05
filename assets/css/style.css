@@ -531,32 +531,422 @@ section .container {
 /*--------------------------------------------------------------
 # Interests
 --------------------------------------------------------------*/
+/* Style de base pour tous les blocs */
 .interests .icon-box {
   display: flex;
   align-items: center;
   padding: 20px;
   background: #09203a;
   transition: ease-in-out 0.3s;
+  border-radius: 8px;
+  height: 100%;
 }
 
-
-.interests .icon-box i {
-  font-size: 32px;
-  padding-right: 10px;
-  line-height: 1;
+/* --- PASSIONS MAJEURES (Dév & Musique) --- */
+.interests .icon-box.major-passion {
+  align-items: flex-start;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 3px solid #12d640;
+  /* Bordure verte par défaut */
 }
 
-.interests .icon-box h3 {
-  font-weight: 700;
+.interests .icon-box.major-passion h3 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  color: #12d640;
+}
+
+.interests .icon-box.major-passion p {
+  font-size: 13px;
+  color: #adb5bd;
   margin: 0;
-  padding: 0;
-  line-height: 1;
-  font-size: 16px;
+  line-height: 1.4;
+}
+
+.interests .icon-box.major-passion i {
+  font-size: 40px;
+  padding-right: 20px;
+}
+
+/* Spécificité Musique : Theme Blue Midnight */
+.interests .music-theme {
+  border-bottom: 3px solid #3a47d5 !important;
+  background: linear-gradient(135deg, rgba(58, 71, 213, 0.1) 0%, rgba(0, 0, 0, 0) 100%) !important;
+}
+
+.interests .music-theme h3,
+.interests .music-theme i {
+  color: #5c67ff !important;
+}
+
+/* --- AUTRES INTÉRÊTS (Pills du bas) --- */
+.interests .minor-interest {
+  padding: 15px;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.interests .minor-interest i {
+  font-size: 24px;
+}
+
+.interests .minor-interest h3 {
+  font-size: 14px;
   color: #fff;
 }
 
 .interests .icon-box:hover {
-  background: #042b56eb;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-3px);
+}
+
+
+
+/* --- Mise en page Formation & Certifications --- */
+
+/* Cartes de formation */
+.education-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  padding: 30px !important;
+  text-align: left !important;
+}
+
+.edu-img {
+  height: 60px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.edu-img img {
+  max-height: 100%;
+  border-radius: 4px;
+}
+
+.education-card h4 {
+  color: #12d640 !important;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.education-card .date {
+  color: #adb5bd;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.education-card ul {
+  padding-left: 20px;
+  margin-top: 15px;
+}
+
+.education-card ul li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Cartes de certifications */
+.cert-card {
+  background: #09203a !important;
+  border-left: 4px solid #12d640;
+  display: flex !important;
+  align-items: center !important;
+  text-align: left !important;
+  padding: 20px !important;
+}
+
+.cert-card i {
+  font-size: 40px;
+  margin-right: 20px;
+}
+
+.cert-info h4 {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.cert-info p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.cert-link {
+  font-size: 13px;
+  color: #12d640;
+  text-decoration: underline;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.cert-link:hover {
+  color: #fff;
+}
+
+
+/* --- Style Section Expérience --- */
+
+.experience-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-left: 5px solid #12d640 !important;
+  /* Ton vert signature */
+  padding: 30px !important;
+  text-align: left !important;
+  border-radius: 12px !important;
+}
+
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.company-name a {
+  color: #12d640 !important;
+  font-size: 24px !important;
+  font-weight: 700;
+}
+
+.exp-date {
+  background: rgba(18, 214, 64, 0.1);
+  color: #12d640;
+  padding: 5px 15px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.job-title {
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+/* Badges de Technologies */
+.tech-stack .badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: #dee2e6;
+  padding: 6px 12px;
+  margin-right: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exp-list {
+  padding-left: 20px;
+  margin-top: 15px;
+  list-style: none;
+}
+
+.exp-list li {
+  position: relative;
+  padding-bottom: 12px;
+  color: #adb5bd;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.exp-list li::before {
+  content: "▹";
+  position: absolute;
+  left: -20px;
+  color: #12d640;
+  font-weight: bold;
+}
+
+
+/* --- Correction Spécifique Section Compétences --- */
+
+/* --- Version Agrandie de la Section Compétences --- */
+
+/* ==========================================================================
+   SECTION COMPÉTENCES (SKILLS)
+   ========================================================================== */
+
+/* Boîte principale de chaque catégorie */
+.skill-box {
+  background: rgba(255, 255, 255, 0.05) !important;
+  padding: 40px !important;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+/* Titre de la catégorie (ex: Langages) */
+.skill-header {
+  color: #12d640 !important;
+  /* Vert Damien Vaiton */
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  margin-bottom: 30px !important;
+  border-bottom: 1px solid rgba(18, 214, 64, 0.3);
+  padding-bottom: 15px;
+  text-align: left;
+}
+
+/* Conteneur des logos */
+.logo-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* --- SYSTÈME DE TOOLTIP (INFOBULLE) --- */
+
+.logo-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* La bulle de texte qui apparaît au-dessus */
+.logo-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 130%;
+  /* Positionne au-dessus du logo */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #09203a;
+  /* Bleu Midnight */
+  color: #12d640;
+  /* Vert signature */
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 5px;
+  border: 1px solid #12d640;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: 10;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Le petit triangle sous la bulle */
+.logo-item::before {
+  content: "";
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #12d640 transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Affichage de la Tooltip au survol */
+.logo-item:hover::after,
+.logo-item:hover::before {
+  opacity: 1;
+  visibility: visible;
+  bottom: 115%;
+}
+
+/* --- STYLE DES IMAGES (LOGOS) --- */
+
+.logo-item img {
+  height: 55px !important;
+  width: auto !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.1));
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+/* Animation au survol du logo */
+.logo-item:hover img {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)) !important;
+}
+
+/* Force la visibilité des logos noirs (Symfony, Android Studio, etc.) */
+.logo-container img.force-white {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Combo : Force-white + Glow au survol */
+.logo-item:hover img.force-white {
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)) !important;
+}
+
+/* --- Style Section Contact --- */
+
+.contact .info-box {
+  color: #fff;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  /* Fond sombre transparent */
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.contact .info-box i.bx {
+  font-size: 32px;
+  color: #12d640;
+  /* Ton vert signature */
+  border-radius: 50%;
+  padding: 10px;
+  background: rgba(18, 214, 64, 0.1);
+  margin-bottom: 15px;
+}
+
+.contact .info-box h3 {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.contact .info-box p {
+  line-height: 24px;
+  font-size: 14px;
+  margin-bottom: 0;
+  color: #adb5bd;
+}
+
+/* Liens réseaux sociaux */
+.contact .social-links {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.contact .social-links a {
+  font-size: 24px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.contact .social-links a:hover {
+  color: #12d640;
+  transform: translateY(-3px);
+}
+
+/* Effet de survol sur la carte */
+.contact .info-box:hover {
+  border-color: #12d640;
+  background: rgba(18, 214, 64, 0.05);
+  transform: translateY(-5px);
 }
 
 /*--------------------------------------------------------------
