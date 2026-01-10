@@ -9,12 +9,12 @@
   <url>
     <loc>https://damienvaiton.fr/projects/vegetabillisauditor.html</loc>
     <lastmod>2026-01-05</lastmod>
-    <priority>0.80</priority>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/edukid.html</loc>
     <lastmod>2026-01-05</lastmod>
-    <priority>0.80</priority>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/fasttrack.html</loc>
@@ -24,11 +24,16 @@
   <url>
     <loc>https://damienvaiton.fr/projects/mcdosurfer.html</loc>
     <lastmod>2026-01-05</lastmod>
-    <priority>0.80</priority>
+    <priority>0.70</priority>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/kinoa.html</loc>
     <lastmod>2026-01-05</lastmod>
-    <priority>0.80</priority>
+    <priority>0.20</priority>
+  </url>
+   <url>
+    <loc>https://damienvaiton.fr/projects/crève.html</loc>
+    <lastmod>2026-01-05</lastmod>
+    <priority>0.10</priority>
   </url>
 </urlset>
