@@ -26,6 +26,10 @@ const FP_KEY = "edt_ics_fingerprints_v1";
 const VIEW_MODE_KEY = "loulouedt_view_mode";
 const TAYLOR_SHOWN_KEY = "loulouedt_taylor_shown_date";
 const TAYLOR_LYRIC_KEY = "loulouedt_taylor_lyric";
+const GROUP_TD_KEY = "edt_group_td_v1";
+const GROUP_LANG_KEY = "edt_group_lang_v1";
+const DEFAULT_GROUP_TD = "G8";
+const DEFAULT_GROUP_LANG = "GH";
 
 const DAY_GRID_START_HOUR = 7;
 const DAY_GRID_END_HOUR = 20;
@@ -48,7 +52,8 @@ const MONTH_NAMES = [
 // =========================================================
 // ---------------- State ----------------
 // =========================================================
-let events = [];
+let rawEvents = []; // tous les événements du calendrier source, avant filtrage par groupe
+let events = []; // événements filtrés pour le groupe TD / langue sélectionné
 let currentView = "day"; // day | week | month
 let dayMode = localStorage.getItem(VIEW_MODE_KEY) === "grid" ? "grid" : "list";
 let selectedDay = startOfDay(new Date());
@@ -240,15 +245,23 @@ function getStoredFingerprints() {
 }
 
 // =========================================================
-// ---------------- Filtre étudiant (G8 / GH) ----------------
+// ---------------- Filtre étudiant (groupe TD / langue) ----------------
 // =========================================================
-function isEventForStudent(e) {
+function getGroupPrefs() {
+	return {
+		td: localStorage.getItem(GROUP_TD_KEY) || DEFAULT_GROUP_TD,
+		lang: localStorage.getItem(GROUP_LANG_KEY) || DEFAULT_GROUP_LANG,
+	};
+}
+
+function isEventForStudent(e, prefs) {
+	const { td, lang } = prefs || getGroupPrefs();
 	const desc = (e.description || "").toUpperCase();
 	const title = (e.title || "").toUpperCase();
 
-	// 1. Cours d'anglais : uniquement le groupe GH
+	// 1. Cours d'anglais : uniquement le groupe de langue choisi
 	if (title.includes("ANGLAIS")) {
-		return desc.includes("GH");
+		return desc.includes(lang);
 	}
 
 	// 2. Vérification des sous-groupes (G1 à G12, GA à GK)
@@ -256,9 +269,9 @@ function isEventForStudent(e) {
 
 	if (groupMatch) {
 		const group = groupMatch[1];
-		// Si c'est un groupe de TD numéroté (G1, G2, etc.), ne garder que G8
+		// Si c'est un groupe de TD numéroté (G1, G2, etc.), ne garder que le groupe TD choisi
 		if (/^G\d+$/.test(group)) {
-			return group === "G8";
+			return group === td;
 		}
 		// Écarter les autres groupes de langues parasites
 		return false;
@@ -266,6 +279,54 @@ function isEventForStudent(e) {
 
 	// 3. Conserver tous les cours en amphi communs
 	return true;
+}
+
+// Détecte les groupes réellement présents dans le calendrier chargé, pour
+// remplir les listes déroulantes du picker sans que l'utilisateur ait à
+// connaître/taper les codes ADE à la main.
+function extractAvailableGroups(list) {
+	const td = new Set();
+	const lang = new Set();
+	for (const e of list) {
+		const desc = (e.description || "").toUpperCase();
+		const matches = desc.match(/\bG(?:\d{1,2}|[A-K])(?:-L\d+)?\b/g) || [];
+		for (const m of matches) {
+			const base = m.split("-")[0];
+			if (/^G\d+$/.test(base)) td.add(base);
+			else lang.add(base);
+		}
+	}
+	// Repli si le calendrier n'est pas encore chargé : plage générique ADE habituelle
+	if (!td.size) for (let i = 1; i <= 12; i++) td.add("G" + i);
+	if (!lang.size) "ABCDEFGHIJK".split("").forEach((l) => lang.add("G" + l));
+	return {
+		td: Array.from(td).sort((a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10)),
+		lang: Array.from(lang).sort(),
+	};
+}
+
+function populateGroupPickers() {
+	const tdSelect = el("groupTdSelect");
+	const langSelect = el("groupLangSelect");
+	if (!tdSelect || !langSelect) return;
+
+	const { td, lang } = extractAvailableGroups(rawEvents);
+	const prefs = getGroupPrefs();
+	// On garde la valeur enregistrée sélectionnable même si elle n'apparaît
+	// pas (encore) dans le calendrier actuellement chargé.
+	if (!td.includes(prefs.td)) td.push(prefs.td);
+	if (!lang.includes(prefs.lang)) lang.push(prefs.lang);
+
+	tdSelect.innerHTML = td.map((g) => `<option value="${g}">${g}</option>`).join("");
+	langSelect.innerHTML = lang.map((g) => `<option value="${g}">${g}</option>`).join("");
+	tdSelect.value = prefs.td;
+	langSelect.value = prefs.lang;
+}
+
+function applyGroupFilter() {
+	const prefs = getGroupPrefs();
+	events = rawEvents.filter((e) => isEventForStudent(e, prefs));
+	setStatus(`${events.length} cours chargés (${prefs.td} & ${prefs.lang})`, "ok");
 }
 
 // =========================================================
@@ -710,12 +771,12 @@ function getCache() {
 }
 
 function loadFromText(text, { persist = true } = {}) {
-	const parsed = dedupeEvents(parseICS(text)).filter(isEventForStudent);
-	events = parsed;
+	rawEvents = dedupeEvents(parseICS(text));
+	applyGroupFilter();
 	if (persist) {
 		localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
 	}
-	setStatus(`${events.length} cours chargés (G8 & GH)`, "ok");
+	populateGroupPickers();
 	renderCurrent();
 }
 
@@ -733,20 +794,20 @@ async function fetchICS(url, { force = false } = {}) {
 		if (!res.ok) throw new Error("HTTP " + res.status);
 		const text = await res.text();
 
-		const parsed = dedupeEvents(parseICS(text)).filter(isEventForStudent);
+		const parsed = dedupeEvents(parseICS(text));
 		const newFps = parsed.map(fingerprint);
 		const oldFps = getStoredFingerprints();
 		const hasChanged = oldFps !== null && !sameFingerprintSet(oldFps, newFps);
 
-		events = parsed;
+		rawEvents = parsed;
+		applyGroupFilter();
 		localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
 		localStorage.setItem(FP_KEY, JSON.stringify(newFps));
+		populateGroupPickers();
 
 		if (hasChanged) {
 			setStatus("Emploi du temps mis à jour", "ok");
 			if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-		} else {
-			setStatus(`${events.length} cours chargés (G8 & GH)`, "ok");
 		}
 		renderCurrent();
 	} catch (err) {
@@ -863,6 +924,18 @@ function init() {
 		const panel = el("setupPanel");
 		panel.classList.toggle("open");
 		el("icsUrlInput").value = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL || "";
+		populateGroupPickers();
+	});
+
+	el("groupTdSelect").addEventListener("change", (ev) => {
+		localStorage.setItem(GROUP_TD_KEY, ev.target.value);
+		applyGroupFilter();
+		renderCurrent();
+	});
+	el("groupLangSelect").addEventListener("change", (ev) => {
+		localStorage.setItem(GROUP_LANG_KEY, ev.target.value);
+		applyGroupFilter();
+		renderCurrent();
 	});
 
 	el("saveUrlBtn").addEventListener("click", () => {
@@ -890,8 +963,10 @@ function init() {
 		localStorage.removeItem(CACHE_KEY);
 		localStorage.removeItem(URL_KEY);
 		localStorage.removeItem(FP_KEY);
+		rawEvents = [];
 		events = [];
 		setStatus("Cache local effacé");
+		populateGroupPickers();
 		renderCurrent();
 	});
 
