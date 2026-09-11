@@ -832,16 +832,9 @@
 
 				// =========================================================
 				// ---------------- Access gate (client-side) ----------------
-				// NOTE: this is a soft gate, not real security. GitHub Pages
-				// is a static host, so there is no server to enforce a real
-				// password check — anyone determined enough could read this
-				// script. It is here to keep the page out of casual reach,
-				// combined with the unindexed /loulouedt route.
-				// Password is stored as a SHA-256 hash so it's not sitting in
-				// plaintext in the page source.
 				// =========================================================
 				const PASS_HASH =
-					"8ed9b16bdb8aca4cb4ca16cc14521074375135b0e9a7e3e04e810d01cdc2c477"; // sha256 of the chosen password
+					"8ed9b16bdb8aca4cb4ca16cc14521074375135b0e9a7e3e04e810d01cdc2c477";
 				const AUTH_KEY = "loulouedt_auth_v1";
 
 				async function sha256(text) {
@@ -895,10 +888,10 @@
 				// ---------------- Main app (runs after unlock) ----------------
 				// =========================================================
 				function initApp() {
-					const DEFAULT_ICS_URL = ""; // ex: "https://upplanning.appli.univ-poitiers.fr/.../agenda.ics"
+					const DEFAULT_ICS_URL = "";
 					const CACHE_KEY = "edt_ics_cache_v1";
 					const URL_KEY = "edt_ics_url_v1";
-					const CACHE_TTL_MS = 30 * 60 * 1000; // 30 min
+					const CACHE_TTL_MS = 30 * 60 * 1000;
 
 					const DOW_SHORT = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 					const MONTH_NAMES = [
@@ -917,7 +910,7 @@
 					];
 
 					let events = [];
-					let currentView = "day"; // 'day' | 'week' | 'month'
+					let currentView = "day";
 					let selectedDay = startOfDay(new Date());
 					let weekCursor = startOfWeek(new Date());
 					let monthCursor = startOfMonth(new Date());
@@ -944,7 +937,7 @@
 					}
 					function startOfWeek(d) {
 						const x = startOfDay(d);
-						const dow = (x.getDay() + 6) % 7; // Monday = 0
+						const dow = (x.getDay() + 6) % 7;
 						return addDays(x, -dow);
 					}
 					function sameDay(a, b) {
@@ -1037,10 +1030,6 @@
 						return out.filter((e) => e.start && e.end);
 					}
 
-					// Dédoublonne par UID (garde la dernière occurrence rencontrée dans le
-					// fichier, généralement la version la plus à jour). Si un événement n'a
-					// pas d'UID, on retombe sur une clé début+fin+titre pour éviter les
-					// doublons accidentels tout en gardant les cours distincts.
 					function dedupeEvents(list) {
 						const map = new Map();
 						for (const e of list) {
@@ -1050,6 +1039,33 @@
 							map.set(key, e);
 						}
 						return Array.from(map.values()).sort((a, b) => a.start - b.start);
+					}
+
+					// ---------- Filtre spécialisé pour G8 et GH ----------
+					function isEventForStudent(e) {
+						const desc = (e.description || "").toUpperCase();
+						const title = (e.title || "").toUpperCase();
+
+						// 1. Cours d'anglais : uniquement le groupe GH
+						if (title.includes("ANGLAIS")) {
+							return desc.includes("GH");
+						}
+
+						// 2. Vérification des sous-groupes (G1 à G12, GA à GK)
+						const groupMatch = desc.match(/\b(G\d+|G[A-K])(-L\d+)?\b/);
+
+						if (groupMatch) {
+							const group = groupMatch[1];
+							// Si c'est un groupe de TD numéroté (G1, G2, etc.), ne garder que G8
+							if (/^G\d+$/.test(group)) {
+								return group === "G8";
+							}
+							// Écarter les autres groupes de langues parasites
+							return false;
+						}
+
+						// 3. Conserver tous les cours en amphi communs
+						return true;
 					}
 
 					// ---------- Rendering: shared course card ----------
@@ -1143,7 +1159,7 @@
 						});
 
 						const firstOfMonth = monthCursor;
-						const firstWeekday = (firstOfMonth.getDay() + 6) % 7; // Monday = 0
+						const firstWeekday = (firstOfMonth.getDay() + 6) % 7;
 						const gridStart = addDays(firstOfMonth, -firstWeekday);
 						const today = new Date();
 
@@ -1276,7 +1292,7 @@
 						renderMonth();
 					});
 
-					// simple horizontal swipe for day view
+					// Swipe navigation
 					(function enableSwipe() {
 						const zone = el("dayView");
 						let startX = null,
@@ -1306,21 +1322,22 @@
 						);
 					})();
 
-					// ---------- Data loading ----------
+					// ---------- Data loading avec application du filtre ----------
 					function setStatus(msg, kind) {
 						statusLine.className = "status-line" + (kind ? " " + kind : "");
 						statusLine.textContent = msg;
 					}
 
 					function loadFromText(text, { persist = true } = {}) {
-						events = dedupeEvents(parseICS(text));
+						const parsed = dedupeEvents(parseICS(text));
+						events = parsed.filter(isEventForStudent);
 						if (persist) {
 							localStorage.setItem(
 								CACHE_KEY,
 								JSON.stringify({ text, fetchedAt: Date.now() }),
 							);
 						}
-						setStatus(`${events.length} cours chargés`, "ok");
+						setStatus(`${events.length} cours chargés (G8 & GH)`, "ok");
 						renderCurrent();
 					}
 
@@ -1429,9 +1446,6 @@
 						}
 					}
 
-					// Rafraîchissement auto : retente un fetch toutes les 30 min (durée du
-					// cache) tant que l'onglet est visible, pour garder le planning à jour
-					// sans que l'utilisateur ait à cliquer manuellement.
 					setInterval(() => {
 						if (document.visibilityState !== "visible") return;
 						const url = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL;
@@ -1446,44 +1460,15 @@
 						}
 					});
 				}
-				const CACHE_NAME = "edt-pwa-v1";
-				const ASSETS = [
-					"./",
-					"./index.html",
-					"./manifest.webmanifest",
-					"https://fonts.googleapis.com/css?family=Space+Grotesk:400,500,600,700|IBM+Plex+Mono:400,500",
-					"https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css",
-				];
 
-				self.addEventListener("install", (e) => {
-					e.waitUntil(
-						caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)),
-					);
-					self.skipWaiting();
-				});
-
-				self.addEventListener("activate", (e) => {
-					e.waitUntil(
-						caches
-							.keys()
-							.then((keys) =>
-								Promise.all(
-									keys
-										.filter((k) => k !== CACHE_NAME)
-										.map((k) => caches.delete(k)),
-								),
-							),
-					);
-					self.clients.claim();
-				});
-
-				// Stratégie : Réseau en priorité, repli sur le cache si hors-ligne
-				self.addEventListener("fetch", (e) => {
-					// On ne gère que les requêtes GET dans le périmètre
-					if (e.request.method !== "GET") return;
-
-					e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-				});
+				// Enregistrement PWA (Service Worker)
+				if ("serviceWorker" in navigator) {
+					window.addEventListener("load", () => {
+						navigator.serviceWorker
+							.register("./sw.js", { scope: "./" })
+							.catch((err) => console.error("Échec enregistrement SW:", err));
+					});
+				}
 			})();
 		</script>
 	</body>
