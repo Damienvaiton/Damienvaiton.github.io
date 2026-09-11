@@ -11,11 +11,11 @@ const VAPID_PUBLIC_KEY =
 	"BJnOjwifo7rq3u8zvL-KdGTL3mV7y5FyrMLaY_QFS90NP60Qs1Wyq4LKdhs0wAu8N8cP0AYJUCEx3lBZ9dFfAUs";
 
 function crousDateParam(date) {
-	// L'API attend le format DD-MM-YYYY
+	// L'API attend le format DD-MM-YYYY (confirmé par le message d'erreur de l'API)
 	return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
 }
 function crousMenuApiUrl(date) {
-	return `https://api.croustillant.menu/v1/restaurants/${CROUS_RESTAURANT_ID}/menus/${crousDateParam(date)}`;
+	return `https://api.croustillant.menu/v1/restaurants/${CROUS_RESTAURANT_ID}/menu/${crousDateParam(date)}`;
 }
 const TAYLOR_API_URL =
 	"https://taylor-swift-api.sarbo.workers.dev/lyrics?shouldRandomizeLyrics=true&numberOfParagraphs=1";
@@ -28,7 +28,7 @@ const TAYLOR_SHOWN_KEY = "loulouedt_taylor_shown_date";
 const TAYLOR_LYRIC_KEY = "loulouedt_taylor_lyric";
 
 const DAY_GRID_START_HOUR = 7;
-const DAY_GRID_END_HOUR = 19;
+const DAY_GRID_END_HOUR = 20;
 
 const MONTH_NAMES = [
 	"janvier",
@@ -180,7 +180,8 @@ function parseICS(text) {
 function dedupeEvents(list) {
 	const map = new Map();
 	for (const e of list) {
-		const key = e.uid || `${e.start.getTime()}|${e.end.getTime()}|${e.title || ""}`;
+		const key =
+			e.uid || `${e.start.getTime()}|${e.end.getTime()}|${e.title || ""}`;
 		map.set(key, e);
 	}
 	return Array.from(map.values()).sort((a, b) => a.start - b.start);
@@ -303,7 +304,9 @@ function renderDayList(dayEvents) {
 		list.innerHTML = `<div class="day-empty"><i class='bx bx-coffee'></i>Aucun cours ce jour-là.</div>`;
 		return;
 	}
-	list.innerHTML = dayEvents.map((e) => courseCardHtml(e, events.indexOf(e))).join("");
+	list.innerHTML = dayEvents
+		.map((e) => courseCardHtml(e, events.indexOf(e)))
+		.join("");
 	wireCourseCards(list);
 }
 
@@ -333,7 +336,10 @@ function renderDayGrid(dayEvents) {
 
 	let eventsHtml = "";
 	dayEvents.forEach((e) => {
-		const s = Math.max(e.start.getHours() * 60 + e.start.getMinutes(), startMin);
+		const s = Math.max(
+			e.start.getHours() * 60 + e.start.getMinutes(),
+			startMin,
+		);
 		const en = Math.min(e.end.getHours() * 60 + e.end.getMinutes(), endMin);
 		if (en <= startMin || s >= endMin) return;
 		const top = ((s - startMin) / totalMin) * 100;
@@ -478,7 +484,9 @@ function renderMonthDayPanel() {
 		list.innerHTML = `<div class="day-empty" style="padding:30px 16px;"><i class='bx bx-coffee'></i>Aucun cours ce jour-là.</div>`;
 		return;
 	}
-	list.innerHTML = dayEvents.map((e) => courseCardHtml(e, events.indexOf(e))).join("");
+	list.innerHTML = dayEvents
+		.map((e) => courseCardHtml(e, events.indexOf(e)))
+		.join("");
 	wireCourseCards(list);
 }
 
@@ -615,14 +623,20 @@ async function fetchCrousMenu(date) {
 		const json = await res.json();
 		if (!json.success || !json.data) throw new Error("Réponse invalide");
 
-		const repas = (json.data.repas || []).find((r) => r.type === CROUS_MEAL_TYPE);
+		const repas = (json.data.repas || []).find(
+			(r) => r.type === CROUS_MEAL_TYPE,
+		);
 		if (!repas) {
 			result = { state: "empty" };
 		} else {
-			const cats = [...(repas.categories || [])].sort((a, b) => a.ordre - b.ordre);
+			const cats = [...(repas.categories || [])].sort(
+				(a, b) => a.ordre - b.ordre,
+			);
 			const groups = cats
 				.map((cat) => {
-					const plats = [...(cat.plats || [])].sort((a, b) => a.ordre - b.ordre);
+					const plats = [...(cat.plats || [])].sort(
+						(a, b) => a.ordre - b.ordre,
+					);
 					return { libelle: cat.libelle, plats: plats.map((p) => p.libelle) };
 				})
 				.filter((g) => g.plats.length);
@@ -702,7 +716,10 @@ function loadFromText(text, { persist = true } = {}) {
 	const parsed = dedupeEvents(parseICS(text)).filter(isEventForStudent);
 	events = parsed;
 	if (persist) {
-		localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
+		localStorage.setItem(
+			CACHE_KEY,
+			JSON.stringify({ text, fetchedAt: Date.now() }),
+		);
 	}
 	setStatus(`${events.length} cours chargés (G8 & GH)`, "ok");
 	renderCurrent();
@@ -728,7 +745,10 @@ async function fetchICS(url, { force = false } = {}) {
 		const hasChanged = oldFps !== null && !sameFingerprintSet(oldFps, newFps);
 
 		events = parsed;
-		localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
+		localStorage.setItem(
+			CACHE_KEY,
+			JSON.stringify({ text, fetchedAt: Date.now() }),
+		);
 		localStorage.setItem(FP_KEY, JSON.stringify(newFps));
 
 		if (hasChanged) {
@@ -742,9 +762,15 @@ async function fetchICS(url, { force = false } = {}) {
 		const cached = getCache();
 		if (cached) {
 			loadFromText(cached.text, { persist: false });
-			setStatus("Sync impossible (réseau/CORS) — dernière version en cache", "error");
+			setStatus(
+				"Sync impossible (réseau/CORS) — dernière version en cache",
+				"error",
+			);
 		} else {
-			setStatus("Échec du chargement. Colle le .ics dans les réglages.", "error");
+			setStatus(
+				"Échec du chargement. Colle le .ics dans les réglages.",
+				"error",
+			);
 			renderCurrent();
 		}
 	} finally {
@@ -842,7 +868,9 @@ function init() {
 	})();
 
 	// ---------- Modal wiring ----------
-	el("modalClose").addEventListener("click", () => el("modalBg").classList.remove("open"));
+	el("modalClose").addEventListener("click", () =>
+		el("modalBg").classList.remove("open"),
+	);
 	el("modalBg").addEventListener("click", (ev) => {
 		if (ev.target === el("modalBg")) el("modalBg").classList.remove("open");
 	});
@@ -851,7 +879,8 @@ function init() {
 	el("setupBtn").addEventListener("click", () => {
 		const panel = el("setupPanel");
 		panel.classList.toggle("open");
-		el("icsUrlInput").value = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL || "";
+		el("icsUrlInput").value =
+			localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL || "";
 	});
 
 	el("saveUrlBtn").addEventListener("click", () => {
@@ -932,12 +961,17 @@ function urlBase64ToUint8Array(base64String) {
 	const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 	const rawData = atob(base64);
 	const outputArray = new Uint8Array(rawData.length);
-	for (let i = 0; i < rawData.length; i++) outputArray[i] = rawData.charCodeAt(i);
+	for (let i = 0; i < rawData.length; i++)
+		outputArray[i] = rawData.charCodeAt(i);
 	return outputArray;
 }
 
 function pushSupported() {
-	return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+	return (
+		"serviceWorker" in navigator &&
+		"PushManager" in window &&
+		"Notification" in window
+	);
 }
 
 async function getPushButtonState() {
@@ -1039,5 +1073,3 @@ if (document.readyState === "loading") {
 } else {
 	init();
 }
-
-
