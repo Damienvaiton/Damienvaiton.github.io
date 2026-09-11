@@ -1,0 +1,717 @@
+:root {
+	--bg: #0b0f10;
+	--panel: #14191b;
+	--panel-2: #1b2224;
+	--line: rgba(255, 255, 255, 0.09);
+	--ink: #f2f4f3;
+	--ink-dim: rgba(242, 244, 243, 0.5);
+	--ink-faint: rgba(242, 244, 243, 0.32);
+	--lime: #c4f24b;
+	--lime-dim: rgba(196, 242, 75, 0.14);
+	--coral: #ff6b5e;
+	--safe-top: env(safe-area-inset-top, 0px);
+	--safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--ink);
+	font-family: "Space Grotesk", sans-serif;
+	min-height: 100vh;
+	overscroll-behavior-y: contain;
+}
+
+h1,
+h2,
+h3 {
+	font-family: "Space Grotesk", sans-serif;
+	margin: 0;
+}
+.mono {
+	font-family: "IBM Plex Mono", monospace;
+}
+
+button {
+	font-family: inherit;
+}
+
+/* ---------------- App shell ---------------- */
+#app {
+	min-height: 100vh;
+	padding-bottom: calc(24px + var(--safe-bottom));
+}
+
+.topbar {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	background: var(--bg);
+	padding: calc(14px + var(--safe-top)) 16px 12px;
+	border-bottom: 1px solid var(--line);
+}
+.topbar-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.brand-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--lime);
+	flex-shrink: 0;
+}
+.brand h1 {
+	font-size: 1.05rem;
+	font-weight: 600;
+}
+
+.icon-btn {
+	width: 36px;
+	height: 36px;
+	border-radius: 9px;
+	border: 1px solid var(--line);
+	background: var(--panel);
+	color: var(--ink);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.05rem;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+.icon-btn:active {
+	background: var(--panel-2);
+}
+.icon-btn.spin i {
+	animation: spin 0.7s linear;
+}
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.status-line {
+	font-size: 0.72rem;
+	color: var(--ink-faint);
+	margin-top: 8px;
+}
+.status-line.error {
+	color: var(--coral);
+}
+.status-line.ok {
+	color: var(--ink-dim);
+}
+
+/* View switch (jour / semaine / mois) */
+.view-switch {
+	display: flex;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	padding: 3px;
+	margin-top: 12px;
+}
+.view-switch button {
+	flex: 1;
+	background: transparent;
+	border: none;
+	color: var(--ink-dim);
+	font-size: 0.82rem;
+	font-weight: 500;
+	padding: 8px 0;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.view-switch button.active {
+	background: var(--lime);
+	color: #0b0f10;
+	font-weight: 600;
+}
+
+/* Date nav */
+.date-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 16px 4px;
+}
+.date-nav .label {
+	font-size: 0.98rem;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+.date-nav .label .sub {
+	display: block;
+	font-size: 0.72rem;
+	font-weight: 400;
+	color: var(--ink-faint);
+	margin-top: 2px;
+	text-transform: none;
+}
+.nav-arrows {
+	display: flex;
+	gap: 8px;
+}
+
+.today-chip {
+	margin: 0 16px 6px;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	color: var(--ink-dim);
+	font-size: 0.76rem;
+	padding: 6px 12px;
+	border-radius: 20px;
+}
+.today-chip:active {
+	background: var(--panel-2);
+}
+
+/* Day mode switch (Liste / Grille) */
+.day-mode-switch {
+	display: inline-flex;
+	gap: 4px;
+	margin: 0 16px 10px;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 9px;
+	padding: 3px;
+}
+.day-mode-switch button {
+	background: transparent;
+	border: none;
+	color: var(--ink-dim);
+	font-size: 0.74rem;
+	font-weight: 500;
+	padding: 6px 10px;
+	border-radius: 6px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+.day-mode-switch button.active {
+	background: var(--lime-dim);
+	color: var(--lime);
+}
+
+/* ---------------- Day view ---------------- */
+#dayView {
+	padding: 10px 16px 8px;
+}
+.day-empty {
+	text-align: center;
+	padding: 60px 20px;
+	color: var(--ink-faint);
+}
+.day-empty i {
+	font-size: 2rem;
+	color: var(--ink-faint);
+	display: block;
+	margin-bottom: 10px;
+}
+
+.day-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.course-card {
+	display: flex;
+	gap: 12px;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	padding: 14px;
+	cursor: pointer;
+}
+.course-card:active {
+	background: var(--panel-2);
+}
+.course-time {
+	flex-shrink: 0;
+	width: 56px;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.72rem;
+	color: var(--lime);
+	line-height: 1.5;
+	padding-top: 1px;
+}
+.course-time .end {
+	color: var(--ink-faint);
+}
+.course-bar {
+	width: 3px;
+	border-radius: 3px;
+	background: var(--lime);
+	flex-shrink: 0;
+}
+.course-body {
+	min-width: 0;
+	flex: 1;
+}
+.course-title {
+	font-size: 0.92rem;
+	font-weight: 600;
+	margin-bottom: 4px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.course-loc {
+	font-size: 0.78rem;
+	color: var(--ink-dim);
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.course-loc i {
+	font-size: 0.85rem;
+	color: var(--ink-faint);
+}
+.course-teacher {
+	font-size: 0.74rem;
+	color: var(--ink-faint);
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 3px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.course-teacher i {
+	font-size: 0.82rem;
+}
+
+/* ---------------- Day grid (vue calendrier) ---------------- */
+.day-grid-wrap {
+	position: relative;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	padding: 0 0 0 44px;
+	overflow: hidden;
+}
+.day-grid {
+	position: relative;
+	height: 660px;
+}
+.grid-hours {
+	position: absolute;
+	inset: 0;
+}
+.grid-hour-line {
+	position: absolute;
+	left: -44px;
+	right: 0;
+	border-top: 1px solid var(--line);
+	height: 0;
+}
+.grid-hour-line span {
+	position: absolute;
+	left: 0;
+	top: -7px;
+	width: 40px;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.62rem;
+	color: var(--ink-faint);
+	text-align: right;
+	padding-right: 6px;
+}
+.grid-events {
+	position: absolute;
+	inset: 0;
+	padding: 0 8px;
+}
+.grid-event {
+	position: absolute;
+	left: 8px;
+	right: 8px;
+	background: var(--lime-dim);
+	border-left: 3px solid var(--lime);
+	border-radius: 6px;
+	padding: 4px 8px;
+	overflow: hidden;
+	cursor: pointer;
+}
+.grid-event:active {
+	filter: brightness(1.15);
+}
+.grid-event-time {
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.62rem;
+	color: var(--lime);
+}
+.grid-event-title {
+	font-size: 0.78rem;
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.grid-event-loc {
+	font-size: 0.68rem;
+	color: var(--ink-dim);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ---------------- Vibe du Soir (widget Taylor Swift) ---------------- */
+.vibe-widget {
+	margin-top: 16px;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-left: 3px solid var(--lime);
+	border-radius: 12px;
+	padding: 14px 16px;
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+}
+.vibe-widget i {
+	color: var(--lime);
+	font-size: 1rem;
+	margin-top: 2px;
+	flex-shrink: 0;
+}
+.vibe-widget .vibe-text {
+	font-size: 0.82rem;
+	line-height: 1.55;
+	color: var(--ink-dim);
+	font-style: italic;
+	white-space: pre-line;
+}
+.vibe-widget .vibe-label {
+	display: block;
+	font-size: 0.64rem;
+	color: var(--ink-faint);
+	font-style: normal;
+	margin-top: 8px;
+	letter-spacing: 0.02em;
+}
+
+/* ---------------- Menu CROUS ---------------- */
+.crous-section {
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid var(--line);
+}
+.section-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+	margin-bottom: 10px;
+}
+.section-label i {
+	color: var(--lime);
+	font-size: 0.9rem;
+}
+.crous-widget {
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	padding: 4px;
+	background: var(--panel);
+}
+.crous-loading,
+.crous-empty {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 20px 14px;
+	color: var(--ink-faint);
+	font-size: 0.82rem;
+}
+.crous-loading i,
+.crous-empty i {
+	font-size: 1.1rem;
+}
+.crous-group {
+	padding: 12px 14px;
+}
+.crous-group + .crous-group {
+	border-top: 1px solid var(--line);
+}
+.crous-cat {
+	font-size: 0.68rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var(--lime);
+	margin-bottom: 6px;
+}
+.crous-plats {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+.crous-plat {
+	font-size: 0.86rem;
+	color: var(--ink);
+	line-height: 1.4;
+}
+
+/* ---------------- Week view ---------------- */
+#weekView {
+	display: none;
+	padding: 10px 16px 8px;
+}
+.week-day-block + .week-day-block {
+	margin-top: 18px;
+}
+.week-day-header {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	font-size: 0.82rem;
+	font-weight: 500;
+	color: var(--ink-dim);
+	text-transform: capitalize;
+	padding-bottom: 8px;
+	border-bottom: 1px solid var(--line);
+	margin-bottom: 10px;
+}
+.week-day-header .wd-num {
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--ink);
+}
+.week-day-header.today {
+	color: var(--lime);
+}
+.week-day-header.today .wd-num {
+	color: var(--lime);
+}
+
+/* ---------------- Month view ---------------- */
+#monthView {
+	display: none;
+	padding: 6px 12px 8px;
+}
+.month-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 4px;
+}
+.month-dow {
+	text-align: center;
+	font-size: 0.65rem;
+	color: var(--ink-faint);
+	padding-bottom: 6px;
+	font-weight: 500;
+}
+.month-cell {
+	aspect-ratio: 1;
+	border-radius: 9px;
+	background: var(--panel);
+	border: 1px solid transparent;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	cursor: pointer;
+	position: relative;
+}
+.month-cell.out {
+	background: transparent;
+}
+.month-cell.out .m-num {
+	color: var(--ink-faint);
+	opacity: 0.4;
+}
+.month-cell.today {
+	border-color: var(--lime);
+}
+.month-cell.selected {
+	background: var(--lime-dim);
+	border-color: var(--lime);
+}
+.month-cell:active {
+	background: var(--panel-2);
+}
+.m-num {
+	font-size: 0.82rem;
+	font-weight: 500;
+}
+.m-dots {
+	display: flex;
+	gap: 2px;
+	height: 4px;
+}
+.m-dot {
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: var(--lime);
+}
+
+.month-day-panel {
+	margin-top: 16px;
+	padding-top: 4px;
+	border-top: 1px solid var(--line);
+}
+.month-day-panel .panel-label {
+	font-size: 0.78rem;
+	color: var(--ink-dim);
+	padding: 12px 4px 10px;
+	text-transform: capitalize;
+}
+
+/* ---------------- Setup panel ---------------- */
+.setup-box {
+	margin: 12px 16px 0;
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	padding: 16px;
+	display: none;
+}
+.setup-box.open {
+	display: block;
+}
+.setup-box p {
+	color: var(--ink-dim);
+	font-size: 0.78rem;
+	line-height: 1.5;
+	margin: 0 0 12px;
+}
+.setup-box textarea {
+	width: 100%;
+	min-height: 100px;
+	background: var(--bg);
+	border: 1px solid var(--line);
+	border-radius: 9px;
+	color: var(--ink);
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.75rem;
+	padding: 10px;
+	margin: 8px 0;
+	resize: vertical;
+}
+.setup-box input[type="text"] {
+	width: 100%;
+	background: var(--bg);
+	border: 1px solid var(--line);
+	border-radius: 9px;
+	color: var(--ink);
+	padding: 11px 12px;
+	font-size: 0.85rem;
+	margin-bottom: 10px;
+}
+.setup-box input[type="file"] {
+	color: var(--ink-dim);
+	font-size: 0.78rem;
+}
+.setup-row {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: center;
+	margin-top: 10px;
+}
+.btn {
+	background: var(--panel-2);
+	border: 1px solid var(--line);
+	color: var(--ink);
+	padding: 9px 14px;
+	border-radius: 9px;
+	font-size: 0.8rem;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.btn.primary {
+	background: var(--lime);
+	color: #0b0f10;
+	border-color: var(--lime);
+	font-weight: 600;
+}
+.btn:active {
+	filter: brightness(0.95);
+}
+
+/* ---------------- Modal ---------------- */
+.modal-bg {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.55);
+	align-items: flex-end;
+	justify-content: center;
+	z-index: 60;
+}
+.modal-bg.open {
+	display: flex;
+}
+.modal {
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 16px 16px 0 0;
+	padding: 20px 20px calc(20px + var(--safe-bottom));
+	width: 100%;
+	max-width: 480px;
+}
+.modal-handle {
+	width: 36px;
+	height: 4px;
+	background: var(--line);
+	border-radius: 4px;
+	margin: 0 auto 16px;
+}
+.modal h3 {
+	font-size: 1.1rem;
+	margin-bottom: 14px;
+}
+.modal .row {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+	font-size: 0.86rem;
+	color: var(--ink-dim);
+}
+.modal .row i {
+	color: var(--lime);
+	width: 18px;
+	flex-shrink: 0;
+}
+.modal .close-btn {
+	margin-top: 14px;
+	width: 100%;
+	justify-content: center;
+}
+
+@media (min-width: 640px) {
+	.wrap-max {
+		max-width: 480px;
+		margin: 0 auto;
+	}
+}
