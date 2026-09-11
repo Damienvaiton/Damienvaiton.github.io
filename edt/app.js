@@ -180,8 +180,7 @@ function parseICS(text) {
 function dedupeEvents(list) {
 	const map = new Map();
 	for (const e of list) {
-		const key =
-			e.uid || `${e.start.getTime()}|${e.end.getTime()}|${e.title || ""}`;
+		const key = e.uid || `${e.start.getTime()}|${e.end.getTime()}|${e.title || ""}`;
 		map.set(key, e);
 	}
 	return Array.from(map.values()).sort((a, b) => a.start - b.start);
@@ -304,9 +303,7 @@ function renderDayList(dayEvents) {
 		list.innerHTML = `<div class="day-empty"><i class='bx bx-coffee'></i>Aucun cours ce jour-là.</div>`;
 		return;
 	}
-	list.innerHTML = dayEvents
-		.map((e) => courseCardHtml(e, events.indexOf(e)))
-		.join("");
+	list.innerHTML = dayEvents.map((e) => courseCardHtml(e, events.indexOf(e))).join("");
 	wireCourseCards(list);
 }
 
@@ -336,10 +333,7 @@ function renderDayGrid(dayEvents) {
 
 	let eventsHtml = "";
 	dayEvents.forEach((e) => {
-		const s = Math.max(
-			e.start.getHours() * 60 + e.start.getMinutes(),
-			startMin,
-		);
+		const s = Math.max(e.start.getHours() * 60 + e.start.getMinutes(), startMin);
 		const en = Math.min(e.end.getHours() * 60 + e.end.getMinutes(), endMin);
 		if (en <= startMin || s >= endMin) return;
 		const top = ((s - startMin) / totalMin) * 100;
@@ -484,9 +478,7 @@ function renderMonthDayPanel() {
 		list.innerHTML = `<div class="day-empty" style="padding:30px 16px;"><i class='bx bx-coffee'></i>Aucun cours ce jour-là.</div>`;
 		return;
 	}
-	list.innerHTML = dayEvents
-		.map((e) => courseCardHtml(e, events.indexOf(e)))
-		.join("");
+	list.innerHTML = dayEvents.map((e) => courseCardHtml(e, events.indexOf(e))).join("");
 	wireCourseCards(list);
 }
 
@@ -619,28 +611,33 @@ async function fetchCrousMenu(date) {
 	let result;
 	try {
 		const res = await fetch(crousMenuApiUrl(date), { cache: "no-store" });
-		if (!res.ok) throw new Error("HTTP " + res.status);
+		// On lit toujours le corps JSON, même si le statut HTTP n'est pas 2xx :
+		// l'API renvoie un objet {success:false, message:"..."} structuré aussi
+		// bien pour "date invalide" que pour "aucun menu pour cette date"
+		// (typiquement une date trop lointaine, pas encore publiée par le CROUS).
+		// Seule une réponse illisible (pas du JSON, réseau coupé) est une vraie erreur.
 		const json = await res.json();
-		if (!json.success || !json.data) throw new Error("Réponse invalide");
 
-		const repas = (json.data.repas || []).find(
-			(r) => r.type === CROUS_MEAL_TYPE,
-		);
-		if (!repas) {
+		if (!json.success) {
+			// Réponse structurée indiquant qu'il n'y a simplement pas de menu
+			// pour cette date (pas encore publié, jour sans service, etc.)
 			result = { state: "empty" };
+		} else if (!json.data) {
+			throw new Error("Réponse invalide");
 		} else {
-			const cats = [...(repas.categories || [])].sort(
-				(a, b) => a.ordre - b.ordre,
-			);
-			const groups = cats
-				.map((cat) => {
-					const plats = [...(cat.plats || [])].sort(
-						(a, b) => a.ordre - b.ordre,
-					);
-					return { libelle: cat.libelle, plats: plats.map((p) => p.libelle) };
-				})
-				.filter((g) => g.plats.length);
-			result = groups.length ? { state: "ok", groups } : { state: "empty" };
+			const repas = (json.data.repas || []).find((r) => r.type === CROUS_MEAL_TYPE);
+			if (!repas) {
+				result = { state: "empty" };
+			} else {
+				const cats = [...(repas.categories || [])].sort((a, b) => a.ordre - b.ordre);
+				const groups = cats
+					.map((cat) => {
+						const plats = [...(cat.plats || [])].sort((a, b) => a.ordre - b.ordre);
+						return { libelle: cat.libelle, plats: plats.map((p) => p.libelle) };
+					})
+					.filter((g) => g.plats.length);
+				result = groups.length ? { state: "ok", groups } : { state: "empty" };
+			}
 		}
 	} catch {
 		result = { state: "error" };
@@ -716,10 +713,7 @@ function loadFromText(text, { persist = true } = {}) {
 	const parsed = dedupeEvents(parseICS(text)).filter(isEventForStudent);
 	events = parsed;
 	if (persist) {
-		localStorage.setItem(
-			CACHE_KEY,
-			JSON.stringify({ text, fetchedAt: Date.now() }),
-		);
+		localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
 	}
 	setStatus(`${events.length} cours chargés (G8 & GH)`, "ok");
 	renderCurrent();
@@ -745,10 +739,7 @@ async function fetchICS(url, { force = false } = {}) {
 		const hasChanged = oldFps !== null && !sameFingerprintSet(oldFps, newFps);
 
 		events = parsed;
-		localStorage.setItem(
-			CACHE_KEY,
-			JSON.stringify({ text, fetchedAt: Date.now() }),
-		);
+		localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
 		localStorage.setItem(FP_KEY, JSON.stringify(newFps));
 
 		if (hasChanged) {
@@ -762,15 +753,9 @@ async function fetchICS(url, { force = false } = {}) {
 		const cached = getCache();
 		if (cached) {
 			loadFromText(cached.text, { persist: false });
-			setStatus(
-				"Sync impossible (réseau/CORS) — dernière version en cache",
-				"error",
-			);
+			setStatus("Sync impossible (réseau/CORS) — dernière version en cache", "error");
 		} else {
-			setStatus(
-				"Échec du chargement. Colle le .ics dans les réglages.",
-				"error",
-			);
+			setStatus("Échec du chargement. Colle le .ics dans les réglages.", "error");
 			renderCurrent();
 		}
 	} finally {
@@ -868,9 +853,7 @@ function init() {
 	})();
 
 	// ---------- Modal wiring ----------
-	el("modalClose").addEventListener("click", () =>
-		el("modalBg").classList.remove("open"),
-	);
+	el("modalClose").addEventListener("click", () => el("modalBg").classList.remove("open"));
 	el("modalBg").addEventListener("click", (ev) => {
 		if (ev.target === el("modalBg")) el("modalBg").classList.remove("open");
 	});
@@ -879,8 +862,7 @@ function init() {
 	el("setupBtn").addEventListener("click", () => {
 		const panel = el("setupPanel");
 		panel.classList.toggle("open");
-		el("icsUrlInput").value =
-			localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL || "";
+		el("icsUrlInput").value = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL || "";
 	});
 
 	el("saveUrlBtn").addEventListener("click", () => {
@@ -961,17 +943,12 @@ function urlBase64ToUint8Array(base64String) {
 	const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 	const rawData = atob(base64);
 	const outputArray = new Uint8Array(rawData.length);
-	for (let i = 0; i < rawData.length; i++)
-		outputArray[i] = rawData.charCodeAt(i);
+	for (let i = 0; i < rawData.length; i++) outputArray[i] = rawData.charCodeAt(i);
 	return outputArray;
 }
 
 function pushSupported() {
-	return (
-		"serviceWorker" in navigator &&
-		"PushManager" in window &&
-		"Notification" in window
-	);
+	return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
 }
 
 async function getPushButtonState() {
@@ -1073,3 +1050,5 @@ if (document.readyState === "loading") {
 } else {
 	init();
 }
+
+
