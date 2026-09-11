@@ -47,7 +47,7 @@
 
   button { font-family: inherit; }
 
-  /* ---------------- Gate screen ---------------- */
+  /* ---------------- Gate screen (mimics a native browser basic-auth prompt) ---------------- */
   #gate {
     position: fixed;
     inset: 0;
@@ -55,66 +55,86 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background:
-      radial-gradient(600px 400px at 20% 0%, rgba(196,242,75,0.08), transparent 60%),
-      var(--bg);
+    background: rgba(0,0,0,0.5);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     z-index: 100;
   }
   #gate.hidden { display: none; }
   .gate-card {
     width: 100%;
     max-width: 340px;
+    background: #f2f2f2;
+    border-radius: 6px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.4);
+    padding: 18px 20px 14px;
+    color: #202124;
   }
-  .gate-mark {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    background: var(--lime);
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 20px;
-  }
-  .gate-mark i { color: #0b0f10; font-size: 1.3rem; }
   .gate-card h1 {
-    font-size: 1.4rem;
+    font-size: 0.98rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    margin-bottom: 6px;
+    letter-spacing: 0;
+    margin-bottom: 4px;
   }
   .gate-card p {
-    color: var(--ink-dim);
-    font-size: 0.88rem;
-    line-height: 1.5;
-    margin-bottom: 22px;
+    color: #5f6368;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin-bottom: 2px;
   }
-  #gateForm { display: flex; flex-direction: column; gap: 10px; }
+  .gate-site {
+    display: block;
+    color: #5f6368;
+    font-size: 0.76rem;
+    margin-bottom: 14px;
+    word-break: break-all;
+  }
+  #gateForm { display: flex; flex-direction: column; gap: 4px; }
+  .gate-field label {
+    display: block;
+    font-size: 0.76rem;
+    color: #3c4043;
+    margin-bottom: 4px;
+  }
   #gatePass {
     width: 100%;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    color: var(--ink);
-    padding: 14px 16px;
-    font-size: 1rem;
-    font-family: "IBM Plex Mono", monospace;
-    letter-spacing: 0.04em;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #202124;
+    padding: 7px 8px;
+    font-size: 0.86rem;
+    font-family: inherit;
   }
-  #gatePass:focus { outline: none; border-color: var(--lime); }
-  #gateSubmit {
-    background: var(--lime);
-    color: #0b0f10;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-  }
-  #gateSubmit:active { transform: scale(0.98); }
+  #gatePass:focus { outline: 2px solid #1a73e8; outline-offset: -1px; border-color: #1a73e8; }
   #gateError {
-    color: var(--coral);
-    font-size: 0.82rem;
-    min-height: 18px;
-    margin-top: 2px;
+    color: #d93025;
+    font-size: 0.76rem;
+    min-height: 16px;
+    margin-top: 6px;
   }
+  .gate-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .gate-btn {
+    padding: 7px 16px;
+    font-size: 0.82rem;
+    border-radius: 4px;
+    border: 1px solid #dadce0;
+    background: #f8f9fa;
+    color: #1a73e8;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .gate-btn.primary {
+    background: #1a73e8;
+    border-color: #1a73e8;
+    color: #fff;
+    font-weight: 500;
+  }
+  .gate-btn:active { filter: brightness(0.96); }
 
   /* ---------------- App shell ---------------- */
   #app { display: none; min-height: 100vh; padding-bottom: calc(24px + var(--safe-bottom)); }
@@ -270,6 +290,25 @@
   }
   .course-loc i { font-size: 0.85rem; color: var(--ink-faint); }
 
+  /* ---------------- Week view ---------------- */
+  #weekView { display: none; padding: 10px 16px 8px; }
+  .week-day-block + .week-day-block { margin-top: 18px; }
+  .week-day-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink-dim);
+    text-transform: capitalize;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 10px;
+  }
+  .week-day-header .wd-num { font-size: 0.95rem; font-weight: 700; color: var(--ink); }
+  .week-day-header.today { color: var(--lime); }
+  .week-day-header.today .wd-num { color: var(--lime); }
+
   /* ---------------- Month view ---------------- */
   #monthView { display: none; padding: 6px 12px 8px; }
   .month-grid {
@@ -414,13 +453,19 @@
 <!-- ============== GATE ============== -->
 <div id="gate">
   <div class="gate-card">
-    <div class="gate-mark"><i class='bx bx-lock-alt'></i></div>
-    <h1>Accès privé</h1>
-    <p>Cette page n'est pas destinée à être partagée. Entre le mot de passe pour voir l'emploi du temps.</p>
+    <h1>Authentification requise</h1>
+    <p>Ce site vous demande votre nom d'utilisateur et votre mot de passe.</p>
+    <span class="gate-site">loulou-edt</span>
     <form id="gateForm">
-      <input type="password" id="gatePass" placeholder="Mot de passe" autocomplete="off" autocapitalize="off" spellcheck="false" />
-      <button type="submit" id="gateSubmit">Entrer</button>
+      <div class="gate-field">
+        <label for="gatePass">Mot de passe</label>
+        <input type="password" id="gatePass" autocomplete="off" autocapitalize="off" spellcheck="false" />
+      </div>
       <div id="gateError"></div>
+      <div class="gate-actions">
+        <button type="button" class="gate-btn" id="gateCancel">Annuler</button>
+        <button type="submit" class="gate-btn primary" id="gateSubmit">Se connecter</button>
+      </div>
     </form>
   </div>
 </div>
@@ -435,14 +480,15 @@
           <h1>Edt</h1>
         </div>
         <div style="display:flex; gap:8px;">
-          <button class="icon-btn" id="setupBtn"><i class='bx bx-cog'></i></button>
-          <button class="icon-btn" id="refreshBtn"><i class='bx bx-refresh'></i></button>
+          <button class="icon-btn" id="setupBtn" aria-label="Réglages de la source ICS"><i class='bx bx-cog'></i></button>
+          <button class="icon-btn" id="refreshBtn" aria-label="Rafraîchir le planning"><i class='bx bx-refresh'></i></button>
         </div>
       </div>
       <div id="statusLine" class="status-line">Chargement…</div>
 
       <div class="view-switch">
         <button id="viewDayBtn" class="active">Jour</button>
+        <button id="viewWeekBtn">Semaine</button>
         <button id="viewMonthBtn">Mois</button>
       </div>
     </header>
@@ -465,20 +511,31 @@
     <!-- DAY VIEW -->
     <div id="dayView">
       <div class="date-nav">
-        <button class="icon-btn" id="prevDay"><i class='bx bx-chevron-left'></i></button>
+        <button class="icon-btn" id="prevDay" aria-label="Jour précédent"><i class='bx bx-chevron-left'></i></button>
         <div class="label" id="dayLabel">—</div>
-        <button class="icon-btn" id="nextDay"><i class='bx bx-chevron-right'></i></button>
+        <button class="icon-btn" id="nextDay" aria-label="Jour suivant"><i class='bx bx-chevron-right'></i></button>
       </div>
       <button class="today-chip" id="todayChipDay"><i class='bx bx-calendar-check'></i>Aujourd'hui</button>
       <div id="dayList" class="day-list" style="margin-top:10px;"></div>
     </div>
 
+    <!-- WEEK VIEW -->
+    <div id="weekView">
+      <div class="date-nav">
+        <button class="icon-btn" id="prevWeek" aria-label="Semaine précédente"><i class='bx bx-chevron-left'></i></button>
+        <div class="label" id="weekLabel">—</div>
+        <button class="icon-btn" id="nextWeek" aria-label="Semaine suivante"><i class='bx bx-chevron-right'></i></button>
+      </div>
+      <button class="today-chip" id="todayChipWeek"><i class='bx bx-calendar-check'></i>Aujourd'hui</button>
+      <div id="weekList" style="margin-top:10px;"></div>
+    </div>
+
     <!-- MONTH VIEW -->
     <div id="monthView">
       <div class="date-nav">
-        <button class="icon-btn" id="prevMonth"><i class='bx bx-chevron-left'></i></button>
+        <button class="icon-btn" id="prevMonth" aria-label="Mois précédent"><i class='bx bx-chevron-left'></i></button>
         <div class="label" id="monthLabel">—</div>
-        <button class="icon-btn" id="nextMonth"><i class='bx bx-chevron-right'></i></button>
+        <button class="icon-btn" id="nextMonth" aria-label="Mois suivant"><i class='bx bx-chevron-right'></i></button>
       </div>
       <button class="today-chip" id="todayChipMonth"><i class='bx bx-calendar-check'></i>Aujourd'hui</button>
       <div class="month-grid" id="monthGrid" style="margin-top:10px;"></div>
@@ -552,6 +609,11 @@
         gatePass.focus();
       }
     });
+    document.getElementById("gateCancel").addEventListener("click", () => {
+      gatePass.value = "";
+      gateError.textContent = "";
+      gatePass.blur();
+    });
   }
 
   // =========================================================
@@ -567,8 +629,9 @@
     const MONTH_NAMES = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
 
     let events = [];
-    let currentView = "day"; // 'day' | 'month'
+    let currentView = "day"; // 'day' | 'week' | 'month'
     let selectedDay = startOfDay(new Date());
+    let weekCursor = startOfWeek(new Date());
     let monthCursor = startOfMonth(new Date());
 
     const el = (id) => document.getElementById(id);
@@ -579,6 +642,11 @@
     function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
     function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
     function addMonths(d, n) { return new Date(d.getFullYear(), d.getMonth() + n, 1); }
+    function startOfWeek(d) {
+      const x = startOfDay(d);
+      const dow = (x.getDay() + 6) % 7; // Monday = 0
+      return addDays(x, -dow);
+    }
     function sameDay(a, b) {
       return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     }
@@ -640,7 +708,20 @@
           else if (key === "UID") cur.uid = value;
         }
       }
-      return out.filter((e) => e.start && e.end).sort((a, b) => a.start - b.start);
+      return out.filter((e) => e.start && e.end);
+    }
+
+    // Dédoublonne par UID (garde la dernière occurrence rencontrée dans le
+    // fichier, généralement la version la plus à jour). Si un événement n'a
+    // pas d'UID, on retombe sur une clé début+fin+titre pour éviter les
+    // doublons accidentels tout en gardant les cours distincts.
+    function dedupeEvents(list) {
+      const map = new Map();
+      for (const e of list) {
+        const key = e.uid || `${e.start.getTime()}|${e.end.getTime()}|${e.title || ""}`;
+        map.set(key, e);
+      }
+      return Array.from(map.values()).sort((a, b) => a.start - b.start);
     }
 
     // ---------- Rendering: shared course card ----------
@@ -682,6 +763,38 @@
         return;
       }
       list.innerHTML = dayEvents.map((e) => courseCardHtml(e, events.indexOf(e))).join("");
+      wireCourseCards(list);
+    }
+
+    // ---------- Week view ----------
+    function renderWeek() {
+      const weekEnd = addDays(weekCursor, 6);
+      const label = el("weekLabel");
+      if (weekCursor.getMonth() === weekEnd.getMonth()) {
+        label.textContent = `${weekCursor.getDate()}–${weekEnd.getDate()} ${MONTH_NAMES[weekCursor.getMonth()]} ${weekCursor.getFullYear()}`;
+      } else {
+        label.textContent = `${weekCursor.getDate()} ${MONTH_NAMES[weekCursor.getMonth()]} – ${weekEnd.getDate()} ${MONTH_NAMES[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+      }
+
+      const today = new Date();
+      const list = el("weekList");
+      let html = "";
+      for (let i = 0; i < 7; i++) {
+        const d = addDays(weekCursor, i);
+        const isToday = sameDay(d, today);
+        const dayEvents = events.filter((e) => sameDay(e.start, d));
+        html += `<div class="week-day-block">
+          <div class="week-day-header${isToday ? " today" : ""}">
+            <span class="wd-num">${d.getDate()}</span>
+            <span>${d.toLocaleDateString("fr-FR", { weekday: "long", month: "long" })}</span>
+          </div>
+          ${dayEvents.length
+            ? `<div class="day-list">${dayEvents.map((e) => courseCardHtml(e, events.indexOf(e))).join("")}</div>`
+            : `<div class="day-empty" style="padding:14px 4px; text-align:left;"><i class='bx bx-coffee'></i> Aucun cours</div>`
+          }
+        </div>`;
+      }
+      list.innerHTML = html;
       wireCourseCards(list);
     }
 
@@ -743,13 +856,22 @@
     function setView(view) {
       currentView = view;
       el("viewDayBtn").classList.toggle("active", view === "day");
+      el("viewWeekBtn").classList.toggle("active", view === "week");
       el("viewMonthBtn").classList.toggle("active", view === "month");
       el("dayView").style.display = view === "day" ? "block" : "none";
+      el("weekView").style.display = view === "week" ? "block" : "none";
       el("monthView").style.display = view === "month" ? "block" : "none";
-      if (view === "day") renderDay(); else renderMonth();
+      renderCurrent();
+    }
+
+    function renderCurrent() {
+      if (currentView === "day") renderDay();
+      else if (currentView === "week") renderWeek();
+      else renderMonth();
     }
 
     el("viewDayBtn").addEventListener("click", () => setView("day"));
+    el("viewWeekBtn").addEventListener("click", () => setView("week"));
     el("viewMonthBtn").addEventListener("click", () => setView("month"));
 
     // ---------- Modal ----------
@@ -771,6 +893,10 @@
     el("prevDay").addEventListener("click", () => { selectedDay = addDays(selectedDay, -1); renderDay(); });
     el("nextDay").addEventListener("click", () => { selectedDay = addDays(selectedDay, 1); renderDay(); });
     el("todayChipDay").addEventListener("click", () => { selectedDay = startOfDay(new Date()); renderDay(); });
+
+    el("prevWeek").addEventListener("click", () => { weekCursor = addDays(weekCursor, -7); renderWeek(); });
+    el("nextWeek").addEventListener("click", () => { weekCursor = addDays(weekCursor, 7); renderWeek(); });
+    el("todayChipWeek").addEventListener("click", () => { weekCursor = startOfWeek(new Date()); renderWeek(); });
 
     el("prevMonth").addEventListener("click", () => { monthCursor = addMonths(monthCursor, -1); renderMonth(); });
     el("nextMonth").addEventListener("click", () => { monthCursor = addMonths(monthCursor, 1); renderMonth(); });
@@ -807,18 +933,18 @@
     }
 
     function loadFromText(text, { persist = true } = {}) {
-      events = parseICS(text);
+      events = dedupeEvents(parseICS(text));
       if (persist) {
         localStorage.setItem(CACHE_KEY, JSON.stringify({ text, fetchedAt: Date.now() }));
       }
       setStatus(`${events.length} cours chargés`, "ok");
-      if (currentView === "day") renderDay(); else renderMonth();
+      renderCurrent();
     }
 
     async function fetchICS(url, { force = false } = {}) {
       if (!url) {
         setStatus("Aucune source configurée — touche l'icône réglages");
-        if (currentView === "day") renderDay(); else renderMonth();
+        renderCurrent();
         return;
       }
       if (!force) {
@@ -842,7 +968,7 @@
           setStatus("Reload impossible (CORS ?) — dernière version en cache", "error");
         } else {
           setStatus("Échec du chargement. Colle le .ics dans les réglages.", "error");
-          if (currentView === "day") renderDay(); else renderMonth();
+          renderCurrent();
         }
       }
     }
@@ -887,7 +1013,7 @@
       localStorage.removeItem(URL_KEY);
       events = [];
       setStatus("Cache local effacé");
-      if (currentView === "day") renderDay(); else renderMonth();
+      renderCurrent();
     });
 
     el("refreshBtn").addEventListener("click", (e) => {
@@ -910,6 +1036,23 @@
         setStatus("Aucune source configurée — touche l'icône réglages");
       }
     }
+
+    // Rafraîchissement auto : retente un fetch toutes les 30 min (durée du
+    // cache) tant que l'onglet est visible, pour garder le planning à jour
+    // sans que l'utilisateur ait à cliquer manuellement.
+    setInterval(() => {
+      if (document.visibilityState !== "visible") return;
+      const url = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL;
+      if (url) fetchICS(url, { force: true });
+    }, CACHE_TTL_MS);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "visible") return;
+      const cached = getCache();
+      if (cached && Date.now() - cached.fetchedAt >= CACHE_TTL_MS) {
+        const url = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL;
+        if (url) fetchICS(url, { force: true });
+      }
+    });
   }
 })();
 </script>
