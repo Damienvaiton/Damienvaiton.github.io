@@ -33,6 +33,26 @@ const DEFAULT_GROUP_LANG = "GH";
 
 const DAY_GRID_START_HOUR = 7;
 const DAY_GRID_END_HOUR = 20;
+const HOUR_PX = 72; // hauteur d'une heure dans la grille horaire (px), pour la rendre scrollable
+
+// Mots-clés (sur le TITRE uniquement) qui déclenchent la mise en avant "examen".
+// \b = bordure de mot, donc "DS" ne matche pas dans un mot plus long, mais peut
+// matcher un code de salle du style "DS12" -> à ajuster ici si ça arrive en pratique.
+const EXAM_KEYWORDS = [
+	"EXAMEN",
+	"EXAM",
+	"PARTIEL",
+	"DS",
+	"CONTR[OÔ]LE",
+	"[EÉ]VALUATION",
+	"INTERRO",
+];
+// \b en JS ignore les lettres accentuées (ex: ÉVALUATION) : on redéfinit la
+// frontière de mot à la main pour que ça matche correctement.
+const EXAM_KEYWORDS_RE = new RegExp(
+	`(?<![\\p{L}\\p{N}_])(${EXAM_KEYWORDS.join("|")})(?![\\p{L}\\p{N}_])`,
+	"iu",
+);
 
 const MONTH_NAMES = [
 	"janvier",
@@ -224,6 +244,90 @@ function extractTeacher(description, title) {
 }
 
 // =========================================================
+// ---------------- Détection examens / DS ----------------
+// =========================================================
+function isExamEvent(e) {
+	return EXAM_KEYWORDS_RE.test(e.title || "");
+}
+
+// =========================================================
+// ---------------- Matières : couleur "album" + vignette ----------------
+// Chaque matière est mappée à une des 12 couleurs d'album, et éventuellement
+// à une vignette (petite image) quand on en a une (anglais, maths...).
+// Pour ajouter/ajuster une matière : modifier SUBJECT_RULES ci-dessous.
+// =========================================================
+const ALBUM_COLORS = {
+	taylorSwift: "#C3E1BD",
+	fearless: "#FFDAA3",
+	speakNow: "#C3A6C6",
+	red: "#D14546",
+	nineteen89: "#B1DAED",
+	reputation: "#5B5C5E",
+	lover: "#F0A9C7",
+	folklore: "#C6C1BB",
+	evermore: "#BDA58B",
+	midnights: "#2E3347",
+	ttpd: "#7D7D7D",
+	tloas: "#F49402",
+};
+
+// Règles de détection (sur le TITRE, en majuscules) -> album + icône + vignette.
+// L'ordre compte : la première règle qui matche est utilisée.
+const SUBJECT_RULES = [
+	{ test: /ANGLAIS|ENGLISH|\bTOEIC\b/, album: "lover", icon: "bx-flag" },
+	{ test: /MATH|ALG[EÈ]BRE|ANALYSE|STAT/, album: "nineteen89", icon: "bx-math" },
+	{ test: /INFO|ALGO|PROGRAM|DEV|SQL|RESEAU|R[ÉE]SEAU/, album: "midnights", icon: "bx-code-alt" },
+	{ test: /FRAN[CÇ]AIS|LETTRES|LITT[ÉE]RATURE/, album: "folklore", icon: "bx-book-open" },
+	{ test: /HISTOIRE|G[ÉE]O(GRAPHIE)?/, album: "evermore", icon: "bx-map-alt" },
+	{ test: /PHYSIQUE|CHIMIE|SVT|BIOLOGIE/, album: "reputation", icon: "bx-atom" },
+	{ test: /SPORT|EPS/, album: "fearless", icon: "bx-run" },
+	{ test: /ECO(NOMIE)?|GESTION|COMPTA/, album: "tloas", icon: "bx-line-chart" },
+	{ test: /DROIT|JURIDIQUE/, album: "speakNow", icon: "bx-briefcase-alt" },
+	{ test: /PROJET|TUTOR/, album: "red", icon: "bx-bulb" },
+];
+const DEFAULT_SUBJECT = { album: "taylorSwift", icon: "bx-book", thumb: null };
+
+// ---------------- Type de séance : CM vs TD ----------------
+// TD = la description contient un groupe précis (G1, G8, GH, GC, ...).
+// CM = pas de groupe détecté (amphi, toute la promo).
+const SESSION_GROUP_RE = /\b(G\d+|G[A-K])(-L\d+)?\b/i;
+function isTD(e) {
+	const desc = (e.description || "").toUpperCase();
+	return SESSION_GROUP_RE.test(desc);
+}
+
+// Vignettes par type de séance (déposer les fichiers dans /assets/).
+const THUMBS = {
+	cm: "assets/thumb-cm.png",
+	anglaisTd: "assets/thumb-anglais-td.png",
+	mathsTd: "assets/thumb-maths-td.png",
+};
+const MATHS_TITLE_RE = /MATH|ALG[EÈ]BRE|ANALYSE|STAT/;
+const ANGLAIS_TITLE_RE = /ANGLAIS|ENGLISH|\bTOEIC\b/;
+
+function getSessionThumb(e) {
+	const title = (e.title || "").toUpperCase();
+	const td = isTD(e);
+	if (td && ANGLAIS_TITLE_RE.test(title)) return THUMBS.anglaisTd;
+	if (td && MATHS_TITLE_RE.test(title)) return THUMBS.mathsTd;
+	if (!td) return THUMBS.cm;
+	return null; // TD sans vignette dédiée -> on retombe sur l'icône de matière
+}
+
+function getSubjectInfo(e) {
+	const title = (e.title || "").toUpperCase();
+	const rule = SUBJECT_RULES.find((r) => r.test.test(title));
+	const base = rule
+		? { album: rule.album, icon: rule.icon || DEFAULT_SUBJECT.icon }
+		: DEFAULT_SUBJECT;
+	return { ...base, thumb: getSessionThumb(e) };
+}
+
+function albumColor(albumKey) {
+	return ALBUM_COLORS[albumKey] || ALBUM_COLORS.taylorSwift;
+}
+
+// =========================================================
 // ---------------- Empreinte (détection de changement) ----------------
 // =========================================================
 function fingerprint(e) {
@@ -335,10 +439,18 @@ function applyGroupFilter() {
 function courseCardHtml(e, idx) {
 	const timeStr = `${pad(e.start.getHours())}:${pad(e.start.getMinutes())}`;
 	const endStr = `${pad(e.end.getHours())}:${pad(e.end.getMinutes())}`;
-	return `<div class="course-card" data-idx="${idx}">
+	const exam = isExamEvent(e);
+	const subject = getSubjectInfo(e);
+	const color = albumColor(subject.album);
+	const thumbHtml = subject.thumb
+		? `<img class="course-thumb" src="${subject.thumb}" alt="" />`
+		: `<div class="course-thumb course-thumb-icon"><i class='bx ${subject.icon}'></i></div>`;
+	return `<div class="course-card${exam ? " exam" : ""}" data-idx="${idx}" style="--album:${color}">
     <div class="course-time">${timeStr}<div class="end">${endStr}</div></div>
+    ${thumbHtml}
     <div class="course-bar"></div>
     <div class="course-body">
+      ${exam ? `<div class="exam-badge"><i class='bx bx-error'></i>Examen</div>` : ""}
       <div class="course-title">${escapeHtml(e.title || "Cours")}</div>
       ${e.location ? `<div class="course-loc"><i class='bx bx-map'></i>${escapeHtml(e.location)}</div>` : ""}
       ${e.teacher ? `<div class="course-teacher"><i class='bx bx-user'></i>${escapeHtml(e.teacher)}</div>` : ""}
@@ -385,6 +497,7 @@ function renderDayGrid(dayEvents) {
 	}
 	wrap.style.display = "block";
 	el("dayGridEmpty").style.display = "none";
+	grid.style.height = `${(totalMin / 60) * HOUR_PX}px`;
 
 	let hoursHtml = "";
 	for (let h = DAY_GRID_START_HOUR; h <= DAY_GRID_END_HOUR; h++) {
@@ -399,9 +512,12 @@ function renderDayGrid(dayEvents) {
 		if (en <= startMin || s >= endMin) return;
 		const top = ((s - startMin) / totalMin) * 100;
 		const height = Math.max(((en - s) / totalMin) * 100, 3.5);
-		eventsHtml += `<div class="grid-event" data-idx="${events.indexOf(e)}" style="top:${top}%; height:${height}%;">
+		const exam = isExamEvent(e);
+		const subject = getSubjectInfo(e);
+		const color = albumColor(subject.album);
+		eventsHtml += `<div class="grid-event${exam ? " exam" : ""}" data-idx="${events.indexOf(e)}" style="top:${top}%; height:${height}%; --album:${color}">
       <div class="grid-event-time">${pad(e.start.getHours())}:${pad(e.start.getMinutes())}</div>
-      <div class="grid-event-title">${escapeHtml(e.title || "Cours")}</div>
+      <div class="grid-event-title">${exam ? "<i class='bx bx-error'></i> " : ""}${escapeHtml(e.title || "Cours")}</div>
       ${e.location ? `<div class="grid-event-loc">${escapeHtml(e.location)}</div>` : ""}
     </div>`;
 	});
@@ -412,6 +528,41 @@ function renderDayGrid(dayEvents) {
 	});
 }
 
+// =========================================================
+// ---------------- Ligne "heure actuelle" (vue grille) ----------------
+// =========================================================
+function renderNowLine({ scrollIntoView = false } = {}) {
+	const grid = el("dayGrid");
+	const wrap = el("dayGridWrap");
+	if (!grid || !wrap) return;
+
+	// La grille est reconstruite à chaque rendu (innerHTML), donc l'ancienne
+	// ligne a déjà disparu ; on ne fait rien si elle n'existe plus dans le DOM.
+	const isGridVisible = wrap.offsetParent !== null;
+	const isToday = sameDay(selectedDay, new Date());
+	if (!isToday || !isGridVisible) return;
+
+	const now = new Date();
+	const startMin = DAY_GRID_START_HOUR * 60;
+	const endMin = DAY_GRID_END_HOUR * 60;
+	const nowMin = now.getHours() * 60 + now.getMinutes();
+	if (nowMin < startMin || nowMin > endMin) return; // hors plage affichée (ex: cours du soir passé)
+
+	const old = grid.querySelector(".now-line");
+	if (old) old.remove();
+
+	const top = ((nowMin - startMin) / (endMin - startMin)) * 100;
+	const line = document.createElement("div");
+	line.className = "now-line";
+	line.style.top = `${top}%`;
+	grid.appendChild(line);
+
+	if (scrollIntoView) {
+		const lineTopPx = (top / 100) * grid.offsetHeight;
+		wrap.scrollTop = Math.max(lineTopPx - wrap.clientHeight / 2, 0);
+	}
+}
+
 function setDayMode(mode) {
 	dayMode = mode;
 	localStorage.setItem(VIEW_MODE_KEY, mode);
@@ -419,13 +570,14 @@ function setDayMode(mode) {
 	el("dayModeGridBtn").classList.toggle("active", mode === "grid");
 	el("dayListWrap").style.display = mode === "list" ? "block" : "none";
 	el("dayGridOuter").style.display = mode === "grid" ? "block" : "none";
-	renderDay();
+	// On vient d'ouvrir la grille : on saute directement sur l'heure actuelle.
+	renderDay({ autoScrollNow: mode === "grid" });
 }
 
 // =========================================================
 // ---------------- Day view : orchestration ----------------
 // =========================================================
-function renderDay() {
+function renderDay({ autoScrollNow = false } = {}) {
 	const dayLabel = el("dayLabel");
 	const today = new Date();
 	const isToday = sameDay(selectedDay, today);
@@ -436,6 +588,7 @@ function renderDay() {
 
 	if (dayMode === "grid") {
 		renderDayGrid(dayEvents);
+		renderNowLine({ scrollIntoView: autoScrollNow });
 	} else {
 		renderDayList(dayEvents);
 	}
@@ -506,10 +659,16 @@ function renderMonth() {
 		const inMonth = d.getMonth() === monthCursor.getMonth();
 		const isToday = sameDay(d, today);
 		const isSelected = sameDay(d, selectedDay);
-		const dayHasEvents = events.some((e) => sameDay(e.start, d));
+		const dayList = events.filter((e) => sameDay(e.start, d));
+		const dayHasEvents = dayList.length > 0;
+		// Une pastille par matière distincte présente ce jour-là (max 4 pour ne pas déborder)
+		const albumsToday = [...new Set(dayList.map((e) => getSubjectInfo(e).album))].slice(0, 4);
+		const dotsHtml = albumsToday
+			.map((a) => `<div class="m-dot" style="background:${albumColor(a)}"></div>`)
+			.join("");
 		html += `<div class="month-cell${inMonth ? "" : " out"}${isToday ? " today" : ""}${isSelected ? " selected" : ""}" data-date="${d.toISOString()}">
       <div class="m-num">${d.getDate()}</div>
-      <div class="m-dots">${dayHasEvents ? `<div class="m-dot"></div>` : ""}</div>
+      <div class="m-dots">${dayHasEvents ? dotsHtml : ""}</div>
     </div>`;
 	}
 	grid.innerHTML = html;
@@ -554,11 +713,12 @@ function setView(view) {
 	el("dayView").style.display = view === "day" ? "block" : "none";
 	el("weekView").style.display = view === "week" ? "block" : "none";
 	el("monthView").style.display = view === "month" ? "block" : "none";
-	renderCurrent();
+	// On vient d'ouvrir la vue jour : on saute sur l'heure actuelle si on est en grille.
+	renderCurrent({ autoScrollNow: view === "day" });
 }
 
-function renderCurrent() {
-	if (currentView === "day") renderDay();
+function renderCurrent(opts) {
+	if (currentView === "day") renderDay(opts);
 	else if (currentView === "week") renderWeek();
 	else renderMonth();
 }
@@ -567,6 +727,7 @@ function renderCurrent() {
 // ---------------- Modal ----------------
 // =========================================================
 function openModal(e) {
+	el("modalExamRow").style.display = isExamEvent(e) ? "inline-flex" : "none";
 	el("modalTitle").textContent = e.title || "Cours";
 	el("modalTime").textContent =
 		`${e.start.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })} · ` +
@@ -750,6 +911,271 @@ async function updateCrousWidget() {
 }
 
 // =========================================================
+// ---------------- Export PDF (impression de la semaine) ----------------
+// Repose sur window.print() + une feuille de style @media print dédiée :
+// pas de lib PDF, l'utilisateur choisit "Enregistrer au format PDF" dans
+// la boîte de dialogue d'impression native (desktop et mobile).
+// =========================================================
+function weekPrintHtml(cursor) {
+	const weekEnd = addDays(cursor, 6);
+	let rangeStr;
+	if (cursor.getMonth() === weekEnd.getMonth()) {
+		rangeStr = `${cursor.getDate()}–${weekEnd.getDate()} ${MONTH_NAMES[cursor.getMonth()]} ${cursor.getFullYear()}`;
+	} else {
+		rangeStr = `${cursor.getDate()} ${MONTH_NAMES[cursor.getMonth()]} – ${weekEnd.getDate()} ${MONTH_NAMES[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+	}
+
+	let daysHtml = "";
+	for (let i = 0; i < 7; i++) {
+		const d = addDays(cursor, i);
+		const dayEvents = events
+			.filter((e) => sameDay(e.start, d))
+			.sort((a, b) => a.start - b.start);
+		const dayLabel = d.toLocaleDateString("fr-FR", {
+			weekday: "long",
+			day: "numeric",
+			month: "long",
+		});
+
+		const coursesHtml = dayEvents.length
+			? dayEvents
+					.map((e) => {
+						const exam = isExamEvent(e);
+						const meta = [e.location, e.teacher].filter(Boolean).join(" · ");
+						return `<div class="print-course${exam ? " exam" : ""}">
+              <div class="pc-time">${pad(e.start.getHours())}:${pad(e.start.getMinutes())}–${pad(e.end.getHours())}:${pad(e.end.getMinutes())}</div>
+              <div>
+                <div class="pc-title">${exam ? "⚠ " : ""}${escapeHtml(e.title || "Cours")}</div>
+                ${meta ? `<div class="pc-meta">${escapeHtml(meta)}</div>` : ""}
+              </div>
+            </div>`;
+					})
+					.join("")
+			: `<div class="print-empty">Aucun cours</div>`;
+
+		daysHtml += `<div class="print-day">
+      <h2>${escapeHtml(dayLabel)}</h2>
+      ${coursesHtml}
+    </div>`;
+	}
+
+	return `<h1>Emploi du temps</h1><div class="print-week-range">${escapeHtml(rangeStr)}</div>${daysHtml}`;
+}
+
+function printWeek() {
+	el("printArea").innerHTML = weekPrintHtml(weekCursor);
+	window.print();
+}
+
+// =========================================================
+// ---------------- Partage de la journée ----------------
+// Partage natif (Web Share API) en image si possible, sinon en texte,
+// avec repli sur une copie presse-papier si l'appareil ne supporte rien.
+// =========================================================
+function dayShareText(dayEvents, day) {
+	const dateStr = day.toLocaleDateString("fr-FR", {
+		weekday: "long",
+		day: "numeric",
+		month: "long",
+	});
+	if (!dayEvents.length) {
+		return `Ma journée du ${dateStr}\n\nAucun cours ce jour-là.`;
+	}
+	const lines = dayEvents.map((e) => {
+		const t = `${pad(e.start.getHours())}:${pad(e.start.getMinutes())}–${pad(e.end.getHours())}:${pad(e.end.getMinutes())}`;
+		const bits = [t, (isExamEvent(e) ? "⚠ " : "") + (e.title || "Cours")];
+		if (e.location) bits.push(`(${e.location})`);
+		return bits.join(" ");
+	});
+	return `Ma journée du ${dateStr}\n\n${lines.join("\n")}`;
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+	ctx.beginPath();
+	ctx.moveTo(x + r, y);
+	ctx.arcTo(x + w, y, x + w, y + h, r);
+	ctx.arcTo(x + w, y + h, x, y + h, r);
+	ctx.arcTo(x, y + h, x, y, r);
+	ctx.arcTo(x, y, x + w, y, r);
+	ctx.closePath();
+}
+
+function truncateForCanvas(ctx, text, maxWidth) {
+	if (ctx.measureText(text).width <= maxWidth) return text;
+	let t = text;
+	while (t.length > 1 && ctx.measureText(t + "…").width > maxWidth) {
+		t = t.slice(0, -1);
+	}
+	return t + "…";
+}
+
+async function buildDayShareImage(dayEvents, day) {
+	if (document.fonts && document.fonts.ready) {
+		try {
+			await document.fonts.ready;
+		} catch {
+			// tant pis, on dessine avec les polices dispo à cet instant
+		}
+	}
+
+	const width = 720;
+	const padding = 28;
+	const headerHeight = 116;
+	const rowHeight = 92;
+	const height = headerHeight + (dayEvents.length ? dayEvents.length * rowHeight : 90) + padding;
+	const scale = 2; // rendu net sur écrans retina
+
+	const canvas = document.createElement("canvas");
+	canvas.width = width * scale;
+	canvas.height = height * scale;
+	const ctx = canvas.getContext("2d");
+	ctx.scale(scale, scale);
+
+	// Fond
+	ctx.fillStyle = "#0b0f10";
+	ctx.fillRect(0, 0, width, height);
+
+	// En-tête (logo + date)
+	ctx.fillStyle = "#c4f24b";
+	ctx.beginPath();
+	ctx.arc(padding + 5, 34, 5, 0, Math.PI * 2);
+	ctx.fill();
+	ctx.fillStyle = "#f2f4f3";
+	ctx.font = "600 18px 'Space Grotesk', sans-serif";
+	ctx.fillText("Edt", padding + 18, 40);
+
+	ctx.font = "600 25px 'Space Grotesk', sans-serif";
+	const dateStr = day
+		.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+		.replace(/^\p{L}/u, (c) => c.toUpperCase());
+	ctx.fillText(dateStr, padding, 78);
+
+	ctx.strokeStyle = "rgba(255,255,255,0.09)";
+	ctx.lineWidth = 1;
+	ctx.beginPath();
+	ctx.moveTo(padding, headerHeight - 16);
+	ctx.lineTo(width - padding, headerHeight - 16);
+	ctx.stroke();
+
+	if (!dayEvents.length) {
+		ctx.fillStyle = "rgba(242,244,243,0.5)";
+		ctx.font = "500 16px 'Space Grotesk', sans-serif";
+		ctx.fillText("Aucun cours ce jour-là.", padding, headerHeight + 28);
+	} else {
+		dayEvents.forEach((e, i) => {
+			const y = headerHeight + i * rowHeight;
+			const exam = isExamEvent(e);
+			const accent = exam ? "#ff6b5e" : "#c4f24b";
+			const cardH = rowHeight - 14;
+
+			ctx.fillStyle = "#14191b";
+			roundRectPath(ctx, padding, y, width - padding * 2, cardH, 12);
+			ctx.fill();
+
+			ctx.fillStyle = accent;
+			roundRectPath(ctx, padding, y, 4, cardH, 2);
+			ctx.fill();
+
+			ctx.font = "500 15px 'IBM Plex Mono', monospace";
+			ctx.fillStyle = accent;
+			ctx.fillText(`${pad(e.start.getHours())}:${pad(e.start.getMinutes())}`, padding + 20, y + 30);
+			ctx.font = "400 12px 'IBM Plex Mono', monospace";
+			ctx.fillStyle = "rgba(242,244,243,0.32)";
+			ctx.fillText(`${pad(e.end.getHours())}:${pad(e.end.getMinutes())}`, padding + 20, y + 47);
+
+			if (exam) {
+				ctx.fillStyle = "rgba(255,107,94,0.16)";
+				roundRectPath(ctx, padding + 96, y + 10, 60, 18, 9);
+				ctx.fill();
+				ctx.fillStyle = "#ff6b5e";
+				ctx.font = "700 10px 'Space Grotesk', sans-serif";
+				ctx.fillText("EXAMEN", padding + 104, y + 23);
+			}
+
+			ctx.fillStyle = "#f2f4f3";
+			ctx.font = "600 17px 'Space Grotesk', sans-serif";
+			const titleY = exam ? y + 46 : y + 27;
+			ctx.fillText(
+				truncateForCanvas(ctx, e.title || "Cours", width - padding * 2 - 116),
+				padding + 96,
+				titleY,
+			);
+
+			if (e.location) {
+				ctx.fillStyle = "rgba(242,244,243,0.5)";
+				ctx.font = "400 13px 'Space Grotesk', sans-serif";
+				ctx.fillText(e.location, padding + 96, titleY + 20);
+			}
+		});
+	}
+
+	return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+}
+
+async function shareDay() {
+	const dayEvents = events
+		.filter((e) => sameDay(e.start, selectedDay))
+		.sort((a, b) => a.start - b.start);
+	const text = dayShareText(dayEvents, selectedDay);
+	const shareTitle = "Mon emploi du temps";
+
+	// 1. Partage en image si le navigateur sait partager des fichiers.
+	try {
+		const blob = await buildDayShareImage(dayEvents, selectedDay);
+		if (blob) {
+			const file = new File([blob], "ma-journee.png", { type: "image/png" });
+			if (navigator.canShare && navigator.canShare({ files: [file] })) {
+				await navigator.share({ files: [file], title: shareTitle, text });
+				return;
+			}
+		}
+	} catch (err) {
+		if (err && err.name === "AbortError") return; // annulé par l'utilisateur
+		// sinon on retombe sur le partage texte ci-dessous
+	}
+
+	// 2. Partage texte natif.
+	if (navigator.share) {
+		try {
+			await navigator.share({ title: shareTitle, text });
+			return;
+		} catch (err) {
+			if (err && err.name === "AbortError") return;
+		}
+	}
+
+	// 3. Repli : copie dans le presse-papier.
+	try {
+		await navigator.clipboard.writeText(text);
+		setStatus("Journée copiée dans le presse-papier", "ok");
+	} catch {
+		setStatus("Partage indisponible sur cet appareil", "error");
+	}
+}
+
+// =========================================================
+// ---------------- Confirmation "Vider le cache" ----------------
+// =========================================================
+let clearConfirmTimeout = null;
+
+function armClearConfirm() {
+	const btn = el("clearBtn");
+	btn.classList.add("danger-confirm");
+	btn.innerHTML = `<i class='bx bx-error'></i>Confirmer ?`;
+	clearTimeout(clearConfirmTimeout);
+	clearConfirmTimeout = setTimeout(resetClearConfirm, 4000);
+}
+
+function resetClearConfirm() {
+	const btn = el("clearBtn");
+	if (!btn) return;
+	btn.classList.remove("danger-confirm");
+	btn.innerHTML = `<i class='bx bx-trash'></i>Vider le cache`;
+	clearTimeout(clearConfirmTimeout);
+	clearConfirmTimeout = null;
+}
+
+// =========================================================
 // ---------------- Chargement des données / synchronisation ----------------
 // Stratégie : pas de polling en arrière-plan. On synchronise
 // uniquement au chargement initial, quand l'app redevient visible,
@@ -853,7 +1279,7 @@ function init() {
 	});
 	el("todayChipDay").addEventListener("click", () => {
 		selectedDay = startOfDay(new Date());
-		renderDay();
+		renderDay({ autoScrollNow: true });
 	});
 
 	el("prevWeek").addEventListener("click", () => {
@@ -867,6 +1293,10 @@ function init() {
 	el("todayChipWeek").addEventListener("click", () => {
 		weekCursor = startOfWeek(new Date());
 		renderWeek();
+	});
+
+	el("exportPdfBtn").addEventListener("click", () => {
+		printWeek();
 	});
 
 	el("prevMonth").addEventListener("click", () => {
@@ -913,6 +1343,11 @@ function init() {
 		);
 	})();
 
+	// ---------- Partage ----------
+	el("shareBtn").addEventListener("click", () => {
+		shareDay();
+	});
+
 	// ---------- Modal wiring ----------
 	el("modalClose").addEventListener("click", () => el("modalBg").classList.remove("open"));
 	el("modalBg").addEventListener("click", (ev) => {
@@ -925,6 +1360,7 @@ function init() {
 		panel.classList.toggle("open");
 		el("icsUrlInput").value = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL || "";
 		populateGroupPickers();
+		resetClearConfirm();
 	});
 
 	el("groupTdSelect").addEventListener("change", (ev) => {
@@ -959,7 +1395,15 @@ function init() {
 		reader.readAsText(file);
 	});
 
+	// Confirmation à deux temps avant de vider le cache : un premier clic arme
+	// le bouton (texte + couleur "danger"), un second clic dans les 4s confirme.
 	el("clearBtn").addEventListener("click", () => {
+		const btn = el("clearBtn");
+		if (!btn.classList.contains("danger-confirm")) {
+			armClearConfirm();
+			return;
+		}
+		resetClearConfirm();
 		localStorage.removeItem(CACHE_KEY);
 		localStorage.removeItem(URL_KEY);
 		localStorage.removeItem(FP_KEY);
@@ -986,6 +1430,14 @@ function init() {
 	}
 	const savedUrl = localStorage.getItem(URL_KEY) || DEFAULT_ICS_URL;
 	fetchICS(savedUrl);
+
+	// Repositionne la ligne "heure actuelle" chaque minute (sans re-render
+	// complet ni scroll forcé, pour ne pas gêner une lecture en cours).
+	setInterval(() => {
+		if (currentView === "day" && dayMode === "grid") {
+			renderNowLine({ scrollIntoView: false });
+		}
+	}, 60000);
 
 	// Sync quand l'app redevient visible (pas de setInterval en tâche de fond)
 	document.addEventListener("visibilitychange", () => {

@@ -1,14 +1,31 @@
 :root {
-	--bg: #0b0f10;
-	--panel: #14191b;
-	--panel-2: #1b2224;
-	--line: rgba(255, 255, 255, 0.09);
-	--ink: #f2f4f3;
-	--ink-dim: rgba(242, 244, 243, 0.5);
-	--ink-faint: rgba(242, 244, 243, 0.32);
-	--lime: #c4f24b;
-	--lime-dim: rgba(196, 242, 75, 0.14);
-	--coral: #ff6b5e;
+	/* ---- Couleurs "albums" (référence, utilisées via --album inline sur les cartes) ---- */
+	--album-taylorswift: #c3e1bd;
+	--album-fearless: #ffdaa3;
+	--album-speaknow: #c3a6c6;
+	--album-red: #d14546;
+	--album-1989: #b1daed;
+	--album-reputation: #5b5c5e;
+	--album-lover: #f0a9c7;
+	--album-folklore: #c6c1bb;
+	--album-evermore: #bda58b;
+	--album-midnights: #2e3347;
+	--album-ttpd: #7d7d7d;
+	--album-tloas: #f49402;
+
+	/* ---- Thème "pop" : fond clair, crème, chaleureux ---- */
+	--bg: #f6ece1;
+	--panel: #ffffff;
+	--panel-2: #fbeee6;
+	--line: rgba(60, 35, 30, 0.16);
+	--line-strong: rgba(60, 35, 30, 0.26);
+	--ink: #2b2320;
+	--ink-dim: rgba(43, 35, 32, 0.68);
+	--ink-faint: rgba(43, 35, 32, 0.5);
+	--lime: #d14546; /* accent principal = rouge "Red (Taylor's Version)" */
+	--lime-dim: rgba(209, 69, 70, 0.14);
+	--coral: #d14546;
+	--card-shadow: 0 2px 0 rgba(60, 35, 30, 0.08), 0 4px 14px rgba(60, 35, 30, 0.08);
 	--safe-top: env(safe-area-inset-top, 0px);
 	--safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -82,8 +99,8 @@ button {
 .icon-btn {
 	width: 36px;
 	height: 36px;
-	border-radius: 9px;
-	border: 1px solid var(--line);
+	border-radius: 12px;
+	border: 1px solid var(--line-strong);
 	background: var(--panel);
 	color: var(--ink);
 	display: flex;
@@ -92,6 +109,7 @@ button {
 	font-size: 1.05rem;
 	cursor: pointer;
 	flex-shrink: 0;
+	box-shadow: var(--card-shadow);
 }
 .icon-btn:active {
 	background: var(--panel-2);
@@ -121,16 +139,17 @@ button {
 .view-switch {
 	display: flex;
 	background: var(--panel);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 10px;
 	padding: 3px;
 	margin-top: 12px;
+	box-shadow: var(--card-shadow);
 }
 .view-switch button {
 	flex: 1;
 	background: transparent;
 	border: none;
-	color: var(--ink-dim);
+	color: var(--ink);
 	font-size: 0.82rem;
 	font-weight: 500;
 	padding: 8px 0;
@@ -139,7 +158,7 @@ button {
 }
 .view-switch button.active {
 	background: var(--lime);
-	color: #0b0f10;
+	color: #fff;
 	font-weight: 600;
 }
 
@@ -174,14 +193,26 @@ button {
 	align-items: center;
 	gap: 6px;
 	background: var(--panel);
-	border: 1px solid var(--line);
-	color: var(--ink-dim);
+	border: 1px solid var(--line-strong);
+	color: var(--ink);
 	font-size: 0.76rem;
+	font-weight: 500;
 	padding: 6px 12px;
 	border-radius: 20px;
+	box-shadow: var(--card-shadow);
 }
 .today-chip:active {
 	background: var(--panel-2);
+}
+
+.week-actions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin: 0 16px 6px;
+}
+.week-actions .today-chip {
+	margin: 0;
 }
 
 /* Day mode switch (Liste / Grille) */
@@ -190,9 +221,10 @@ button {
 	gap: 4px;
 	margin: 0 16px 10px;
 	background: var(--panel);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 9px;
 	padding: 3px;
+	box-shadow: var(--card-shadow);
 }
 .day-mode-switch button {
 	background: transparent;
@@ -208,8 +240,9 @@ button {
 	gap: 5px;
 }
 .day-mode-switch button.active {
-	background: var(--lime-dim);
-	color: var(--lime);
+	background: var(--lime);
+	color: #fff;
+	font-weight: 600;
 }
 
 /* ---------------- Day view ---------------- */
@@ -235,34 +268,58 @@ button {
 }
 
 .course-card {
+	--album: var(--lime);
 	display: flex;
 	gap: 12px;
+	align-items: flex-start;
 	background: var(--panel);
-	border: 1px solid var(--line);
-	border-radius: 12px;
-	padding: 14px;
+	border: 1px solid var(--line-strong);
+	border-radius: 14px;
+	padding: 12px 14px;
 	cursor: pointer;
+	box-shadow: var(--card-shadow);
+	transition: transform 0.12s ease;
 }
 .course-card:active {
 	background: var(--panel-2);
+	transform: scale(0.985);
 }
 .course-time {
 	flex-shrink: 0;
-	width: 56px;
+	width: 50px;
 	font-family: "IBM Plex Mono", monospace;
 	font-size: 0.72rem;
-	color: var(--lime);
+	color: var(--album);
+	font-weight: 600;
 	line-height: 1.5;
-	padding-top: 1px;
+	padding-top: 3px;
 }
 .course-time .end {
 	color: var(--ink-faint);
+	font-weight: 400;
+}
+.course-thumb {
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	object-fit: cover;
+	background: var(--album);
+	margin-top: 1px;
+}
+.course-thumb-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgba(0, 0, 0, 0.55);
+	font-size: 1.15rem;
 }
 .course-bar {
 	width: 3px;
 	border-radius: 3px;
-	background: var(--lime);
+	background: var(--album);
 	flex-shrink: 0;
+	align-self: stretch;
 }
 .course-body {
 	min-width: 0;
@@ -305,18 +362,85 @@ button {
 	font-size: 0.82rem;
 }
 
+/* ---------------- Mise en avant examens / DS ---------------- */
+.course-card.exam {
+	border: 1px dashed var(--coral);
+	background: repeating-linear-gradient(
+		135deg,
+		var(--panel),
+		var(--panel) 10px,
+		rgba(209, 69, 70, 0.05) 10px,
+		rgba(209, 69, 70, 0.05) 20px
+	);
+}
+.course-card.exam .course-bar {
+	background: var(--coral);
+}
+.course-card.exam .course-time {
+	color: var(--coral);
+}
+.exam-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 0.64rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: #fff;
+	background: var(--coral);
+	padding: 3px 8px;
+	border-radius: 20px;
+	margin-bottom: 5px;
+}
+.grid-event.exam {
+	background: rgba(209, 69, 70, 0.14);
+	border-left-color: var(--coral);
+	border-left-width: 4px;
+}
+.grid-event.exam .grid-event-time {
+	color: var(--coral);
+}
+.m-dot.exam {
+	background: var(--coral);
+}
+
 /* ---------------- Day grid (vue calendrier) ---------------- */
 .day-grid-wrap {
 	position: relative;
 	background: var(--panel);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
+	box-shadow: var(--card-shadow);
 	border-radius: 12px;
 	padding: 0 0 0 44px;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
+	max-height: 62vh;
+	max-height: 62dvh;
 }
 .day-grid {
 	position: relative;
-	height: 660px;
+	/* hauteur définie dynamiquement en JS selon HOUR_PX */
+}
+
+/* Ligne "heure actuelle", façon Google Calendar */
+.now-line {
+	position: absolute;
+	left: -44px;
+	right: 0;
+	border-top: 2px solid var(--coral);
+	z-index: 6;
+	pointer-events: none;
+}
+.now-line::before {
+	content: "";
+	position: absolute;
+	left: 40px;
+	top: -4px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--coral);
 }
 .grid-hours {
 	position: absolute;
@@ -346,23 +470,25 @@ button {
 	padding: 0 8px;
 }
 .grid-event {
+	--album: var(--lime);
 	position: absolute;
 	left: 8px;
 	right: 8px;
-	background: var(--lime-dim);
-	border-left: 3px solid var(--lime);
+	background: color-mix(in srgb, var(--album) 18%, white);
+	border-left: 3px solid var(--album);
 	border-radius: 6px;
 	padding: 4px 8px;
 	overflow: hidden;
 	cursor: pointer;
 }
 .grid-event:active {
-	filter: brightness(1.15);
+	filter: brightness(0.96);
 }
 .grid-event-time {
 	font-family: "IBM Plex Mono", monospace;
 	font-size: 0.62rem;
-	color: var(--lime);
+	color: color-mix(in srgb, var(--album) 70%, black);
+	font-weight: 600;
 }
 .grid-event-title {
 	font-size: 0.78rem;
@@ -383,7 +509,7 @@ button {
 .vibe-widget {
 	margin-top: 16px;
 	background: var(--panel);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-left: 3px solid var(--lime);
 	border-radius: 12px;
 	padding: 14px 16px;
@@ -435,9 +561,10 @@ button {
 	font-size: 0.9rem;
 }
 .crous-widget {
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 12px;
 	padding: 4px;
+	box-shadow: var(--card-shadow);
 	background: var(--panel);
 }
 .crous-loading,
@@ -531,7 +658,8 @@ button {
 	aspect-ratio: 1;
 	border-radius: 9px;
 	background: var(--panel);
-	border: 1px solid transparent;
+	border: 1px solid var(--line);
+	box-shadow: var(--card-shadow);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -589,7 +717,8 @@ button {
 .setup-box {
 	margin: 12px 16px 0;
 	background: var(--panel);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
+	box-shadow: var(--card-shadow);
 	border-radius: 12px;
 	padding: 16px;
 	display: none;
@@ -621,7 +750,7 @@ button {
 }
 .group-picker-row select {
 	background: var(--bg);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 9px;
 	color: var(--ink);
 	padding: 8px 10px;
@@ -633,7 +762,7 @@ button {
 	width: 100%;
 	min-height: 100px;
 	background: var(--bg);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 9px;
 	color: var(--ink);
 	font-family: "IBM Plex Mono", monospace;
@@ -645,7 +774,7 @@ button {
 .setup-box input[type="text"] {
 	width: 100%;
 	background: var(--bg);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 9px;
 	color: var(--ink);
 	padding: 11px 12px;
@@ -665,7 +794,7 @@ button {
 }
 .btn {
 	background: var(--panel-2);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	color: var(--ink);
 	padding: 9px 14px;
 	border-radius: 9px;
@@ -677,8 +806,14 @@ button {
 }
 .btn.primary {
 	background: var(--lime);
-	color: #0b0f10;
+	color: #fff;
 	border-color: var(--lime);
+	font-weight: 600;
+}
+.btn.danger-confirm {
+	background: var(--coral);
+	color: #fff;
+	border-color: var(--coral);
 	font-weight: 600;
 }
 .btn:active {
@@ -700,11 +835,12 @@ button {
 }
 .modal {
 	background: var(--panel);
-	border: 1px solid var(--line);
+	border: 1px solid var(--line-strong);
 	border-radius: 16px 16px 0 0;
 	padding: 20px 20px calc(20px + var(--safe-bottom));
 	width: 100%;
 	max-width: 480px;
+	box-shadow: 0 -8px 30px rgba(60, 35, 30, 0.18);
 }
 .modal-handle {
 	width: 36px;
@@ -739,5 +875,76 @@ button {
 	.wrap-max {
 		max-width: 480px;
 		margin: 0 auto;
+	}
+}
+
+/* ---------------- Impression / export PDF (vue semaine) ---------------- */
+#printArea {
+	display: none;
+}
+@media print {
+	#app,
+	.modal-bg {
+		display: none !important;
+	}
+	#printArea {
+		display: block;
+		background: #fff;
+		color: #16181a;
+		font-family: "Space Grotesk", sans-serif;
+		padding: 12px 4px;
+	}
+	#printArea h1 {
+		font-size: 1.25rem;
+		margin: 0 0 2px;
+	}
+	#printArea .print-week-range {
+		font-size: 0.82rem;
+		color: #666;
+		margin-bottom: 16px;
+	}
+	#printArea .print-day {
+		break-inside: avoid;
+		margin-bottom: 14px;
+	}
+	#printArea .print-day h2 {
+		font-size: 0.95rem;
+		font-weight: 600;
+		text-transform: capitalize;
+		border-bottom: 1px solid #ccc;
+		padding-bottom: 4px;
+		margin: 0 0 6px;
+	}
+	#printArea .print-course {
+		display: flex;
+		gap: 12px;
+		padding: 4px 0;
+		font-size: 0.8rem;
+		border-bottom: 1px dashed #e2e2e2;
+	}
+	#printArea .print-course.exam {
+		color: #b23a2e;
+	}
+	#printArea .pc-time {
+		flex-shrink: 0;
+		width: 92px;
+		font-family: "IBM Plex Mono", monospace;
+		color: #444;
+	}
+	#printArea .print-course.exam .pc-time {
+		color: #b23a2e;
+	}
+	#printArea .pc-title {
+		font-weight: 600;
+	}
+	#printArea .pc-meta {
+		color: #666;
+		font-size: 0.78rem;
+	}
+	#printArea .print-empty {
+		font-size: 0.78rem;
+		color: #999;
+		font-style: italic;
+		padding: 2px 0;
 	}
 }
