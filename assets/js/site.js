@@ -65,15 +65,13 @@
     });
   });
 
-  window.addEventListener("load", function () {
+  // Les animations d'entrée démarrent dès que le DOM est prêt (le script est en
+  // fin de page) : sans attendre images et polices, pour un meilleur LCP.
+  requestAnimationFrame(function () {
     requestAnimationFrame(function () {
       root.classList.add("loaded");
     });
   });
-  // Filet de sécurité si "load" tarde (polices, images)
-  setTimeout(function () {
-    root.classList.add("loaded");
-  }, 1500);
 
   // ---------- Ciel étoilé ----------
   var meteorShower = function () {};

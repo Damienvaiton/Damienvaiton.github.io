@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../assets/css/site.css" />
 
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="../favicon.png" type="image/png" sizes="64x64" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
     <meta name="color-scheme" content="dark" />
@@ -74,7 +74,10 @@
         "@id": "https://damienvaiton.fr/#website"
       },
       "about": {
-        "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#app"
+        "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#project"
+      },
+      "mainEntity": {
+        "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#project"
       },
       "author": {
         "@id": "https://damienvaiton.fr/#person"
@@ -90,26 +93,13 @@
       }
     },
     {
-      "@type": "SoftwareApplication",
-      "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#app",
+      "@type": "SoftwareSourceCode",
+      "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#project",
       "name": "McDo Surfer",
       "description": "Jeu mobile de type runner infini (inspiré de Subway Surfers) développé avec Unity et C# pendant le cours d'Unity de 3e année de BUT Informatique.",
-      "applicationCategory": "GameApplication",
-      "operatingSystem": "Mobile",
       "url": "https://damienvaiton.fr/projects/mcdosurfer.html",
       "image": "https://damienvaiton.fr/assets/img/og/mcdosurfer.jpg",
-      "author": {
-        "@id": "https://damienvaiton.fr/#person"
-      },
-      "creator": {
-        "@id": "https://damienvaiton.fr/#person"
-      },
-      "inLanguage": "fr"
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#code",
-      "name": "McDo Surfer (code source)",
+      "inLanguage": "fr",
       "programmingLanguage": [
         "C#"
       ],
@@ -117,8 +107,14 @@
       "author": {
         "@id": "https://damienvaiton.fr/#person"
       },
+      "creator": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
       "targetProduct": {
-        "@id": "https://damienvaiton.fr/projects/mcdosurfer.html#app"
+        "@type": "SoftwareApplication",
+        "name": "McDo Surfer",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Mobile"
       },
       "codeRepository": "https://github.com/alexisboizard/mcdo_surfer"
     },
@@ -129,18 +125,12 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Accueil",
+          "name": "Damien Vaiton",
           "item": "https://damienvaiton.fr/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Projets",
-          "item": "https://damienvaiton.fr/#projets"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "McDo Surfer",
           "item": "https://damienvaiton.fr/projects/mcdosurfer.html"
         }

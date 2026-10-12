@@ -534,6 +534,14 @@ picture {
   opacity: 1;
   transform: none;
 }
+/* Glissement sans fondu : l'élément reste visible (compte pour le LCP) */
+.js .rise {
+  transform: translateY(14px);
+  transition: transform 1.2s var(--ease);
+}
+.loaded .rise {
+  transform: none;
+}
 
 /* Carte de code */
 .code-card {

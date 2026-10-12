@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../assets/css/site.css" />
 
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="../favicon.png" type="image/png" sizes="64x64" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
     <meta name="color-scheme" content="dark" />
@@ -74,7 +74,10 @@
         "@id": "https://damienvaiton.fr/#website"
       },
       "about": {
-        "@id": "https://damienvaiton.fr/projects/kinoa.html#app"
+        "@id": "https://damienvaiton.fr/projects/kinoa.html#project"
+      },
+      "mainEntity": {
+        "@id": "https://damienvaiton.fr/projects/kinoa.html#project"
       },
       "author": {
         "@id": "https://damienvaiton.fr/#person"
@@ -90,26 +93,13 @@
       }
     },
     {
-      "@type": "SoftwareApplication",
-      "@id": "https://damienvaiton.fr/projects/kinoa.html#app",
+      "@type": "SoftwareSourceCode",
+      "@id": "https://damienvaiton.fr/projects/kinoa.html#project",
       "name": "Mangeuse de Kinoa",
       "description": "Bot Discord en Node.js (Discord.js, Axios) : attribution automatique de rôles et quiz sur les drapeaux. Projet terminé, remplacé par Kitty.",
-      "applicationCategory": "CommunicationApplication",
-      "operatingSystem": "Discord",
       "url": "https://damienvaiton.fr/projects/kinoa.html",
       "image": "https://damienvaiton.fr/assets/img/og/kinoa.jpg",
-      "author": {
-        "@id": "https://damienvaiton.fr/#person"
-      },
-      "creator": {
-        "@id": "https://damienvaiton.fr/#person"
-      },
-      "inLanguage": "fr"
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://damienvaiton.fr/projects/kinoa.html#code",
-      "name": "Mangeuse de Kinoa (code source)",
+      "inLanguage": "fr",
       "programmingLanguage": [
         "JavaScript"
       ],
@@ -117,8 +107,14 @@
       "author": {
         "@id": "https://damienvaiton.fr/#person"
       },
+      "creator": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
       "targetProduct": {
-        "@id": "https://damienvaiton.fr/projects/kinoa.html#app"
+        "@type": "SoftwareApplication",
+        "name": "Mangeuse de Kinoa",
+        "applicationCategory": "CommunicationApplication",
+        "operatingSystem": "Discord"
       },
       "codeRepository": "https://github.com/Damienvaiton/Botdiscord"
     },
@@ -129,18 +125,12 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Accueil",
+          "name": "Damien Vaiton",
           "item": "https://damienvaiton.fr/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Projets",
-          "item": "https://damienvaiton.fr/#projets"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "Mangeuse de Kinoa",
           "item": "https://damienvaiton.fr/projects/kinoa.html"
         }

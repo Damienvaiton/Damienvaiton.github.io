@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../assets/css/site.css" />
 
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="../favicon.png" type="image/png" sizes="64x64" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="96x96" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
     <meta name="color-scheme" content="dark" />
@@ -74,7 +74,10 @@
         "@id": "https://damienvaiton.fr/#website"
       },
       "about": {
-        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#app"
+        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#project"
+      },
+      "mainEntity": {
+        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#project"
       },
       "author": {
         "@id": "https://damienvaiton.fr/#person"
@@ -90,26 +93,13 @@
       }
     },
     {
-      "@type": "SoftwareApplication",
-      "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#app",
+      "@type": "SoftwareSourceCode",
+      "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#project",
       "name": "Vegetabillis Auditor",
       "description": "Système IoT pour le département biologie de l'IUT de Bourg-en-Bresse : capteurs Arduino (O₂, CO₂, luminosité), stockage temps réel dans Firebase et application Android Java de visualisation et d'administration.",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "Android",
       "url": "https://damienvaiton.fr/projects/vegetabillisauditor.html",
       "image": "https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg",
-      "author": {
-        "@id": "https://damienvaiton.fr/#person"
-      },
-      "creator": {
-        "@id": "https://damienvaiton.fr/#person"
-      },
-      "inLanguage": "fr"
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#code",
-      "name": "Vegetabillis Auditor (code source)",
+      "inLanguage": "fr",
       "programmingLanguage": [
         "Java"
       ],
@@ -117,8 +107,14 @@
       "author": {
         "@id": "https://damienvaiton.fr/#person"
       },
+      "creator": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
       "targetProduct": {
-        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#app"
+        "@type": "SoftwareApplication",
+        "name": "Vegetabillis Auditor",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Android"
       },
       "codeRepository": "https://github.com/Damienvaiton/SAE-S3"
     },
@@ -129,18 +125,12 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Accueil",
+          "name": "Damien Vaiton",
           "item": "https://damienvaiton.fr/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Projets",
-          "item": "https://damienvaiton.fr/#projets"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "Vegetabillis Auditor",
           "item": "https://damienvaiton.fr/projects/vegetabillisauditor.html"
         }
