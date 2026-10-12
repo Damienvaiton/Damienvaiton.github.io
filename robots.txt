@@ -1,4 +1,23 @@
+# Le portfolio est public : moteurs de recherche et assistants IA sont les bienvenus.
+# Seule exception : edt/, une application à ne pas indexer.
 User-agent: *
 Allow: /
+# edt/ est une application privée : à ne jamais indexer
+Disallow: /edt/
+
+# Robots des moteurs et assistants IA, autorisés explicitement
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+Allow: /
+Disallow: /edt/
 
 Sitemap: https://damienvaiton.fr/sitemap.xml

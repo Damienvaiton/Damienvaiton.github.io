@@ -1,211 +1,261 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="p.fasttrack.title">FastTrack, app Android Formule 1 en Kotlin · Damien Vaiton</title>
+    <meta name="description" content="FastTrack, application Android en Kotlin (MVVM, Retrofit, Room) pour suivre la Formule 1 : prochaine course, calendrier et classements." data-i18n-attr="content:p.fasttrack.desc" />
+    <meta name="author" content="Damien Vaiton" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href="https://damienvaiton.fr/projects/fasttrack.html" />
+    <link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/fasttrack.html" />
+    <link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/fasttrack.html?lang=en" />
+    <link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/fasttrack.html" />
+    <link rel="me" href="https://www.linkedin.com/in/damien-vaiton/" />
+    <link rel="me" href="https://github.com/Damienvaiton" />
 
-		<title>Damien Vaiton | FastTrack (Android & F1)</title>
-		<meta
-			name="description"
-			content="Découvrez FastTrack : une application mobile Android pour les fans de Formule 1, développée par Damien Vaiton et Ewen Cervasi."
-		/>
-		<link
-			rel="canonical"
-			href="https://damienvaiton.fr/projects/fasttrack.html"
-		/>
+    <link rel="preload" href="../assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="../assets/css/site.css" />
 
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-			gtag("config", "UA-169007209-3");
-		</script>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <meta name="theme-color" content="#080b1d" />
+    <meta name="color-scheme" content="dark" />
 
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/bootstrap/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/boxicons/css/boxicons.min.css"
-			rel="stylesheet"
-		/>
-		<link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
-		<link href="../assets/css/style.css" rel="stylesheet" />
-	</head>
+    <meta property="og:site_name" content="Damien Vaiton" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="FastTrack, app Android Formule 1 en Kotlin · Damien Vaiton" />
+    <meta property="og:description" content="FastTrack, application Android en Kotlin (MVVM, Retrofit, Room) pour suivre la Formule 1 : prochaine course, calendrier et classements." />
+    <meta property="og:url" content="https://damienvaiton.fr/projects/fasttrack.html" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/og/fasttrack.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FastTrack : Le championnat de Formule 1 dans la poche : prochaine course, calendrier et classements, toujours à jour." />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="article:author" content="https://damienvaiton.fr/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FastTrack, app Android Formule 1 en Kotlin · Damien Vaiton" />
+    <meta name="twitter:description" content="FastTrack, application Android en Kotlin (MVVM, Retrofit, Room) pour suivre la Formule 1 : prochaine course, calendrier et classements." />
+    <meta name="twitter:image" content="https://damienvaiton.fr/assets/img/og/fasttrack.jpg" />
+    <meta name="twitter:image:alt" content="FastTrack : Le championnat de Formule 1 dans la poche : prochaine course, calendrier et classements, toujours à jour." />
 
-	<body style="background-color: #040b14; color: #fff">
-		<main id="main">
-			<div class="container-fluid pb-4">
-				<div class="project-card">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2 class="project-title-custom">
-								<i class="bx bx-flag"></i> FastTrack
-							</h2>
+    <!-- Google Tag Manager (chargé après l'affichage pour ne pas ralentir la page) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          var j = document.createElement("script");
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-5BB8W2X";
+          document.head.appendChild(j);
+        }, 1500);
+      });
+    </script>
 
-							<div class="row mt-4">
-								<div class="col-md-6">
-									<span class="section-label-custom">Stack Technique</span>
-									<div class="mb-4">
-										<span class="tech-badge">Kotlin</span>
-										<span class="tech-badge">MVVM</span>
-										<span class="tech-badge">Retrofit</span>
-										<span class="tech-badge">Room</span>
-										<span class="tech-badge">LiveData</span>
-										<span class="tech-badge">Coroutines</span>
-									</div>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://damienvaiton.fr/projects/fasttrack.html",
+      "url": "https://damienvaiton.fr/projects/fasttrack.html",
+      "name": "FastTrack, app Android Formule 1 en Kotlin · Damien Vaiton",
+      "description": "FastTrack, application Android en Kotlin (MVVM, Retrofit, Room) pour suivre la Formule 1 : prochaine course, calendrier et classements.",
+      "inLanguage": "fr-FR",
+      "dateModified": "2026-10-12",
+      "isPartOf": {
+        "@id": "https://damienvaiton.fr/#website"
+      },
+      "about": {
+        "@id": "https://damienvaiton.fr/projects/fasttrack.html#project"
+      },
+      "mainEntity": {
+        "@id": "https://damienvaiton.fr/projects/fasttrack.html#project"
+      },
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "breadcrumb": {
+        "@id": "https://damienvaiton.fr/projects/fasttrack.html#breadcrumb"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://damienvaiton.fr/assets/img/og/fasttrack.jpg",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://damienvaiton.fr/projects/fasttrack.html#project",
+      "name": "FastTrack",
+      "description": "Application Android en Kotlin (MVVM, Retrofit, Room, Coroutines) pour suivre la Formule 1 : prochaine course avec compte à rebours, calendrier, classements pilotes et écuries. Projet du cours de programmation avancée du BUT Informatique.",
+      "url": "https://damienvaiton.fr/projects/fasttrack.html",
+      "image": "https://damienvaiton.fr/assets/img/og/fasttrack.jpg",
+      "inLanguage": "fr",
+      "programmingLanguage": [
+        "Kotlin"
+      ],
+      "runtimePlatform": "Android",
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "creator": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "targetProduct": {
+        "@type": "SoftwareApplication",
+        "name": "FastTrack",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "Android"
+      },
+      "codeRepository": "https://github.com/Damienvaiton/Fasttrack"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://damienvaiton.fr/projects/fasttrack.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Damien Vaiton",
+          "item": "https://damienvaiton.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "FastTrack",
+          "item": "https://damienvaiton.fr/projects/fasttrack.html"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://damienvaiton.fr/#person",
+      "name": "Damien Vaiton",
+      "url": "https://damienvaiton.fr/",
+      "sameAs": [
+        "https://www.linkedin.com/in/damien-vaiton/",
+        "https://github.com/Damienvaiton"
+      ]
+    }
+  ]
+}
+    </script>
+  </head>
 
-									<span class="section-label-custom">Accès au projet</span>
-									<div class="d-flex flex-wrap">
-										<a
-											href="https://github.com/Damienvaiton/Fasttrack"
-											target="_blank"
-											class="github-btn-custom mr-2 mb-2"
-										>
-											<i class="bx bxl-github mr-2"></i> GitHub
-										</a>
-										<a
-											href="https://app.bitrise.io/app/24291305-ebd9-4d1c-9cdd-14d180605fb1/build/9acaaf00-803e-4147-911a-0a2ced439185/artifact/868000e6ec5a2ccd/p/a5efebf20400567733414dbdf150220e"
-											target="_blank"
-											class="github-btn-custom mb-2"
-											style="background: #12d640"
-										>
-											<i class="bx bx-download mr-2"></i> Télécharger l'APK
-										</a>
-									</div>
-								</div>
-								<div class="col-md-6 mt-4 mt-md-0">
-									<span class="section-label-custom">Contexte du Projet</span>
-									<p>
-										Réalisé dans le cadre du cours de
-										<strong>programmation avancée</strong> à l'IUT Informatique
-										de Bourg-en-Bresse. FastTrack s'adresse aux passionnés de
-										Formule 1 souhaitant suivre les résultats en temps réel.
-									</p>
-								</div>
-							</div>
+  <body>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
 
-							<hr class="my-5" style="border-color: rgba(255, 255, 255, 0.1)" />
+    <a class="skip" href="#contenu" data-i18n="nav.skip">Aller au contenu</a>
+    <div class="sky" aria-hidden="true"></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="glow" aria-hidden="true"></div>
 
-							<div class="row">
-								<div class="col-md-12">
-									<h4 style="color: #12d640" class="mb-4 text-uppercase">
-										Fonctionnalités
-									</h4>
-									<div class="row mt-4">
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-timer feature-icon-custom"></i>
-												Prochaine Course
-											</h5>
-											<p class="text-white-50 small">
-												Affichage dynamique de la prochaine épreuve au
-												calendrier avec compte à rebours.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-calendar-event feature-icon-custom"></i>
-												Calendrier Complet
-											</h5>
-											<p class="text-white-50 small">
-												Consultation de l'intégralité des dates et lieux de la
-												saison de F1.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-trophy feature-icon-custom"></i>
-												Classement Pilotes
-											</h5>
-											<p class="text-white-50 small">
-												Suivi précis des points et des positions des pilotes au
-												championnat.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-group feature-icon-custom"></i>
-												Classement Écuries
-											</h5>
-											<p class="text-white-50 small">
-												Visualisation de la hiérarchie des constructeurs durant
-												la saison.
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="../" class="brand">Damien Vaiton</a>
+        <ul class="nav-links">
+          <li><a href="../#projets" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="../#parcours" data-i18n="nav.background">Parcours</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+        <button class="lang-btn" type="button"><span class="sr-only" data-i18n="nav.langLabel">Langue :</span><span data-l="fr">FR</span> <span data-l="en">EN</span></button>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </nav>
+    </header>
 
-							<div class="mt-5 text-center">
-								<h4 style="color: #12d640" class="mb-4 text-uppercase">
-									Aperçu de l'application
-								</h4>
-								<div class="row justify-content-center">
-									<div class="col-md-3 mb-3">
-										<img
-											src="../assets/img/project/images/fasttrackhome.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Accueil FastTrack"
-										/>
-									</div>
-									<div class="col-md-3 mb-3">
-										<img
-											src="../assets/img/project/images/fasttrackranking.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Classement FastTrack"
-										/>
-									</div>
-									<div class="col-md-3 mb-3">
-										<img
-											src="../assets/img/project/images/fasttrackschedule.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Calendrier FastTrack"
-										/>
-									</div>
-									<div class="col-md-3 mb-3">
-										<img
-											src="../assets/img/project/images/fasttrackshop.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Boutique FastTrack"
-										/>
-									</div>
-								</div>
-							</div>
+    <main id="contenu">
+      <section class="p-hero">
+        <div class="container">
+          <a href="../#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> <span data-i18n="p.back">La tracklist</span></a>
+          <div><span class="time fade-in" style="--d: 0.2s" data-i18n="p.fasttrack.track">Piste 02</span></div>
+          <h1>
+              <span class="line"><span style="--i: 0">FastTrack</span></span>
+          </h1>
+          <p class="p-tagline fade-in" style="--d: 0.6s" data-i18n="p.fasttrack.tagline">Le championnat de Formule 1 dans la poche : prochaine course, calendrier et classements, toujours à jour.</p>
+          <div class="p-actions fade-in" style="--d: 0.75s">
+              <a href="https://github.com/Damienvaiton/Fasttrack" target="_blank" rel="noopener" class="btn"><span data-i18n="p.github">Code sur GitHub</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a href="https://app.bitrise.io/app/24291305-ebd9-4d1c-9cdd-14d180605fb1/build/9acaaf00-803e-4147-911a-0a2ced439185/artifact/868000e6ec5a2ccd/p/a5efebf20400567733414dbdf150220e" target="_blank" rel="noopener" class="link" data-i18n="p.apk">Télécharger l'APK</a>
+          </div>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt data-i18n="fact.Contexte">Contexte</dt><dd data-i18n="p.fasttrack.fact0">Projet BUT Informatique</dd></div><div><dt data-i18n="fact.Plateforme">Plateforme</dt><dd data-i18n="p.fasttrack.fact1">Android</dd></div><div><dt data-i18n="fact.Stack">Stack</dt><dd data-i18n="p.fasttrack.fact2">Kotlin · MVVM</dd></div></dl>
+        </div>
+      </section>
 
-							<div class="text-center mt-5">
-								<a
-									href="https://damienvaiton.fr"
-									target="_top"
-									class="btn"
-									style="
-										color: #12d640;
-										border: 1px solid #12d640;
-										border-radius: 50px;
-										padding: 10px 30px;
-									"
-								>
-									<i class="bx bx-left-arrow-alt"></i> Retour au Portfolio
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal" data-i18n="p.notesTime">Notes de pochette</span>
+          <h2 class="split" data-i18n="p.projectTitle">Le <em class="gold">projet</em></h2>
+          <div class="p-intro">
+            <div>
+              <p class="reveal" data-i18n="p.fasttrack.intro0">Réalisé pour le cours de <strong>programmation avancée</strong> de l'IUT Informatique de Bourg-en-Bresse, FastTrack s'adresse aux fans de F1 qui veulent suivre la saison sans chercher l'info partout.</p>
+              <p class="reveal" data-i18n="p.fasttrack.intro1">L'app récupère les données de course depuis une API, les met en cache localement et les affiche dans une interface pensée pour une lecture rapide.</p>
+            </div>
+            <div class="p-side reveal">
+              <h3 data-i18n="p.stackTitle">Stack technique</h3>
+              <ul><li>Kotlin</li><li>MVVM</li><li>Retrofit</li><li>Room</li><li>LiveData</li><li>Coroutines</li></ul>
+              
+            </div>
+          </div>
+        </div>
+      </section>
 
-		<script src="../assets/vendor/jquery/jquery.min.js"></script>
-		<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/js/main.js"></script>
-	</body>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal" data-i18n="p.featTime">Ce qu'il fait</span>
+          <h2 class="split" data-i18n="p.featTitle">Les <em class="gold">fonctionnalités</em></h2>
+          <ol class="features">
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.fasttrack.f0t">Prochaine course</h3><p data-i18n="p.fasttrack.f0d">La prochaine épreuve du calendrier, avec un compte à rebours jusqu'au départ.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.fasttrack.f1t">Calendrier complet</h3><p data-i18n="p.fasttrack.f1d">Toutes les dates et tous les circuits de la saison en un coup d'œil.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.fasttrack.f2t">Classement pilotes</h3><p data-i18n="p.fasttrack.f2d">Les points et positions de chaque pilote au championnat.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.fasttrack.f3t">Classement écuries</h3><p data-i18n="p.fasttrack.f3d">La hiérarchie des constructeurs au fil de la saison.</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal" data-i18n="p.capTime">Captures</span>
+          <h2 class="split" data-i18n="p.capTitle">En <em class="gold">images</em></h2>
+          <div class="gallery reveal">
+            <figure><picture><source srcset="../assets/img/project/images/fasttrackhome.webp" type="image/webp" /><img src="../assets/img/project/images/fasttrackhome.jpg" alt="Accueil de FastTrack" data-i18n-attr="alt:p.fasttrack.cap0" width="540" height="1200" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.fasttrack.cap0">Accueil de FastTrack</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/fasttrackranking.webp" type="image/webp" /><img src="../assets/img/project/images/fasttrackranking.jpg" alt="Classement des pilotes" data-i18n-attr="alt:p.fasttrack.cap1" width="540" height="1561" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.fasttrack.cap1">Classement des pilotes</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/fasttrackschedule.webp" type="image/webp" /><img src="../assets/img/project/images/fasttrackschedule.jpg" alt="Calendrier de la saison" data-i18n-attr="alt:p.fasttrack.cap2" width="540" height="1200" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.fasttrack.cap2">Calendrier de la saison</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/fasttrackshop.webp" type="image/webp" /><img src="../assets/img/project/images/fasttrackshop.jpg" alt="Boutique" data-i18n-attr="alt:p.fasttrack.cap3" width="540" height="1200" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.fasttrack.cap3">Boutique</figcaption></figure>
+          </div>
+
+          <a href="vegetabillisauditor.html" class="next">
+            <small data-i18n="p.fasttrack.next">Piste suivante · 03</small>
+            <strong>Vegetabillis Auditor <em class="gold">→</em></strong>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <span>© <span data-year>2026</span> Damien Vaiton</span>
+        <a href="../" data-i18n="p.home">Retour à l'accueil</a>
+      </div>
+    </footer>
+
+    <script src="../assets/js/i18n.js"></script>
+    <script src="../assets/js/site.js"></script>
+  </body>
 </html>

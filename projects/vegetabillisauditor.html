@@ -1,193 +1,259 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="p.vegetabillisauditor.title">Vegetabillis Auditor, IoT Arduino et Android · Damien Vaiton</title>
+    <meta name="description" content="Vegetabillis Auditor : capteurs Arduino, base Firebase et app Android Java pour suivre en temps réel des expériences de biologie à l&#x27;IUT." data-i18n-attr="content:p.vegetabillisauditor.desc" />
+    <meta name="author" content="Damien Vaiton" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/vegetabillisauditor.html?lang=en" />
+    <link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <link rel="me" href="https://www.linkedin.com/in/damien-vaiton/" />
+    <link rel="me" href="https://github.com/Damienvaiton" />
 
-		<title>Damien Vaiton | Vegetabillis Auditor (IoT & Android)</title>
-		<meta
-			name="description"
-			content="Découvrez Vegetabillis Auditor : un système IoT de mesure biologique en temps réel développé par Damien Vaiton, Alexis Blanc, Jules Closson et Gaetan Suard."
-		/>
-		<link
-			rel="canonical"
-			href="https://damienvaiton.fr/projects/vegetabillisauditor.html"
-		/>
+    <link rel="preload" href="../assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="../assets/css/site.css" />
 
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-			gtag("config", "UA-169007209-3");
-		</script>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <meta name="theme-color" content="#080b1d" />
+    <meta name="color-scheme" content="dark" />
 
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/bootstrap/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/boxicons/css/boxicons.min.css"
-			rel="stylesheet"
-		/>
-		<link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
-		<link href="../assets/css/style.css" rel="stylesheet" />
-	</head>
+    <meta property="og:site_name" content="Damien Vaiton" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Vegetabillis Auditor, IoT Arduino et Android · Damien Vaiton" />
+    <meta property="og:description" content="Vegetabillis Auditor : capteurs Arduino, base Firebase et app Android Java pour suivre en temps réel des expériences de biologie à l&#x27;IUT." />
+    <meta property="og:url" content="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vegetabillis Auditor : Des capteurs Arduino jusqu&#x27;au smartphone : le suivi en temps réel d&#x27;expériences de biologie." />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="article:author" content="https://damienvaiton.fr/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vegetabillis Auditor, IoT Arduino et Android · Damien Vaiton" />
+    <meta name="twitter:description" content="Vegetabillis Auditor : capteurs Arduino, base Firebase et app Android Java pour suivre en temps réel des expériences de biologie à l&#x27;IUT." />
+    <meta name="twitter:image" content="https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg" />
+    <meta name="twitter:image:alt" content="Vegetabillis Auditor : Des capteurs Arduino jusqu&#x27;au smartphone : le suivi en temps réel d&#x27;expériences de biologie." />
 
-	<body style="background-color: #040b14; color: #fff">
-		<main id="main">
-			<div class="container pb-5">
-				<div class="project-card shadow-lg">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2 class="project-title-custom">
-								<i class="bx bx-broadcast"></i> Vegetabillis Auditor
-							</h2>
+    <!-- Google Tag Manager (chargé après l'affichage pour ne pas ralentir la page) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          var j = document.createElement("script");
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-5BB8W2X";
+          document.head.appendChild(j);
+        }, 1500);
+      });
+    </script>
 
-							<div class="row mt-4">
-								<div class="col-md-6">
-									<span class="section-label-custom">Technologies Clés</span>
-									<div class="mb-4">
-										<span class="tech-badge">Java</span>
-										<span class="tech-badge">Arduino</span>
-										<span class="tech-badge">Firebase</span>
-										<span class="tech-badge">Architecture MVVM</span>
-										<span class="tech-badge">IoT</span>
-									</div>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html",
+      "url": "https://damienvaiton.fr/projects/vegetabillisauditor.html",
+      "name": "Vegetabillis Auditor, IoT Arduino et Android · Damien Vaiton",
+      "description": "Vegetabillis Auditor : capteurs Arduino, base Firebase et app Android Java pour suivre en temps réel des expériences de biologie à l'IUT.",
+      "inLanguage": "fr-FR",
+      "dateModified": "2026-10-12",
+      "isPartOf": {
+        "@id": "https://damienvaiton.fr/#website"
+      },
+      "about": {
+        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#project"
+      },
+      "mainEntity": {
+        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#project"
+      },
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "breadcrumb": {
+        "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#breadcrumb"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#project",
+      "name": "Vegetabillis Auditor",
+      "description": "Système IoT pour le département biologie de l'IUT de Bourg-en-Bresse : capteurs Arduino (O₂, CO₂, luminosité), stockage temps réel dans Firebase et application Android Java de visualisation et d'administration.",
+      "url": "https://damienvaiton.fr/projects/vegetabillisauditor.html",
+      "image": "https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg",
+      "inLanguage": "fr",
+      "programmingLanguage": [
+        "Java"
+      ],
+      "runtimePlatform": "Android, Arduino",
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "creator": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "targetProduct": {
+        "@type": "SoftwareApplication",
+        "name": "Vegetabillis Auditor",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Android"
+      },
+      "codeRepository": "https://github.com/Damienvaiton/SAE-S3"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://damienvaiton.fr/projects/vegetabillisauditor.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Damien Vaiton",
+          "item": "https://damienvaiton.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Vegetabillis Auditor",
+          "item": "https://damienvaiton.fr/projects/vegetabillisauditor.html"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://damienvaiton.fr/#person",
+      "name": "Damien Vaiton",
+      "url": "https://damienvaiton.fr/",
+      "sameAs": [
+        "https://www.linkedin.com/in/damien-vaiton/",
+        "https://github.com/Damienvaiton"
+      ]
+    }
+  ]
+}
+    </script>
+  </head>
 
-									<span class="section-label-custom">Code Source</span>
-									<a
-										href="https://github.com/Damienvaiton/SAE-S3"
-										target="_blank"
-										class="github-btn-custom"
-									>
-										<i class="bx bxl-github mr-2"></i> Consulter sur GitHub
-									</a>
-								</div>
-								<div class="col-md-6 mt-4 mt-md-0">
-									<span class="section-label-custom">Contexte du Projet</span>
-									<p>
-										Projet réalisé lors de mon
-										<strong>BUT Informatique (2ème année)</strong> pour le
-										département biologie de l'IUT de Bourg-en-Bresse. Ce système
-										automatise le suivi de données biologiques critiques.
-									</p>
-								</div>
-							</div>
+  <body>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
 
-							<hr class="my-5" style="border-color: rgba(255, 255, 255, 0.1)" />
+    <a class="skip" href="#contenu" data-i18n="nav.skip">Aller au contenu</a>
+    <div class="sky" aria-hidden="true"></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="glow" aria-hidden="true"></div>
 
-							<div class="row">
-								<div class="col-md-12">
-									<h4 style="color: #12d640" class="mb-4 text-uppercase">
-										Description Technique
-									</h4>
-									<div class="row mt-4">
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-microchip feature-icon-custom"></i>
-												Acquisition IoT
-											</h5>
-											<p class="text-white-50 small">
-												Mesure en temps réel de capteurs biologiques (O2, CO2,
-												luminosité) via une carte Arduino.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-cloud-upload feature-icon-custom"></i>
-												Stockage Cloud
-											</h5>
-											<p class="text-white-50 small">
-												Synchronisation instantanée des données vers une base de
-												données Firebase pour un accès distant.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-mobile-alt feature-icon-custom"></i>
-												Application Mobile
-											</h5>
-											<p class="text-white-50 small">
-												Visualisation graphique en direct sur Android pour les
-												enseignants et les étudiants de l'IUT.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-data feature-icon-custom"></i>
-												Administration
-											</h5>
-											<p class="text-white-50 small">
-												Gestion simplifiée des données collectées directement
-												depuis l'interface mobile.
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="../" class="brand">Damien Vaiton</a>
+        <ul class="nav-links">
+          <li><a href="../#projets" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="../#parcours" data-i18n="nav.background">Parcours</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+        <button class="lang-btn" type="button"><span class="sr-only" data-i18n="nav.langLabel">Langue :</span><span data-l="fr">FR</span> <span data-l="en">EN</span></button>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </nav>
+    </header>
 
-							<div class="mt-5 text-center">
-								<h4 style="color: #12d640" class="mb-4 text-uppercase">
-									Captures d'écran
-								</h4>
-								<div class="row justify-content-center">
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/va1.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Vegetabillis Auditor 1"
-										/>
-									</div>
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/va2.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Vegetabillis Auditor 2"
-										/>
-									</div>
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/va3.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Vegetabillis Auditor 3"
-										/>
-									</div>
-								</div>
-							</div>
+    <main id="contenu">
+      <section class="p-hero">
+        <div class="container">
+          <a href="../#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> <span data-i18n="p.back">La tracklist</span></a>
+          <div><span class="time fade-in" style="--d: 0.2s" data-i18n="p.vegetabillisauditor.track">Piste 03</span></div>
+          <h1>
+              <span class="line"><span style="--i: 0">Vegetabillis Auditor</span></span>
+          </h1>
+          <p class="p-tagline fade-in" style="--d: 0.6s" data-i18n="p.vegetabillisauditor.tagline">Des capteurs Arduino jusqu'au smartphone : le suivi en temps réel d'expériences de biologie.</p>
+          <div class="p-actions fade-in" style="--d: 0.75s">
+              <a href="https://github.com/Damienvaiton/SAE-S3" target="_blank" rel="noopener" class="btn"><span data-i18n="p.github">Code sur GitHub</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt data-i18n="fact.Contexte">Contexte</dt><dd data-i18n="p.vegetabillisauditor.fact0">Projet BUT, 2e année</dd></div><div><dt data-i18n="fact.Client">Client</dt><dd data-i18n="p.vegetabillisauditor.fact1">Département biologie de l'IUT</dd></div><div><dt data-i18n="fact.Plateforme">Plateforme</dt><dd data-i18n="p.vegetabillisauditor.fact2">Arduino + Android</dd></div></dl>
+        </div>
+      </section>
 
-							<div class="text-center mt-5">
-								<a
-									href="https://damienvaiton.fr"
-									target="_top"
-									class="btn"
-									style="
-										color: #12d640;
-										border: 1px solid #12d640;
-										border-radius: 50px;
-										padding: 10px 30px;
-									"
-								>
-									<i class="bx bx-left-arrow-alt"></i> Retour au Portfolio
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal" data-i18n="p.notesTime">Notes de pochette</span>
+          <h2 class="split" data-i18n="p.projectTitle">Le <em class="gold">projet</em></h2>
+          <div class="p-intro">
+            <div>
+              <p class="reveal" data-i18n="p.vegetabillisauditor.intro0">Un projet mené pour le <strong>département biologie de l'IUT de Bourg-en-Bresse</strong>, qui avait besoin de suivre des expériences sans rester collé aux instruments.</p>
+              <p class="reveal" data-i18n="p.vegetabillisauditor.intro1">Une carte Arduino relève les capteurs, envoie les mesures dans le cloud, et une app Android les affiche en direct pour les enseignants et les étudiants.</p>
+            </div>
+            <div class="p-side reveal">
+              <h3 data-i18n="p.stackTitle">Stack technique</h3>
+              <ul><li>Java</li><li>Arduino</li><li>Firebase</li><li>MVVM</li><li>IoT</li></ul>
+              
+            </div>
+          </div>
+        </div>
+      </section>
 
-		<script src="../assets/vendor/jquery/jquery.min.js"></script>
-		<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/js/main.js"></script>
-	</body>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal" data-i18n="p.featTime">Ce qu'il fait</span>
+          <h2 class="split" data-i18n="p.featTitle">Les <em class="gold">fonctionnalités</em></h2>
+          <ol class="features">
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.vegetabillisauditor.f0t">Acquisition IoT</h3><p data-i18n="p.vegetabillisauditor.f0d">Mesures en temps réel d'O₂, de CO₂ et de luminosité via une carte Arduino.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.vegetabillisauditor.f1t">Stockage cloud</h3><p data-i18n="p.vegetabillisauditor.f1d">Synchronisation immédiate des mesures dans Firebase, consultables à distance.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.vegetabillisauditor.f2t">Graphiques en direct</h3><p data-i18n="p.vegetabillisauditor.f2d">Visualisation des courbes sur Android, directement depuis la salle de TP ou ailleurs.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.vegetabillisauditor.f3t">Administration</h3><p data-i18n="p.vegetabillisauditor.f3d">Gestion des données collectées depuis l'interface mobile.</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal" data-i18n="p.capTime">Captures</span>
+          <h2 class="split" data-i18n="p.capTitle">En <em class="gold">images</em></h2>
+          <div class="gallery reveal">
+            <figure><picture><source srcset="../assets/img/project/images/va1.webp" type="image/webp" /><img src="../assets/img/project/images/va1.jpg" alt="Écran principal" data-i18n-attr="alt:p.vegetabillisauditor.cap0" width="540" height="1200" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.vegetabillisauditor.cap0">Écran principal</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/va2.webp" type="image/webp" /><img src="../assets/img/project/images/va2.jpg" alt="Graphique des mesures" data-i18n-attr="alt:p.vegetabillisauditor.cap1" width="540" height="1200" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.vegetabillisauditor.cap1">Graphique des mesures</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/va3.webp" type="image/webp" /><img src="../assets/img/project/images/va3.jpg" alt="Administration des données" data-i18n-attr="alt:p.vegetabillisauditor.cap2" width="540" height="1200" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.vegetabillisauditor.cap2">Administration des données</figcaption></figure>
+          </div>
+
+          <a href="edukid.html" class="next">
+            <small data-i18n="p.vegetabillisauditor.next">Piste suivante · 04</small>
+            <strong>Edukid <em class="gold">→</em></strong>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <span>© <span data-year>2026</span> Damien Vaiton</span>
+        <a href="../" data-i18n="p.home">Retour à l'accueil</a>
+      </div>
+    </footer>
+
+    <script src="../assets/js/i18n.js"></script>
+    <script src="../assets/js/site.js"></script>
+  </body>
 </html>
