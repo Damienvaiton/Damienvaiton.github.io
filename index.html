@@ -14,7 +14,7 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Damien Vaiton · Développeur web" />
-    <meta property="og:description" content="Développeur web, Symfony côté back, React côté front. Disponible pour un poste." />
+    <meta property="og:description" content="Développeur web, Symfony côté back, React côté front." />
     <meta property="og:url" content="https://damienvaiton.fr/" />
     <meta property="og:image" content="https://damienvaiton.fr/assets/img/profile.jpg" />
 
@@ -106,7 +106,7 @@
             </h1>
             <p class="hero-lead fade-in" style="--d: 0.7s">
               Diplômé d'un <strong>BUT Informatique</strong>, je construis des applications web, de la logique métier
-              en PHP jusqu'à l'interface. Basé à Bourg-en-Bresse, je cherche mon prochain poste de développeur web.
+              en PHP jusqu'à l'interface. Basé à Bourg-en-Bresse.
             </p>
             <div class="hero-actions fade-in" style="--d: 0.85s">
               <a href="#projets" class="btn">
@@ -116,13 +116,13 @@
               <a href="#contact" class="link">Me contacter</a>
             </div>
             <div class="hero-meta fade-in" style="--d: 1s">
-              <span>Disponible</span><span>Bourg-en-Bresse</span><span>BUT Informatique</span>
+              <span>Symfony · React</span><span>Bourg-en-Bresse</span><span>BUT Informatique</span>
             </div>
           </div>
 
           <div class="code-card fade-in" style="--d: 0.5s" aria-label="Extrait de code Symfony qui me présente">
             <div class="code-tab"><b>PortraitController.php</b><span>PHP</span></div>
-<pre><code><span class="cl" style="--n:0"><span class="tk-c">// Ouvert après minuit</span></span><span class="cl" style="--n:1"><span class="tk-a">#[Route('/damien')]</span></span><span class="cl" style="--n:2"><span class="tk-k">public function</span> <span class="tk-f">portrait</span>(): <span class="tk-k">Response</span></span><span class="cl" style="--n:3">{</span><span class="cl" style="--n:4">    <span class="tk-k">return</span> $this-&gt;<span class="tk-f">render</span>(<span class="tk-s">'dev.html.twig'</span>, [</span><span class="cl" style="--n:5">        <span class="tk-s">'poste'</span>  =&gt; <span class="tk-s">'Développeur web'</span>,</span><span class="cl" style="--n:6">        <span class="tk-s">'statut'</span> =&gt; <span class="tk-s">'Disponible'</span>,</span><span class="cl" style="--n:7">        <span class="tk-s">'stack'</span>  =&gt; [<span class="tk-s">'Symfony'</span>, <span class="tk-s">'React'</span>],</span><span class="cl" style="--n:8">        <span class="tk-s">'ville'</span>  =&gt; <span class="tk-s">'Bourg-en-Bresse'</span>,</span><span class="cl" style="--n:9">    ]);</span><span class="cl" style="--n:10">}<span class="caret"></span></span></code></pre>
+<pre><code><span class="cl" style="--n:0"><span class="tk-c">// Ouvert après minuit</span></span><span class="cl" style="--n:1"><span class="tk-a">#[Route('/damien')]</span></span><span class="cl" style="--n:2"><span class="tk-k">public function</span> <span class="tk-f">portrait</span>(): <span class="tk-k">Response</span></span><span class="cl" style="--n:3">{</span><span class="cl" style="--n:4">    <span class="tk-k">return</span> $this-&gt;<span class="tk-f">render</span>(<span class="tk-s">'dev.html.twig'</span>, [</span><span class="cl" style="--n:5">        <span class="tk-s">'poste'</span>   =&gt; <span class="tk-s">'Développeur web'</span>,</span><span class="cl" style="--n:6">        <span class="tk-s">'passion'</span> =&gt; <span class="tk-s">'la musique'</span>,</span><span class="cl" style="--n:7">        <span class="tk-s">'stack'</span>   =&gt; [<span class="tk-s">'Symfony'</span>, <span class="tk-s">'React'</span>],</span><span class="cl" style="--n:8">        <span class="tk-s">'ville'</span>   =&gt; <span class="tk-s">'Bourg-en-Bresse'</span>,</span><span class="cl" style="--n:9">    ]);</span><span class="cl" style="--n:10">}<span class="caret"></span></span></code></pre>
             <div class="now-playing">
               <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
               <span>En fond sonore · <em>Midnights</em></span>
@@ -146,13 +146,22 @@
               <span class="time reveal">01:00 — Projets</span>
               <h2 class="split">La <em class="gold">tracklist</em></h2>
             </div>
-            <p class="reveal">Cinq projets, du mobile à l'IoT en passant par le jeu vidéo. Chaque piste a sa page.</p>
+            <p class="reveal">Six projets, des bots Discord au mobile, en passant par l'IoT et le jeu vidéo. Chaque piste a sa page.</p>
           </div>
 
           <ol class="tracklist">
             <li class="track reveal">
-              <a href="projects/fasttrack.html">
+              <a href="projects/kitty.html">
                 <span class="track-n">01</span>
+                <h3>Kitty</h3>
+                <span class="track-desc">Un bot Discord pour fans de pop : blind tests de paroles et rôles par album.</span>
+                <span class="track-tech">TypeScript · Discord.js</span>
+                <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+            <li class="track reveal">
+              <a href="projects/fasttrack.html">
+                <span class="track-n">02</span>
                 <h3>FastTrack</h3>
                 <span class="track-desc">Le championnat de Formule 1 dans la poche.</span>
                 <span class="track-tech">Kotlin · Android</span>
@@ -161,7 +170,7 @@
             </li>
             <li class="track reveal">
               <a href="projects/vegetabillisauditor.html">
-                <span class="track-n">02</span>
+                <span class="track-n">03</span>
                 <h3>Vegetabillis Auditor</h3>
                 <span class="track-desc">Des capteurs Arduino jusqu'au smartphone, en temps réel.</span>
                 <span class="track-tech">Java · Arduino · Firebase</span>
@@ -170,7 +179,7 @@
             </li>
             <li class="track reveal">
               <a href="projects/edukid.html">
-                <span class="track-n">03</span>
+                <span class="track-n">04</span>
                 <h3>Edukid</h3>
                 <span class="track-desc">Des mini-jeux pour apprendre, pensés pour les moins de 6 ans.</span>
                 <span class="track-tech">Kotlin · Room</span>
@@ -179,7 +188,7 @@
             </li>
             <li class="track reveal">
               <a href="projects/mcdosurfer.html">
-                <span class="track-n">04</span>
+                <span class="track-n">05</span>
                 <h3>McDo Surfer</h3>
                 <span class="track-desc">Un runner infini pour apprendre les bases d'Unity.</span>
                 <span class="track-tech">Unity · C#</span>
@@ -188,7 +197,7 @@
             </li>
             <li class="track reveal">
               <a href="projects/kinoa.html">
-                <span class="track-n">05</span>
+                <span class="track-n">06</span>
                 <h3>Mangeuse de Kinoa</h3>
                 <span class="track-desc">Un bot Discord : rôles automatiques et quiz sur les drapeaux.</span>
                 <span class="track-tech">Node.js · Discord.js</span>
@@ -264,19 +273,10 @@
               <span class="time reveal">03:00 — Parcours</span>
               <h2 class="split">Les <em class="gold">chapitres</em></h2>
             </div>
-            <p class="reveal">Deux stages, un BUT Informatique, et un prochain chapitre à écrire.</p>
+            <p class="reveal">Deux stages et un BUT Informatique.</p>
           </div>
 
           <ol class="chapters">
-            <li class="chapter reveal">
-              <div class="chapter-when"><span class="now">Aujourd'hui</span></div>
-              <div>
-                <h3>Le prochain chapitre</h3>
-                <div class="chapter-role">Développeur web, à écrire ensemble</div>
-                <p>Je cherche un poste de développeur web, idéalement autour de Symfony et React, dans une équipe où continuer à apprendre.</p>
-                <div class="chapter-tags">PHP · Symfony · React</div>
-              </div>
-            </li>
             <li class="chapter reveal">
               <div class="chapter-when">Nov. 2024 — Mars 2025</div>
               <div>
@@ -356,7 +356,7 @@
         <div class="container">
           <span class="time reveal">06:00 — Contact</span>
           <h2 class="split">On en parle <em class="gold">avant l'aube</em>&nbsp;?</h2>
-          <p class="contact-lead reveal">Un poste, un projet, ou juste envie d'échanger : je réponds toujours.</p>
+          <p class="contact-lead reveal">Un projet, une question, ou juste envie d'échanger : je réponds toujours.</p>
           <a class="mail reveal" href="mailto:damien.vaiton01@gmail.com">damien.vaiton01@gmail.com</a>
           <div class="contact-actions reveal">
             <a class="link" href="https://www.linkedin.com/in/damien-vaiton/" target="_blank" rel="noopener">LinkedIn</a>

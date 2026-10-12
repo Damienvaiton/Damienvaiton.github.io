@@ -6,6 +6,11 @@
     <priority>1.00</priority>
   </url>
   <url>
+    <loc>https://damienvaiton.fr/projects/kitty.html</loc>
+    <lastmod>2026-10-12</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://damienvaiton.fr/projects/fasttrack.html</loc>
     <lastmod>2026-10-10</lastmod>
     <priority>0.80</priority>
