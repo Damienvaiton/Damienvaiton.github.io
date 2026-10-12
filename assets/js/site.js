@@ -25,6 +25,7 @@
   function tr(key, fr) {
     return lang === "en" && EN[key] != null ? EN[key] : fr;
   }
+  var langHooks = [];
   function applyLang() {
     root.lang = lang;
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
@@ -44,6 +45,9 @@
       sp.classList.toggle("on", sp.getAttribute("data-l") === lang);
     });
     if (canonical && canonicalFr) canonical.setAttribute("href", lang === "en" ? canonicalFr + "?lang=en" : canonicalFr);
+    langHooks.forEach(function (fn) {
+      fn();
+    });
   }
   applyLang();
   document.querySelectorAll(".lang-btn").forEach(function (btn) {
@@ -410,6 +414,54 @@
     window.addEventListener("pageshow", function () {
       root.classList.remove("leaving");
     });
+  }
+
+  // ---------- « En fond sonore » : écoute en direct via Last.fm ----------
+  var np = document.querySelector(".now-playing[data-lastfm-user]");
+  if (np && np.dataset.lastfmUser && np.dataset.lastfmKey) {
+    var npText = np.querySelector("[data-i18n]");
+    var npTrack = null;
+    function renderNowPlaying() {
+      if (!npTrack) return;
+      npText.removeAttribute("data-i18n");
+      npText.textContent = "";
+      var label = npTrack.live ? tr("js.npNow", "En écoute") : tr("js.npLast", "Dernière écoute");
+      npText.appendChild(document.createTextNode(label + " · "));
+      var em = document.createElement("em");
+      em.textContent = npTrack.name;
+      npText.appendChild(em);
+      npText.appendChild(document.createTextNode(" — " + npTrack.artist));
+      np.classList.toggle("paused", !npTrack.live);
+      np.title = npTrack.name + " — " + npTrack.artist;
+    }
+    langHooks.push(renderNowPlaying);
+    function fetchNowPlaying() {
+      if (document.hidden) return;
+      var url =
+        "https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&format=json&limit=1" +
+        "&user=" + encodeURIComponent(np.dataset.lastfmUser) +
+        "&api_key=" + encodeURIComponent(np.dataset.lastfmKey);
+      fetch(url)
+        .then(function (r) {
+          return r.ok ? r.json() : null;
+        })
+        .then(function (data) {
+          var t = data && data.recenttracks && data.recenttracks.track && data.recenttracks.track[0];
+          if (!t) return;
+          npTrack = {
+            name: t.name,
+            artist: (t.artist && (t.artist["#text"] || t.artist.name)) || "",
+            live: !!(t["@attr"] && t["@attr"].nowplaying === "true"),
+          };
+          renderNowPlaying();
+        })
+        .catch(function () {
+          // En cas d'erreur, on garde simplement le texte par défaut
+        });
+    }
+    fetchNowPlaying();
+    setInterval(fetchNowPlaying, 60000);
+    document.addEventListener("visibilitychange", fetchNowPlaying);
   }
 
   // ---------- Halo qui suit la souris ----------

@@ -658,6 +658,16 @@ picture {
   font-size: 15px;
   color: var(--ink);
 }
+.now-playing > span:last-child {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.now-playing.paused .eq i {
+  animation-play-state: paused;
+  opacity: 0.5;
+}
 .eq {
   display: flex;
   align-items: flex-end;
