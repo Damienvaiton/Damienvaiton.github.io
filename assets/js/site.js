@@ -16,12 +16,15 @@
   }, 1500);
 
   // ---------- Ciel étoilé ----------
+  var meteorShower = function () {};
   var canvas = document.querySelector(".stars");
   if (canvas && canvas.getContext) {
     var ctx = canvas.getContext("2d");
     var stars = [];
-    var shooting = null;
+    var shots = [];
     var nextShot = 4000;
+    var showerUntil = 0;
+    var now = 0;
     var w, h, dpr;
 
     function resize() {
@@ -46,7 +49,19 @@
       }
     }
 
+    function launch(t) {
+      shots.push({
+        t0: t,
+        d: 900 + Math.random() * 500,
+        x: Math.random() * w * 0.8 + w * 0.2,
+        y: Math.random() * h * 0.45,
+        dx: -(Math.random() * 300 + 250),
+        dy: Math.random() * 120 + 90,
+      });
+    }
+
     function draw(t) {
+      now = t;
       ctx.clearRect(0, 0, w, h);
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i];
@@ -56,41 +71,269 @@
         ctx.fillStyle = s.gold ? "rgba(236,211,148," + alpha + ")" : "rgba(236,233,247," + alpha + ")";
         ctx.fill();
       }
-      if (shooting) {
-        var k = (t - shooting.t0) / shooting.d;
-        if (k >= 1) {
-          shooting = null;
-        } else {
-          var x = shooting.x + shooting.dx * k;
-          var y = shooting.y + shooting.dy * k;
-          var g = ctx.createLinearGradient(x, y, x - shooting.dx * 0.18, y - shooting.dy * 0.18);
-          var fade = Math.sin(k * Math.PI);
-          g.addColorStop(0, "rgba(255,244,207," + fade + ")");
-          g.addColorStop(1, "rgba(255,244,207,0)");
-          ctx.strokeStyle = g;
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(x - shooting.dx * 0.18, y - shooting.dy * 0.18);
-          ctx.stroke();
+      shots = shots.filter(function (sh) {
+        var k = (t - sh.t0) / sh.d;
+        if (k >= 1) return false;
+        var x = sh.x + sh.dx * k;
+        var y = sh.y + sh.dy * k;
+        var g = ctx.createLinearGradient(x, y, x - sh.dx * 0.18, y - sh.dy * 0.18);
+        var fade = Math.sin(k * Math.PI);
+        g.addColorStop(0, "rgba(255,244,207," + fade + ")");
+        g.addColorStop(1, "rgba(255,244,207,0)");
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - sh.dx * 0.18, y - sh.dy * 0.18);
+        ctx.stroke();
+        return true;
+      });
+      if (!reduced) {
+        if (t < showerUntil && Math.random() < 0.18) launch(t);
+        if (t > nextShot) {
+          launch(t);
+          nextShot = t + 7000 + Math.random() * 9000;
         }
-      } else if (!reduced && t > nextShot) {
-        shooting = {
-          t0: t,
-          d: 1100,
-          x: Math.random() * w * 0.7 + w * 0.2,
-          y: Math.random() * h * 0.35,
-          dx: -(Math.random() * 300 + 250),
-          dy: Math.random() * 120 + 90,
-        };
-        nextShot = t + 7000 + Math.random() * 9000;
+        requestAnimationFrame(draw);
       }
-      if (!reduced) requestAnimationFrame(draw);
     }
+
+    meteorShower = function (ms) {
+      showerUntil = now + ms;
+    };
 
     resize();
     window.addEventListener("resize", resize);
     requestAnimationFrame(draw);
+  }
+
+  // ---------- Easter egg : l'horloge de minuit ----------
+  // Cliquer sur l'horloge du menu (ou taper « midnights ») fait apparaître
+  // une grande horloge qui avance jusqu'à minuit, puis pluie d'étoiles.
+  var NUMERALS = ["XII", "I", "II", "III", "IIII", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
+
+  function clockSvg() {
+    var ticks = "";
+    for (var i = 0; i < 60; i++) {
+      var big = i % 5 === 0;
+      ticks +=
+        '<rect x="' + (big ? 198 : 198.8) + '" y="17" width="' + (big ? 4 : 2.4) + '" height="' + (big ? 15 : 11) +
+        '" transform="rotate(' + i * 6 + ' 200 200)"/>';
+    }
+    var nums = "";
+    NUMERALS.forEach(function (n, k) {
+      nums += '<text x="200" y="82" transform="rotate(' + k * 30 + ' 200 200)">' + n + "</text>";
+    });
+    return (
+      '<svg viewBox="0 0 400 400" aria-hidden="true">' +
+      '<defs>' +
+      '<radialGradient id="eggFace" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#f6f4ee"/><stop offset="1" stop-color="#d9d5ca"/></radialGradient>' +
+      '<linearGradient id="eggRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b0413e"/><stop offset=".5" stop-color="#7d2422"/><stop offset="1" stop-color="#a3403a"/></linearGradient>' +
+      '<linearGradient id="eggGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4cf"/><stop offset=".5" stop-color="#d9b45f"/><stop offset="1" stop-color="#9c7a2b"/></linearGradient>' +
+      '<filter id="eggPaper"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" result="n"/><feColorMatrix in="n" type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .07"/></feComponentTransfer><feComposite in2="SourceGraphic" operator="in"/><feBlend in="SourceGraphic" mode="multiply"/></filter>' +
+      "</defs>" +
+      '<circle cx="200" cy="200" r="194" fill="url(#eggFace)" filter="url(#eggPaper)"/>' +
+      '<circle class="egg-rim" cx="200" cy="200" r="193" fill="none" stroke="url(#eggRim)" stroke-width="12"/>' +
+      '<circle class="egg-rim-gold" cx="200" cy="200" r="193" fill="none" stroke="url(#eggGold)" stroke-width="12"/>' +
+      '<circle cx="200" cy="200" r="183" fill="none" stroke="#1b1b1b" stroke-width="1.5"/>' +
+      '<circle cx="200" cy="200" r="166" fill="none" stroke="#1b1b1b" stroke-width="1.5"/>' +
+      '<g fill="#1b1b1b">' + ticks + "</g>" +
+      '<g class="egg-nums">' + nums + "</g>" +
+      '<circle cx="200" cy="200" r="112" fill="none" stroke="#1b1b1b" stroke-width="2"/>' +
+      '<circle cx="200" cy="200" r="106" fill="none" stroke="#1b1b1b" stroke-width="1"/>' +
+      '<g class="egg-hand egg-hour"><path d="M197 206 L196.5 120 L191 108 L200 82 L209 108 L203.5 120 L203 206 Z" fill="#111"/></g>' +
+      '<g class="egg-hand egg-min"><path d="M198.6 214 L199.2 40 L200 26 L200.8 40 L201.4 214 Z" fill="#111"/></g>' +
+      '<circle cx="200" cy="200" r="7" fill="#111"/><circle cx="200" cy="200" r="2.5" fill="#d9b45f"/>' +
+      "</svg>"
+    );
+  }
+
+  function glitter() {
+    var gc = document.createElement("canvas");
+    gc.className = "glitter";
+    document.body.appendChild(gc);
+    var g = gc.getContext("2d");
+    var gw = (gc.width = window.innerWidth);
+    var gh = (gc.height = window.innerHeight);
+    var colors = ["#fff4cf", "#f5e1a0", "#ecd394", "#d9b45f", "#b48c36"];
+    var bits = [];
+    for (var i = 0; i < 170; i++) {
+      bits.push({
+        x: Math.random() * gw,
+        y: Math.random() * gh * 0.75 - gh * 0.6,
+        vy: Math.random() * 2.2 + 1.4,
+        sway: Math.random() * 2 + 0.5,
+        phase: Math.random() * Math.PI * 2,
+        rot: Math.random() * Math.PI,
+        vr: (Math.random() - 0.5) * 0.2,
+        size: Math.random() * 5 + 2,
+        star: Math.random() < 0.3,
+        color: colors[(Math.random() * colors.length) | 0],
+      });
+    }
+    // Étoiles filantes dessinées au-dessus du voile de l'horloge
+    var streaks = [];
+    for (var s2 = 0; s2 < 14; s2++) {
+      streaks.push({
+        t0: Math.random() * 3000,
+        d: 700 + Math.random() * 500,
+        x: Math.random() * gw * 0.8 + gw * 0.2,
+        y: Math.random() * gh * 0.5,
+        dx: -(Math.random() * 350 + 300),
+        dy: Math.random() * 150 + 120,
+      });
+    }
+    var start = performance.now();
+    (function fall(t) {
+      var el = t - start;
+      g.clearRect(0, 0, gw, gh);
+      g.globalAlpha = 1;
+      streaks.forEach(function (sk) {
+        var k = (el - sk.t0) / sk.d;
+        if (k < 0 || k > 1) return;
+        var x = sk.x + sk.dx * k;
+        var y = sk.y + sk.dy * k;
+        var grad = g.createLinearGradient(x, y, x - sk.dx * 0.25, y - sk.dy * 0.25);
+        grad.addColorStop(0, "rgba(255,244,207," + Math.sin(k * Math.PI) + ")");
+        grad.addColorStop(1, "rgba(255,244,207,0)");
+        g.strokeStyle = grad;
+        g.lineWidth = 1.6;
+        g.beginPath();
+        g.moveTo(x, y);
+        g.lineTo(x - sk.dx * 0.25, y - sk.dy * 0.25);
+        g.stroke();
+      });
+      g.globalAlpha = el > 3800 ? Math.max(0, 1 - (el - 3800) / 900) : Math.min(1, el / 300);
+      bits.forEach(function (b) {
+        b.y += b.vy;
+        b.rot += b.vr;
+        var x = b.x + Math.sin(el / 400 + b.phase) * b.sway * 6;
+        g.save();
+        g.translate(x, b.y);
+        g.rotate(b.rot);
+        g.fillStyle = b.color;
+        if (b.star) {
+          var r = b.size;
+          g.beginPath();
+          g.moveTo(0, -r);
+          g.lineTo(r * 0.3, -r * 0.3);
+          g.lineTo(r, 0);
+          g.lineTo(r * 0.3, r * 0.3);
+          g.lineTo(0, r);
+          g.lineTo(-r * 0.3, r * 0.3);
+          g.lineTo(-r, 0);
+          g.lineTo(-r * 0.3, -r * 0.3);
+          g.closePath();
+          g.fill();
+        } else {
+          g.fillRect(-b.size / 2, -b.size / 4, b.size, b.size / 2);
+        }
+        g.restore();
+      });
+      if (el < 4700) requestAnimationFrame(fall);
+      else gc.remove();
+    })(start);
+  }
+
+  var eggOpen = false;
+  function midnight() {
+    if (eggOpen) return;
+    eggOpen = true;
+    var ov = document.createElement("div");
+    ov.className = "clock-egg";
+    ov.setAttribute("role", "dialog");
+    ov.setAttribute("aria-label", "Minuit");
+    var bursts = "";
+    for (var k = 0; k < 13; k++) bursts += '<i style="--a:' + (k * 360) / 13 + 'deg;--d:' + k * 0.03 + 's"></i>';
+    ov.innerHTML =
+      '<div class="egg-dial">' + clockSvg() + '<div class="egg-burst">' + bursts + "</div></div>" +
+      '<p class="egg-caption"><span>00:00</span><em>Midnights</em></p>';
+    document.body.appendChild(ov);
+    var hour = ov.querySelector(".egg-hour");
+    var min = ov.querySelector(".egg-min");
+    function setTime(minutes) {
+      // minutes depuis midi ; 720 = minuit
+      min.style.transform = "rotate(" + (minutes % 60) * 6 + "deg)";
+      hour.style.transform = "rotate(" + (minutes / 60) * 30 + "deg)";
+    }
+    var from = 11 * 60 + 47;
+    var to = 12 * 60;
+    setTime(reduced ? to : from);
+    requestAnimationFrame(function () {
+      ov.classList.add("on");
+    });
+
+    var timers = [];
+    function close() {
+      if (!eggOpen) return;
+      timers.forEach(clearTimeout);
+      ov.classList.remove("on");
+      document.removeEventListener("keydown", onKey);
+      setTimeout(function () {
+        ov.remove();
+        eggOpen = false;
+      }, 700);
+    }
+    function onKey(e) {
+      if (e.key === "Escape") close();
+    }
+    ov.addEventListener("click", close);
+    document.addEventListener("keydown", onKey);
+
+    function strike() {
+      ov.classList.add("midnight");
+      if (!reduced) {
+        meteorShower(3500);
+        glitter();
+      }
+      timers.push(setTimeout(close, 5200));
+    }
+    if (reduced) {
+      timers.push(setTimeout(strike, 300));
+      return;
+    }
+    // Les aiguilles avancent jusqu'à minuit, en ralentissant à l'approche
+    timers.push(
+      setTimeout(function () {
+        var t0 = performance.now();
+        var dur = 2600;
+        (function tick(t) {
+          if (!eggOpen) return;
+          var k = Math.min(1, (t - t0) / dur);
+          var e = 1 - Math.pow(1 - k, 3);
+          setTime(from + (to - from) * e);
+          if (k < 1) requestAnimationFrame(tick);
+          else strike();
+        })(t0);
+      }, 700)
+    );
+  }
+
+  var navClock = document.querySelector(".clock");
+  if (navClock) {
+    navClock.setAttribute("role", "button");
+    navClock.setAttribute("tabindex", "0");
+    navClock.addEventListener("click", midnight);
+    navClock.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        midnight();
+      }
+    });
+  }
+  var typed = "";
+  window.addEventListener("keydown", function (e) {
+    if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+    if (e.key && e.key.length === 1) {
+      typed = (typed + e.key.toLowerCase()).slice(-9);
+      if (typed === "midnights") midnight();
+    }
+  });
+  if (window.console && console.log) {
+    console.log(
+      "%c✦ Psst… clique sur l'horloge, ou tape « midnights ».",
+      "font: italic 15px Georgia, serif; color: #d9b45f; padding: 6px 0;"
+    );
   }
 
   // ---------- Halo qui suit la souris ----------

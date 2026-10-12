@@ -1588,6 +1588,138 @@ p {
   background: #5865f2;
 }
 
+/* ---------- Easter egg : l'horloge de minuit ---------- */
+.clock {
+  cursor: pointer;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.clock:hover,
+.clock:focus-visible {
+  border-color: var(--gold);
+  box-shadow: 0 0 18px rgba(217, 180, 95, 0.3);
+}
+.glitter {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+.clock-egg {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  background: radial-gradient(circle at 50% 45%, rgba(30, 26, 80, 0.7), rgba(5, 7, 20, 0.94));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+  cursor: pointer;
+}
+.clock-egg.on {
+  opacity: 1;
+}
+.egg-dial {
+  position: relative;
+  width: min(68vmin, 440px);
+  aspect-ratio: 1;
+  transform: scale(0.7) rotate(-12deg);
+  transition: transform 1.2s var(--ease), filter 1.2s var(--ease);
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+}
+.clock-egg.on .egg-dial {
+  transform: none;
+}
+.clock-egg.midnight .egg-dial {
+  filter: drop-shadow(0 0 45px rgba(217, 180, 95, 0.55)) drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+}
+.egg-dial svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.egg-nums text {
+  font-family: var(--serif);
+  font-size: 33px;
+  font-weight: 400;
+  text-anchor: middle;
+  fill: #161616;
+  letter-spacing: -1px;
+}
+.egg-hand {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+}
+.egg-rim-gold {
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+.clock-egg.midnight .egg-rim-gold {
+  opacity: 1;
+}
+.egg-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.egg-burst i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px;
+  background: var(--gold-grad);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  opacity: 0;
+}
+.clock-egg.midnight .egg-burst i {
+  animation: burst 1.6s var(--ease) var(--d) forwards;
+}
+@keyframes burst {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(-120px) scale(0.3);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(calc(-1 * min(48vmin, 320px))) scale(1.1);
+  }
+}
+.egg-caption {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s var(--ease) 0.2s, transform 0.9s var(--ease) 0.2s;
+}
+.clock-egg.midnight .egg-caption {
+  opacity: 1;
+  transform: none;
+}
+.egg-caption span {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+}
+.egg-caption em {
+  font-family: var(--serif);
+  font-size: clamp(38px, 6vw, 60px);
+  background: var(--gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1020px) {
   .hero-grid {
