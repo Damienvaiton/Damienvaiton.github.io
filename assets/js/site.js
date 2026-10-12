@@ -248,52 +248,6 @@
     });
   }
 
-  // ---------- Aperçu des projets qui suit la souris ----------
-  var preview = document.querySelector(".preview");
-  var tracks = document.querySelectorAll(".track a[data-preview]");
-  if (preview && tracks.length && finePointer && !reduced) {
-    var imgs = {};
-    tracks.forEach(function (a) {
-      var img = document.createElement("img");
-      img.src = a.dataset.preview;
-      img.alt = "";
-      preview.appendChild(img);
-      imgs[a.dataset.preview] = img;
-    });
-    var px = 0,
-      py = 0,
-      mx = 0,
-      my = 0,
-      vx = 0;
-    window.addEventListener("pointermove", function (e) {
-      mx = e.clientX;
-      my = e.clientY;
-    });
-    (function follow() {
-      var dx = mx - px;
-      px += dx * 0.12;
-      py += (my - py) * 0.12;
-      vx += (dx * 0.04 - vx) * 0.2;
-      var rot = Math.max(-8, Math.min(8, vx));
-      var on = preview.classList.contains("on");
-      preview.style.transform =
-        "translate(" + (px + 40) + "px," + py + "px) rotate(" + rot + "deg) scale(" + (on ? 1 : 0.85) + ")";
-      requestAnimationFrame(follow);
-    })();
-    tracks.forEach(function (a) {
-      a.addEventListener("pointerenter", function () {
-        Object.keys(imgs).forEach(function (k) {
-          imgs[k].classList.toggle("on", k === a.dataset.preview);
-        });
-        preview.classList.toggle("wide", a.dataset.shape === "wide");
-        preview.classList.add("on");
-      });
-      a.addEventListener("pointerleave", function () {
-        preview.classList.remove("on");
-      });
-    });
-  }
-
   // ---------- Carte de code : légère inclinaison 3D ----------
   var card = document.querySelector(".code-card");
   if (card && finePointer && !reduced) {

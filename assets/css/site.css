@@ -770,47 +770,6 @@ p {
   transition: opacity 0.5s;
 }
 
-/* Aperçu qui suit la souris */
-.preview {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 40;
-  width: 210px;
-  height: 300px;
-  margin: -150px 0 0 -105px;
-  pointer-events: none;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 0.4s var(--ease), width 0.5s var(--ease), height 0.5s var(--ease), margin 0.5s var(--ease);
-  will-change: transform;
-}
-.preview.on {
-  opacity: 1;
-}
-.preview.wide {
-  width: 320px;
-  height: 290px;
-  margin: -145px 0 0 -160px;
-}
-.preview img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-.preview img.on {
-  opacity: 1;
-}
-
 /* ---------- Instruments (stack) ---------- */
 .instruments {
   display: grid;
