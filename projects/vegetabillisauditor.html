@@ -1,193 +1,142 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vegetabillis Auditor · Damien Vaiton</title>
+    <meta name="description" content="Vegetabillis Auditor : capteurs Arduino, Firebase et application Android pour suivre des mesures biologiques en temps réel." />
+    <link rel="canonical" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <link rel="icon" href="../favicon.png" />
+    <meta name="theme-color" content="#080b1d" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Vegetabillis Auditor · Damien Vaiton" />
+    <meta property="og:description" content="Des capteurs Arduino jusqu&#x27;au smartphone : le suivi en temps réel d&#x27;expériences de biologie." />
+    <meta property="og:url" content="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/project/va.jpg" />
 
-		<title>Damien Vaiton | Vegetabillis Auditor (IoT & Android)</title>
-		<meta
-			name="description"
-			content="Découvrez Vegetabillis Auditor : un système IoT de mesure biologique en temps réel développé par Damien Vaiton, Alexis Blanc, Jules Closson et Gaetan Suard."
-		/>
-		<link
-			rel="canonical"
-			href="https://damienvaiton.fr/projects/vegetabillisauditor.html"
-		/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/site.css" />
 
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-			gtag("config", "UA-169007209-3");
-		</script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+    </script>
+  </head>
 
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/bootstrap/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/boxicons/css/boxicons.min.css"
-			rel="stylesheet"
-		/>
-		<link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
-		<link href="../assets/css/style.css" rel="stylesheet" />
-	</head>
+  <body>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
 
-	<body style="background-color: #040b14; color: #fff">
-		<main id="main">
-			<div class="container pb-5">
-				<div class="project-card shadow-lg">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2 class="project-title-custom">
-								<i class="bx bx-broadcast"></i> Vegetabillis Auditor
-							</h2>
+    <div class="sky" aria-hidden="true"></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="glow" aria-hidden="true"></div>
 
-							<div class="row mt-4">
-								<div class="col-md-6">
-									<span class="section-label-custom">Technologies Clés</span>
-									<div class="mb-4">
-										<span class="tech-badge">Java</span>
-										<span class="tech-badge">Arduino</span>
-										<span class="tech-badge">Firebase</span>
-										<span class="tech-badge">Architecture MVVM</span>
-										<span class="tech-badge">IoT</span>
-									</div>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="../index.html" class="brand">Damien Vaiton</a>
+        <ul class="nav-links">
+          <li><a href="../index.html#projets">Projets</a></li>
+          <li><a href="../index.html#parcours">Parcours</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </nav>
+    </header>
 
-									<span class="section-label-custom">Code Source</span>
-									<a
-										href="https://github.com/Damienvaiton/SAE-S3"
-										target="_blank"
-										class="github-btn-custom"
-									>
-										<i class="bx bxl-github mr-2"></i> Consulter sur GitHub
-									</a>
-								</div>
-								<div class="col-md-6 mt-4 mt-md-0">
-									<span class="section-label-custom">Contexte du Projet</span>
-									<p>
-										Projet réalisé lors de mon
-										<strong>BUT Informatique (2ème année)</strong> pour le
-										département biologie de l'IUT de Bourg-en-Bresse. Ce système
-										automatise le suivi de données biologiques critiques.
-									</p>
-								</div>
-							</div>
+    <main>
+      <section class="p-hero">
+        <div class="container">
+          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> La tracklist</a>
+          <div><span class="time fade-in" style="--d: 0.2s">Piste 02</span></div>
+          <h1>
+              <span class="line"><span style="--i: 0">Vegetabillis Auditor</span></span>
+          </h1>
+          <p class="p-tagline fade-in" style="--d: 0.6s">Des capteurs Arduino jusqu'au smartphone : le suivi en temps réel d'expériences de biologie.</p>
+          <div class="p-actions fade-in" style="--d: 0.75s">
+              <a href="https://github.com/Damienvaiton/SAE-S3" target="_blank" rel="noopener" class="btn">Code sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt>Contexte</dt><dd>Projet BUT, 2e année</dd></div><div><dt>Client</dt><dd>Département biologie de l'IUT</dd></div><div><dt>Plateforme</dt><dd>Arduino + Android</dd></div></dl>
+        </div>
+      </section>
 
-							<hr class="my-5" style="border-color: rgba(255, 255, 255, 0.1)" />
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Notes de pochette</span>
+          <h2 class="split">Le <em class="gold">projet</em></h2>
+          <div class="p-intro">
+            <div>
+              <p class="reveal">Un projet mené pour le <strong>département biologie de l'IUT de Bourg-en-Bresse</strong>, qui avait besoin de suivre des expériences sans rester collé aux instruments.</p>
+              <p class="reveal">Une carte Arduino relève les capteurs, envoie les mesures dans le cloud, et une app Android les affiche en direct pour les enseignants et les étudiants.</p>
+            </div>
+            <div class="p-side reveal">
+              <h3>Stack technique</h3>
+              <ul><li>Java</li><li>Arduino</li><li>Firebase</li><li>MVVM</li><li>IoT</li></ul>
+              
+            </div>
+          </div>
+        </div>
+      </section>
 
-							<div class="row">
-								<div class="col-md-12">
-									<h4 style="color: #12d640" class="mb-4 text-uppercase">
-										Description Technique
-									</h4>
-									<div class="row mt-4">
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-microchip feature-icon-custom"></i>
-												Acquisition IoT
-											</h5>
-											<p class="text-white-50 small">
-												Mesure en temps réel de capteurs biologiques (O2, CO2,
-												luminosité) via une carte Arduino.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-cloud-upload feature-icon-custom"></i>
-												Stockage Cloud
-											</h5>
-											<p class="text-white-50 small">
-												Synchronisation instantanée des données vers une base de
-												données Firebase pour un accès distant.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-mobile-alt feature-icon-custom"></i>
-												Application Mobile
-											</h5>
-											<p class="text-white-50 small">
-												Visualisation graphique en direct sur Android pour les
-												enseignants et les étudiants de l'IUT.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-data feature-icon-custom"></i>
-												Administration
-											</h5>
-											<p class="text-white-50 small">
-												Gestion simplifiée des données collectées directement
-												depuis l'interface mobile.
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Ce qu'il fait</span>
+          <h2 class="split">Les <em class="gold">fonctionnalités</em></h2>
+          <ol class="features">
+            <li class="reveal" style="--d: 0.0s"><div><h3>Acquisition IoT</h3><p>Mesures en temps réel d'O₂, de CO₂ et de luminosité via une carte Arduino.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3>Stockage cloud</h3><p>Synchronisation immédiate des mesures dans Firebase, consultables à distance.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3>Graphiques en direct</h3><p>Visualisation des courbes sur Android, directement depuis la salle de TP ou ailleurs.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3>Administration</h3><p>Gestion des données collectées depuis l'interface mobile.</p></div></li>
+          </ol>
+        </div>
+      </section>
 
-							<div class="mt-5 text-center">
-								<h4 style="color: #12d640" class="mb-4 text-uppercase">
-									Captures d'écran
-								</h4>
-								<div class="row justify-content-center">
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/va1.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Vegetabillis Auditor 1"
-										/>
-									</div>
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/va2.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Vegetabillis Auditor 2"
-										/>
-									</div>
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/va3.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Vegetabillis Auditor 3"
-										/>
-									</div>
-								</div>
-							</div>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Captures</span>
+          <h2 class="split">En <em class="gold">images</em></h2>
+          <div class="gallery reveal">
+            <figure><img src="../assets/img/project/images/va1.jpg" alt="Écran principal" loading="lazy" /><figcaption>Écran principal</figcaption></figure>
+            <figure><img src="../assets/img/project/images/va2.jpg" alt="Graphique des mesures" loading="lazy" /><figcaption>Graphique des mesures</figcaption></figure>
+            <figure><img src="../assets/img/project/images/va3.jpg" alt="Administration des données" loading="lazy" /><figcaption>Administration des données</figcaption></figure>
+          </div>
 
-							<div class="text-center mt-5">
-								<a
-									href="https://damienvaiton.fr"
-									target="_top"
-									class="btn"
-									style="
-										color: #12d640;
-										border: 1px solid #12d640;
-										border-radius: 50px;
-										padding: 10px 30px;
-									"
-								>
-									<i class="bx bx-left-arrow-alt"></i> Retour au Portfolio
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
+          <a href="edukid.html" class="next">
+            <small>Piste suivante · 03</small>
+            <strong>Edukid <em class="gold">→</em></strong>
+          </a>
+        </div>
+      </section>
+    </main>
 
-		<script src="../assets/vendor/jquery/jquery.min.js"></script>
-		<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/js/main.js"></script>
-	</body>
+    <footer class="footer">
+      <div class="container">
+        <span>© <span data-year>2026</span> Damien Vaiton</span>
+        <a href="../index.html">Retour à l'accueil</a>
+      </div>
+    </footer>
+
+    <script src="../assets/js/site.js"></script>
+  </body>
 </html>

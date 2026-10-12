@@ -1,204 +1,143 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edukid · Damien Vaiton</title>
+    <meta name="description" content="Edukid, application Android éducative pour les enfants de moins de 6 ans, développée en Kotlin." />
+    <link rel="canonical" href="https://damienvaiton.fr/projects/edukid.html" />
+    <link rel="icon" href="../favicon.png" />
+    <meta name="theme-color" content="#080b1d" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Edukid · Damien Vaiton" />
+    <meta property="og:description" content="Des mini-jeux pour apprendre les couleurs, les formes, les chiffres et les lettres, pensés pour les moins de 6 ans." />
+    <meta property="og:url" content="https://damienvaiton.fr/projects/edukid.html" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/project/edukid.jpg" />
 
-		<title>Damien Vaiton | Projet Edukid (Android & Kotlin)</title>
-		<meta
-			name="description"
-			content="Découvrez Edukid : une application mobile Android éducative pour les enfants de moins de 6 ans, développée par Damien Vaiton, Axel Gailliard et Yohan Lapierre."
-		/>
-		<link rel="canonical" href="https://damienvaiton.fr/projects/edukid.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/site.css" />
 
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-			gtag("config", "UA-169007209-3");
-		</script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+    </script>
+  </head>
 
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/bootstrap/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/boxicons/css/boxicons.min.css"
-			rel="stylesheet"
-		/>
-		<link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
-		<link href="../assets/css/style.css" rel="stylesheet" />
-	</head>
+  <body>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
 
-	<body style="background-color: #040b14; color: #fff">
-		<main id="main">
-			<div class="container-fluid pb-4">
-				<div class="project-card">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2 class="project-title-custom">
-								<i class="bx bx-face"></i> Edukid
-							</h2>
+    <div class="sky" aria-hidden="true"></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="glow" aria-hidden="true"></div>
 
-							<div class="row mt-4">
-								<div class="col-md-6">
-									<span class="section-label-custom"
-										>Technologies Utilisées</span
-									>
-									<div class="mb-4">
-										<span class="tech-badge">Kotlin</span>
-										<span class="tech-badge">MVVM</span>
-										<span class="tech-badge">Room</span>
-										<span class="tech-badge">LiveData</span>
-										<span class="tech-badge">Coroutines</span>
-									</div>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="../index.html" class="brand">Damien Vaiton</a>
+        <ul class="nav-links">
+          <li><a href="../index.html#projets">Projets</a></li>
+          <li><a href="../index.html#parcours">Parcours</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </nav>
+    </header>
 
-									<span class="section-label-custom">Liens du Projet</span>
-									<div class="d-flex flex-wrap">
-										<a
-											href="https://github.com/Damienvaiton/SAE3A"
-											target="_blank"
-											class="github-btn-custom mr-2 mb-2"
-										>
-											<i class="bx bxl-github mr-2"></i> GitHub
-										</a>
-										<a
-											href="https://app.bitrise.io/app/5aa8d4e8-d0b8-47cf-9ee7-02065340c39b/build/a209a65f-26e1-411d-9c3a-be1163237c0d/artifact/619ee3252115abdd/p/b3fd5e16609a176c88006b6c38ab6c0c"
-											target="_blank"
-											class="github-btn-custom mb-2"
-											style="background: #12d640"
-										>
-											<i class="bx bx-download mr-2"></i> Télécharger l'APK
-										</a>
-									</div>
-								</div>
-								<div class="col-md-6 mt-4 mt-md-0">
-									<span class="section-label-custom">Contexte du Projet</span>
-									<p>
-										Développé lors de ma
-										<strong>3ème année de BUT Informatique</strong>. Edukid est
-										une application Android conçue pour les enfants de moins de
-										6 ans, offrant un environnement d'apprentissage ludique et
-										sécurisé.
-									</p>
-								</div>
-							</div>
+    <main>
+      <section class="p-hero">
+        <div class="container">
+          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> La tracklist</a>
+          <div><span class="time fade-in" style="--d: 0.2s">Piste 03</span></div>
+          <h1>
+              <span class="line"><span style="--i: 0">Edukid</span></span>
+          </h1>
+          <p class="p-tagline fade-in" style="--d: 0.6s">Des mini-jeux pour apprendre les couleurs, les formes, les chiffres et les lettres, pensés pour les moins de 6 ans.</p>
+          <div class="p-actions fade-in" style="--d: 0.75s">
+              <a href="https://github.com/Damienvaiton/SAE3A" target="_blank" rel="noopener" class="btn">Code sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a href="https://app.bitrise.io/app/5aa8d4e8-d0b8-47cf-9ee7-02065340c39b/build/a209a65f-26e1-411d-9c3a-be1163237c0d/artifact/619ee3252115abdd/p/b3fd5e16609a176c88006b6c38ab6c0c" target="_blank" rel="noopener" class="link">Télécharger l'APK</a>
+          </div>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt>Contexte</dt><dd>Projet BUT, 3e année</dd></div><div><dt>Plateforme</dt><dd>Android</dd></div><div><dt>Public</dt><dd>Enfants de moins de 6 ans</dd></div></dl>
+        </div>
+      </section>
 
-							<hr class="my-5" style="border-color: rgba(255, 255, 255, 0.1)" />
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Notes de pochette</span>
+          <h2 class="split">Le <em class="gold">projet</em></h2>
+          <div class="p-intro">
+            <div>
+              <p class="reveal">Développée en <strong>3e année de BUT Informatique</strong>, Edukid propose aux tout-petits un environnement d'apprentissage ludique et sécurisé.</p>
+              <p class="reveal">Le défi principal : concevoir une interface qu'un enfant qui ne sait pas encore lire peut utiliser seul, avec de grandes zones tactiles, beaucoup de couleurs et très peu de texte.</p>
+            </div>
+            <div class="p-side reveal">
+              <h3>Stack technique</h3>
+              <ul><li>Kotlin</li><li>MVVM</li><li>Room</li><li>LiveData</li><li>Coroutines</li></ul>
+              
+            </div>
+          </div>
+        </div>
+      </section>
 
-							<div class="row">
-								<div class="col-md-12">
-									<h4 style="color: #12d640" class="mb-4 text-uppercase">
-										Expérience Ludique
-									</h4>
-									<div class="row mt-4">
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-joystick feature-icon-custom"></i>
-												Mini-jeux variés
-											</h5>
-											<p class="text-white-50 small">
-												L'application propose de nombreux jeux répartis en
-												catégories : animaux, couleurs, formes, chiffres et
-												lettres.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-happy-alt feature-icon-custom"></i>
-												Interface Ergonomique
-											</h5>
-											<p class="text-white-50 small">
-												Conception pensée spécifiquement pour être intuitive et
-												facile à utiliser par de très jeunes enfants.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-brain feature-icon-custom"></i>
-												Apprentissage Actif
-											</h5>
-											<p class="text-white-50 small">
-												Permet aux tout-petits de développer leurs connaissances
-												de base tout en s'amusant.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-save feature-icon-custom"></i>
-												Persistence des données
-											</h5>
-											<p class="text-white-50 small">
-												Utilisation de la bibliothèque Room pour la gestion
-												locale des données et du suivi.
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Ce qu'il fait</span>
+          <h2 class="split">Les <em class="gold">fonctionnalités</em></h2>
+          <ol class="features">
+            <li class="reveal" style="--d: 0.0s"><div><h3>Mini-jeux variés</h3><p>Des jeux classés par thème : animaux, couleurs, formes, chiffres et lettres.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3>Interface adaptée</h3><p>Une navigation pensée pour de très jeunes enfants : simple, visuelle, sans piège.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3>Apprentissage actif</h3><p>Les bases s'acquièrent en jouant, avec des retours immédiats.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3>Données locales</h3><p>Room stocke la progression sur l'appareil, sans compte ni connexion.</p></div></li>
+          </ol>
+        </div>
+      </section>
 
-							<div class="mt-5 text-center">
-								<h4 style="color: #12d640" class="mb-4 text-uppercase">
-									Captures d'écran
-								</h4>
-								<div class="row justify-content-center">
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/edukidhome.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Écran d'accueil Edukid"
-										/>
-									</div>
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/edukidtheme.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Thèmes Edukid"
-										/>
-									</div>
-									<div class="col-md-4 mb-3">
-										<img
-											src="../assets/img/project/images/edukidgame.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Mini-jeu Edukid"
-										/>
-									</div>
-								</div>
-							</div>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Captures</span>
+          <h2 class="split">En <em class="gold">images</em></h2>
+          <div class="gallery reveal">
+            <figure><img src="../assets/img/project/images/edukidhome.jpg" alt="Accueil d&#x27;Edukid" loading="lazy" /><figcaption>Accueil d&#x27;Edukid</figcaption></figure>
+            <figure><img src="../assets/img/project/images/edukidtheme.jpg" alt="Choix du thème" loading="lazy" /><figcaption>Choix du thème</figcaption></figure>
+            <figure><img src="../assets/img/project/images/edukidgame.jpg" alt="Un mini-jeu" loading="lazy" /><figcaption>Un mini-jeu</figcaption></figure>
+          </div>
 
-							<div class="text-center mt-5">
-								<a
-									href="https://damienvaiton.fr"
-									target="_top"
-									class="btn"
-									style="
-										color: #12d640;
-										border: 1px solid #12d640;
-										border-radius: 50px;
-										padding: 10px 30px;
-									"
-								>
-									<i class="bx bx-left-arrow-alt"></i> Retour au Portfolio
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
+          <a href="mcdosurfer.html" class="next">
+            <small>Piste suivante · 04</small>
+            <strong>McDo Surfer <em class="gold">→</em></strong>
+          </a>
+        </div>
+      </section>
+    </main>
 
-		<script src="../assets/vendor/jquery/jquery.min.js"></script>
-		<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/js/main.js"></script>
-	</body>
+    <footer class="footer">
+      <div class="container">
+        <span>© <span data-year>2026</span> Damien Vaiton</span>
+        <a href="../index.html">Retour à l'accueil</a>
+      </div>
+    </footer>
+
+    <script src="../assets/js/site.js"></script>
+  </body>
 </html>

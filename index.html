@@ -1,874 +1,382 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<script>
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({
-					"gtm.start": new Date().getTime(),
-					event: "gtm.js",
-				});
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != "dataLayer" ? "&l=" + l : "";
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", "GTM-5BB8W2X");
-		</script>
-		<link rel="icon" type="image/png" href="/favicon.png" />
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Damien Vaiton · Développeur web Symfony & React</title>
+    <meta
+      name="description"
+      content="Damien Vaiton, développeur web chez VN Web. Applications web en PHP/Symfony et React. Projets, parcours et contact."
+    />
+    <link rel="canonical" href="https://damienvaiton.fr/" />
+    <link rel="icon" href="favicon.png" />
+    <meta name="theme-color" content="#080b1d" />
 
-		<title>
-			Damien Vaiton | Développeur Fullstack PHP Symfony à Bourg-en-Bresse
-		</title>
-		<meta
-			name="description"
-			content="Développeur Fullstack diplômé d'un BUT Informatique. Expert PHP, Symfony et mobile à Bourg-en-Bresse. Découvrez mes projets, mes compétences et mon CV."
-		/>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Damien Vaiton · Développeur web" />
+    <meta property="og:description" content="Développeur web chez VN Web : Symfony côté back, React côté front." />
+    <meta property="og:url" content="https://damienvaiton.fr/" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/profile.jpg" />
 
-		<link rel="canonical" href="https://damienvaiton.fr/" />
-		<meta
-			name="keywords"
-			content="Damien Vaiton, Développeur, Fullstack, PHP, Symfony, Bourg-en-Bresse, Portfolio, Android, Java, Stage, Alternance"
-		/>
-		<meta name="author" content="Damien Vaiton" />
-		<meta property="og:title" content="Damien Vaiton | Développeur Fullstack" />
-		<meta
-			property="og:description"
-			content="Développeur Fullstack diplômé d'un BUT Informatique à Bourg-en-Bresse. Découvrez mon portfolio."
-		/>
-		<meta property="og:url" content="https://damienvaiton.github.io/" />
-		<meta
-			property="og:image"
-			content="https://damienvaiton.github.io/assets/img/profile.jpg"
-		/>
-		<meta property="og:type" content="website" />
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-			rel="stylesheet"
-		/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/site.css" />
 
-		<link
-			href="assets/vendor/bootstrap/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet" />
-		<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
-		<link
-			href="assets/vendor/owl.carousel/assets/owl.carousel.min.css"
-			rel="stylesheet"
-		/>
-		<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
-		<link href="assets/vendor/venobox/venobox.css" rel="stylesheet" />
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+    </script>
 
-		<link href="assets/css/style.css" rel="stylesheet" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Damien Vaiton",
+        "url": "https://damienvaiton.fr",
+        "image": "https://damienvaiton.fr/assets/img/profile.jpg",
+        "jobTitle": "Développeur web",
+        "worksFor": { "@type": "Organization", "name": "VN Web" },
+        "alumniOf": { "@type": "EducationalOrganization", "name": "IUT Lyon 1 - Bourg-en-Bresse" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Bourg-en-Bresse", "addressCountry": "FR" },
+        "sameAs": ["https://www.linkedin.com/in/damien-vaiton/", "https://github.com/Damienvaiton"],
+        "knowsAbout": ["PHP", "Symfony", "React", "TypeScript", "SQL", "Développement web"]
+      }
+    </script>
+  </head>
 
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
+  <body>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
 
-			gtag("config", "UA-169007209-3");
-		</script>
-	</head>
+    <div class="sky" aria-hidden="true"></div>
+    <div class="dawn" aria-hidden="true"></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="glow" aria-hidden="true"></div>
+    <div class="preview" aria-hidden="true"></div>
 
-	<body>
-		<noscript
-			><iframe
-				src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
-				height="0"
-				width="0"
-				style="display: none; visibility: hidden"
-			></iframe
-		></noscript>
-		<header id="header" class="header-tops">
-			<div class="container">
-				<h1><a href="index.html">Damien Vaiton</a></h1>
-				<h2 style="color: #fff">
-					Je suis <span class="typing" style="color: #12d640"></span>
-				</h2>
+    <!-- ============ Nav ============ -->
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="#intro" class="brand">Damien Vaiton</a>
+        <ul class="nav-links">
+          <li><a href="#projets">Projets</a></li>
+          <li><a href="#stack">Stack</a></li>
+          <li><a href="#parcours">Parcours</a></li>
+          <li><a href="#moi">Moi</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <span class="clock" title="L'heure avance avec la page">
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 18h20M5 18a7 7 0 0 1 14 0M12 5V3M5.6 8.6 4.2 7.2M18.4 8.6l1.4-1.4"/></svg>
+          <span>00:00</span>
+        </span>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </nav>
+    </header>
 
-				<nav class="nav-menu d-none d-lg-block">
-					<ul>
-						<li class="active">
-							<a href="#header"> <span>Accueil</span></a>
-						</li>
-						<li>
-							<a href="#about"><span>À propos</span></a>
-						</li>
-						<li>
-							<a href="#education"> <span>Formation</span></a>
-						</li>
-						<li>
-							<a href="#experience"> <span>Expériences</span></a>
-						</li>
-						<li>
-							<a href="#portfolio"> <span>Mes projets</span></a>
-						</li>
-						<li>
-							<a href="#skills"> <span>Compétences</span></a>
-						</li>
-						<li>
-							<a
-								href="https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing"
-								target="_blank"
-							>
-								<span>Mon CV</span></a
-							>
-						</li>
-						<li>
-							<a href="#contacts"> <span>Contact</span></a>
-						</li>
-					</ul>
-				</nav>
+    <main>
+      <!-- ============ 00:00 Intro ============ -->
+      <section class="hero" id="intro" data-time="00:00">
+        <div class="container hero-grid">
+          <div>
+            <span class="time fade-in" style="--d: 0.1s">00:00 — Intro</span>
+            <h1>
+              <span class="line"><span style="--i: 0">Développeur web,</span></span>
+              <span class="line"><span style="--i: 1">entre <em class="gold">Symfony</em></span></span>
+              <span class="line"><span style="--i: 2">&amp; <em class="gold">React</em>.</span></span>
+            </h1>
+            <p class="hero-lead fade-in" style="--d: 0.7s">
+              Je construis des applications web chez <strong>VN Web</strong>, de la logique métier en PHP jusqu'à
+              l'interface. Basé à Bourg-en-Bresse, diplômé d'un BUT Informatique.
+            </p>
+            <div class="hero-actions fade-in" style="--d: 0.85s">
+              <a href="#projets" class="btn">
+                Voir les projets
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <a href="#contact" class="link">Me contacter</a>
+            </div>
+            <div class="hero-meta fade-in" style="--d: 1s">
+              <span>VN Web · CDI</span><span>Bourg-en-Bresse</span><span>BUT Informatique</span>
+            </div>
+          </div>
 
-				<div class="social-links">
-					<a
-						href="https://www.linkedin.com/in/damien-vaiton/"
-						target="_blank"
-						class="linkedin"
-						><i class="bx bxl-linkedin"></i
-					></a>
-					<a
-						href="https://github.com/Damienvaiton"
-						target="_blank"
-						class="github"
-						><i class="bx bxl-github"></i
-					></a>
-					<a
-						href="mailto:damien.vaiton01@gmail.com"
-						target="_blank"
-						class="google"
-						><i class="bx bxl-google"></i
-					></a>
-				</div>
-			</div>
-		</header>
-		<section id="about" class="about">
-			<div class="about-me container">
-				<div class="section-title">
-					<h2>À propos</h2>
-				</div>
+          <div class="code-card fade-in" style="--d: 0.5s" aria-label="Extrait de code Symfony qui me présente">
+            <div class="code-tab"><b>PortraitController.php</b><span>PHP</span></div>
+<pre><code><span class="cl" style="--n:0"><span class="tk-c">// Ouvert après minuit</span></span><span class="cl" style="--n:1"><span class="tk-a">#[Route('/damien')]</span></span><span class="cl" style="--n:2"><span class="tk-k">public function</span> <span class="tk-f">portrait</span>(): <span class="tk-k">Response</span></span><span class="cl" style="--n:3">{</span><span class="cl" style="--n:4">    <span class="tk-k">return</span> $this-&gt;<span class="tk-f">render</span>(<span class="tk-s">'dev.html.twig'</span>, [</span><span class="cl" style="--n:5">        <span class="tk-s">'poste'</span> =&gt; <span class="tk-s">'Développeur web'</span>,</span><span class="cl" style="--n:6">        <span class="tk-s">'chez'</span>  =&gt; <span class="tk-s">'VN Web'</span>,</span><span class="cl" style="--n:7">        <span class="tk-s">'stack'</span> =&gt; [<span class="tk-s">'Symfony'</span>, <span class="tk-s">'React'</span>],</span><span class="cl" style="--n:8">        <span class="tk-s">'ville'</span> =&gt; <span class="tk-s">'Bourg-en-Bresse'</span>,</span><span class="cl" style="--n:9">    ]);</span><span class="cl" style="--n:10">}<span class="caret"></span></span></code></pre>
+            <div class="now-playing">
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span>En fond sonore · <em>Midnights</em></span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-				<div class="row">
-					<div class="col-lg-4" data-aos="fade-right">
-						<img
-							src="assets/img/profile.jpg"
-							class="img-fluid"
-							alt="Portrait de Damien Vaiton, Développeur Fullstack à Bourg-en-Bresse"
-						/>
-					</div>
-					<div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-						<div class="about-content">
-							<p style="line-height: 1.8; margin-bottom: 25px">
-								Diplômé d'un <strong>BUT Informatique</strong> à l'IUT Lyon 1
-								(Bourg-en-Bresse), je m'appelle <strong>Damien Vaiton</strong>.
-								Je suis aujourd'hui à la recherche d'une opportunité stable en
-								<strong>CDI</strong> pour débuter ma carrière de développeur.
-							</p>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>PHP</span><span>Symfony</span><span>React</span><span>TypeScript</span><span>SQL</span><span>Twig</span><span>Kotlin</span><span>Java</span><span>Unity</span><span>Arduino</span><span>Node.js</span><span>Git</span>
+          <span>PHP</span><span>Symfony</span><span>React</span><span>TypeScript</span><span>SQL</span><span>Twig</span><span>Kotlin</span><span>Java</span><span>Unity</span><span>Arduino</span><span>Node.js</span><span>Git</span>
+        </div>
+      </div>
 
-							<p style="line-height: 1.8; margin-bottom: 25px">
-								Pour moi, le développement ne se limite pas à l'écriture de
-								code. C'est un métier qui demande de la
-								<strong>méthode</strong>, une bonne compréhension des besoins et
-								une capacité à s'adapter aux imprévus techniques. <br /><br />
-								Mes expériences en stage m'ont permis de me confronter à ces
-								réalités, de la <strong>maintenance corrective</strong> au
-								<strong>développement de nouvelles fonctionnalités</strong>,
-								renforçant mon envie d'évoluer au sein d'une équipe structurée.
-							</p>
+      <!-- ============ 01:00 Projets ============ -->
+      <section class="section" id="projets" data-time="01:00">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="time reveal">01:00 — Projets</span>
+              <h2 class="split">La <em class="gold">tracklist</em></h2>
+            </div>
+            <p class="reveal">Cinq projets, du mobile à l'IoT en passant par le jeu vidéo. Chaque piste a sa page.</p>
+          </div>
 
-							<p style="line-height: 1.8; margin-bottom: 30px">
-								Au quotidien, je cherche à maintenir un équilibre entre rigueur
-								technique et créativité. Ma passion principale, la
-								<strong>musique</strong>, joue d'ailleurs un rôle majeur dans ma
-								vie : elle m'apporte une sensibilité et une concentration que je
-								cherche à retransmettre dans mes projets.
-							</p>
-						</div>
+          <ol class="tracklist">
+            <li class="track reveal">
+              <a href="projects/fasttrack.html" data-preview="assets/img/project/images/fasttrackhome.jpg">
+                <span class="track-n">01</span>
+                <h3>FastTrack</h3>
+                <span class="track-desc">Le championnat de Formule 1 dans la poche.</span>
+                <span class="track-tech">Kotlin · Android</span>
+                <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+            <li class="track reveal">
+              <a href="projects/vegetabillisauditor.html" data-preview="assets/img/project/images/va1.jpg">
+                <span class="track-n">02</span>
+                <h3>Vegetabillis Auditor</h3>
+                <span class="track-desc">Des capteurs Arduino jusqu'au smartphone, en temps réel.</span>
+                <span class="track-tech">Java · Arduino · Firebase</span>
+                <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+            <li class="track reveal">
+              <a href="projects/edukid.html" data-preview="assets/img/project/images/edukidhome.jpg">
+                <span class="track-n">03</span>
+                <h3>Edukid</h3>
+                <span class="track-desc">Des mini-jeux pour apprendre, pensés pour les moins de 6 ans.</span>
+                <span class="track-tech">Kotlin · Room</span>
+                <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+            <li class="track reveal">
+              <a href="projects/mcdosurfer.html" data-preview="assets/img/project/images/mcdosurfer1.jpg">
+                <span class="track-n">04</span>
+                <h3>McDo Surfer</h3>
+                <span class="track-desc">Un runner infini pour apprendre les bases d'Unity.</span>
+                <span class="track-tech">Unity · C#</span>
+                <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+            <li class="track reveal">
+              <a href="projects/kinoa.html" data-preview="assets/img/project/images/Kinoa1.jpg" data-shape="wide">
+                <span class="track-n">05</span>
+                <h3>Mangeuse de Kinoa</h3>
+                <span class="track-desc">Un bot Discord : rôles automatiques et quiz sur les drapeaux.</span>
+                <span class="track-tech">Node.js · Discord.js</span>
+                <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+          </ol>
+        </div>
+      </section>
 
-						<div class="row">
-							<div class="col-lg-6">
-								<ul style="padding: 0; list-style: none">
-									<li style="margin-bottom: 12px">
-										<i
-											class="icofont-rounded-right"
-											style="color: #12d640; margin-right: 5px"
-										></i>
-										<strong>Ville :</strong> Bourg-en-Bresse, France
-									</li>
-									<li style="margin-bottom: 12px">
-										<i
-											class="icofont-rounded-right"
-											style="color: #12d640; margin-right: 5px"
-										></i>
-										<strong>Email :</strong> damien.vaiton01@gmail.com
-									</li>
-								</ul>
-							</div>
-							<div class="col-lg-6">
-								<ul style="padding: 0; list-style: none">
-									<li style="margin-bottom: 12px">
-										<i
-											class="icofont-rounded-right"
-											style="color: #12d640; margin-right: 5px"
-										></i>
-										<strong>Né le :</strong> 7 octobre
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="interests container">
-				<div class="section-title">
-					<h2>Passions & Intérêts</h2>
-				</div>
+      <!-- ============ 02:00 Stack ============ -->
+      <section class="section" id="stack" data-time="02:00">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="time reveal">02:00 — Stack</span>
+              <h2 class="split">Mes <em class="gold">instruments</em></h2>
+            </div>
+            <p class="reveal">Ce que je joue tous les jours, et ce que j'ai appris en route.</p>
+          </div>
 
-				<div class="row mb-4">
-					<div class="col-lg-6">
-						<div class="icon-box major-passion">
-							<i class="ri-global-line"></i>
-							<div>
-								<h3>Développement Logiciel</h3>
-								<p>
-									Concevoir des solutions robustes et explorer de nouvelles
-									technos.
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-6 mt-4 mt-lg-0">
-						<div class="icon-box major-passion music-theme">
-							<i class="ri-music-2-fill"></i>
-							<div>
-								<h3>Musique</h3>
-								<p>
-									Mon moteur créatif au quotidien, pour la concentration et
-									l'évasion.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
+          <div class="instruments">
+            <div class="main reveal">
+              <h3>Au quotidien</h3>
+              <ul>
+                <li>PHP <small>back</small></li>
+                <li>Symfony <small>back</small></li>
+                <li>React <small>front</small></li>
+                <li>TypeScript <small>front</small></li>
+                <li>JavaScript <small>front</small></li>
+                <li>SQL <small>données</small></li>
+              </ul>
+            </div>
+            <div class="reveal" style="--d: 0.1s">
+              <h3>Déjà joué</h3>
+              <ul>
+                <li>Kotlin <small>android</small></li>
+                <li>Java <small>android</small></li>
+                <li>Flutter <small>mobile</small></li>
+                <li>Unity <small>jeu</small></li>
+                <li>Arduino <small>iot</small></li>
+                <li>Node.js <small>bot</small></li>
+              </ul>
+            </div>
+            <div class="reveal" style="--d: 0.2s">
+              <h3>En coulisses</h3>
+              <ul>
+                <li>Git <small>versions</small></li>
+                <li>JetBrains <small>ide</small></li>
+                <li>VS Code <small>ide</small></li>
+                <li>Android Studio <small>ide</small></li>
+                <li>HTML &amp; CSS <small>web</small></li>
+              </ul>
+            </div>
+          </div>
 
-				<div class="row">
-					<div class="col-lg-4 col-md-6">
-						<div class="icon-box minor-interest">
-							<i class="ri-dribbble-line" style="color: #ff6600"></i>
-							<h3>Basketball</h3>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-6 mt-4 mt-md-0">
-						<div class="icon-box minor-interest">
-							<i class="ri-football-fill" style="color: #ffffff"></i>
-							<h3>Football</h3>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
-						<div class="icon-box minor-interest">
-							<i class="ri-heart-fill" style="color: #ff0f0f"></i>
-							<h3>Santé / Médical</h3>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-6 mt-4">
-						<div class="icon-box minor-interest">
-							<i class="ri-compass-line" style="color: #f2d117"></i>
-							<h3>Voyages</h3>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-6 mt-4">
-						<div class="icon-box minor-interest">
-							<i class="ri-gamepad-fill" style="color: #ffffff"></i>
-							<h3>Jeux Vidéo</h3>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-6 mt-4">
-						<div class="icon-box minor-interest">
-							<i class="ri-radar-line" style="color: #12d640"></i>
-							<h3>Veille Tech</h3>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="education" class="services">
-			<div class="container">
-				<div class="section-title">
-					<h2>Formation & Certifications</h2>
-				</div>
+          <div class="certs">
+            <a class="cert reveal" href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing" target="_blank" rel="noopener">
+              <b>Anglais B2</b><span>TOEIC 790/990</span><i>Certificat ↗</i>
+            </a>
+            <a class="cert reveal" style="--d: 0.1s" href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link" target="_blank" rel="noopener">
+              <b>Certification DPO</b><span>RGPD · CNIL</span><i>Certificat ↗</i>
+            </a>
+          </div>
+        </div>
+      </section>
 
-				<div class="row">
-					<div class="col-md-6 d-flex align-items-stretch" data-aos="fade-up">
-						<div class="icon-box education-card">
-							<div class="edu-img">
-								<img
-									src="assets/img/education/IUT.jpeg"
-									class="img-fluid"
-									alt="IUT Lyon 1"
-								/>
-							</div>
-							<h4>BUT Informatique</h4>
-							<p class="date">Septembre 2021 - Juillet 2025</p>
-							<p class="school">
-								<strong>IUT Lyon 1 (Bourg-en-Bresse)</strong>
-							</p>
-							<ul>
-								<li>Développement Logiciel</li>
-								<li>Gestion de bases de données</li>
-								<li>Communication et travail en équipe</li>
-								<li>Formation Mobile et Web</li>
-							</ul>
-						</div>
-					</div>
+      <!-- ============ 03:00 Parcours ============ -->
+      <section class="section" id="parcours" data-time="03:00">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="time reveal">03:00 — Parcours</span>
+              <h2 class="split">Les <em class="gold">chapitres</em></h2>
+            </div>
+            <p class="reveal">Deux stages, un BUT Informatique, et aujourd'hui un CDI dans le web.</p>
+          </div>
 
-					<div
-						class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0"
-						data-aos="fade-up"
-						data-aos-delay="100"
-					>
-						<div class="icon-box education-card">
-							<div class="edu-img">
-								<img
-									src="assets/img/education/Carriat.PNG"
-									class="img-fluid"
-									alt="Lycée Carriat"
-								/>
-							</div>
-							<h4>Baccalauréat Général</h4>
-							<p class="date">Septembre 2018 - Juin 2021</p>
-							<p class="school"><strong>Lycée Joseph Marie Carriat</strong></p>
-							<ul>
-								<li>Spécialités : Mathématiques & NSI</li>
-								<li>Section Européenne Anglais / SI</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+          <ol class="chapters">
+            <li class="chapter reveal">
+              <div class="chapter-when"><span class="now">Aujourd'hui</span></div>
+              <div>
+                <h3>VN Web</h3>
+                <div class="chapter-role">Développeur web, en CDI</div>
+                <p>Développement d'applications web de bout en bout : logique métier et API en PHP / Symfony, interfaces en React.</p>
+                <div class="chapter-tags">PHP · Symfony · React</div>
+              </div>
+            </li>
+            <li class="chapter reveal">
+              <div class="chapter-when">Nov. 2024 — Mars 2025</div>
+              <div>
+                <h3><a href="https://lalemant.com/" target="_blank" rel="noopener">Lalemant France</a></h3>
+                <div class="chapter-role">Développeur fullstack, en stage</div>
+                <ul>
+                  <li><strong>Nouvelles fonctionnalités :</strong> outils de cotation et de réponse aux appels d'offres dans l'application interne.</li>
+                  <li><strong>Maintenance :</strong> traitement des tickets et correction de bugs pour garder le système stable.</li>
+                  <li><strong>Travail en équipe</strong> en méthode agile, avec des délais à tenir.</li>
+                </ul>
+                <div class="chapter-tags">PHP · JavaScript · SQL</div>
+              </div>
+            </li>
+            <li class="chapter reveal">
+              <div class="chapter-when">Avr. — Juin 2023</div>
+              <div>
+                <h3><a href="https://www.effetb.com/" target="_blank" rel="noopener">Effet B</a></h3>
+                <div class="chapter-role">Développeur fullstack, en stage</div>
+                <ul>
+                  <li><strong>Maintenance évolutive</strong> d'un progiciel de gestion utilisé par <strong>6 650 utilisateurs</strong> dans 41 établissements.</li>
+                  <li><strong>Conception :</strong> participation aux réunions de conception et au suivi de projet.</li>
+                  <li><strong>Production :</strong> mise en place de correctifs sur un environnement réel.</li>
+                </ul>
+                <div class="chapter-tags">PHP · Symfony · Gestion de projet</div>
+              </div>
+            </li>
+            <li class="chapter reveal">
+              <div class="chapter-when">2021 — 2025</div>
+              <div>
+                <h3>BUT Informatique</h3>
+                <div class="chapter-role">IUT Lyon 1, Bourg-en-Bresse</div>
+                <p>Développement logiciel, web et mobile, bases de données, gestion de projet. La plupart des pistes de la tracklist viennent de là.</p>
+              </div>
+            </li>
+            <li class="chapter reveal">
+              <div class="chapter-when">2018 — 2021</div>
+              <div>
+                <h3>Baccalauréat général</h3>
+                <div class="chapter-role">Lycée Joseph-Marie Carriat</div>
+                <p>Spécialités Mathématiques et NSI, section européenne anglais.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
 
-				<div class="row mt-5">
-					<div class="col-md-6 d-flex align-items-stretch" data-aos="fade-up">
-						<div class="icon-box cert-card">
-							<i class="ri-english-input" style="color: #ffbb2c"></i>
-							<div class="cert-info">
-								<h4>TOEIC Listening & Reading</h4>
-								<p><strong>Score : 790/990 (Niveau B2)</strong></p>
-								<a
-									href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing"
-									target="_blank"
-									class="cert-link"
-									>Consulter le certificat</a
-								>
-							</div>
-						</div>
-					</div>
+      <!-- ============ 04:00 Moi ============ -->
+      <section class="section" id="moi" data-time="04:00">
+        <div class="container about">
+          <figure class="portrait reveal">
+            <div class="portrait-img">
+              <img src="assets/img/profile.jpg" alt="Portrait de Damien Vaiton" width="800" height="800" loading="lazy" />
+            </div>
+            <figcaption>Bourg-en-Bresse, après minuit.</figcaption>
+          </figure>
+          <div class="about-text">
+            <span class="time reveal">04:00 — En dehors du code</span>
+            <h2 class="split">Un peu plus <em class="gold">sur moi</em></h2>
+            <p class="reveal">
+              Pour moi, développer ce n'est pas seulement écrire du code : c'est comprendre un besoin, trouver la
+              solution la plus simple et rester solide face aux imprévus.
+            </p>
+            <p class="reveal">
+              La <strong>musique</strong> tient une grande place dans ma vie. C'est ce qui m'aide à me concentrer, et
+              ce qui me donne envie de soigner les détails. Le reste du temps, je suis sur un terrain de basket ou de
+              foot, en voyage, ou en train de lire la dernière actu tech.
+            </p>
+            <div class="interests reveal">
+              <span>Musique</span><span>Basket</span><span>Football</span><span>Voyages</span><span>Jeux vidéo</span><span>Santé</span><span>Veille tech</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-					<div
-						class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0"
-						data-aos="fade-up"
-						data-aos-delay="100"
-					>
-						<div class="icon-box cert-card">
-							<i class="ri-shield-user-line" style="color: #12d640"></i>
-							<div class="cert-info">
-								<h4>Certification DPO (RGPD)</h4>
-								<p>Maîtrise des principes du RGPD - CNIL</p>
-								<a
-									href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link"
-									target="_blank"
-									class="cert-link"
-									>Consulter le certificat</a
-								>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="experience" class="services">
-			<div class="container">
-				<div class="section-title">
-					<h2>Expérience Pro</h2>
-				</div>
+      <!-- ============ 06:00 Contact ============ -->
+      <section class="contact" id="contact" data-time="06:00">
+        <div class="container">
+          <span class="time reveal">06:00 — Contact</span>
+          <h2 class="split">On en parle <em class="gold">avant l'aube</em>&nbsp;?</h2>
+          <p class="contact-lead reveal">Un projet, une question, ou juste envie d'échanger : je réponds toujours.</p>
+          <a class="mail reveal" href="mailto:damien.vaiton01@gmail.com">damien.vaiton01@gmail.com</a>
+          <div class="contact-actions reveal">
+            <a class="link" href="https://www.linkedin.com/in/damien-vaiton/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="link" href="https://github.com/Damienvaiton" target="_blank" rel="noopener">GitHub</a>
+            <a class="link" href="https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing" target="_blank" rel="noopener">Mon CV</a>
+          </div>
+          <button class="copy reveal" type="button" data-copy="damien.vaiton01@gmail.com">Copier l'adresse</button>
+        </div>
+      </section>
+    </main>
 
-				<div class="row">
-					<div class="col-lg-12" data-aos="fade-up">
-						<div class="icon-box experience-card">
-							<div class="exp-header">
-								<h4 class="company-name">
-									<a href="https://lalemant.com/" target="_blank"
-										>Lalemant France</a
-									>
-								</h4>
-								<span class="exp-date">Novembre 2024 - Mars 2025</span>
-							</div>
-							<p class="job-title"><em>Stagiaire Développeur Fullstack</em></p>
+    <footer class="footer">
+      <div class="container">
+        <span>© <span data-year>2026</span> Damien Vaiton</span>
+        <span>Codé à la main, <em>de minuit à l'aube</em> · <a href="https://github.com/Damienvaiton/Damienvaiton.github.io" target="_blank" rel="noopener">Code source</a></span>
+      </div>
+    </footer>
 
-							<div class="tech-stack mb-3">
-								<span class="badge">PHP</span>
-								<span class="badge">JavaScript</span>
-								<span class="badge">SQL</span>
-							</div>
-
-							<ul class="exp-list">
-								<li>
-									<strong>Développement de fonctionnalités :</strong> Conception
-									d'outils de cotations et d'appels d'offres pour l'application
-									interne.
-								</li>
-								<li>
-									<strong>Maintenance proactive :</strong> Gestion des tickets
-									et correction de bugs pour assurer la stabilité du système.
-								</li>
-								<li>
-									<strong>Collaboration Agile :</strong> Travail en équipe pour
-									garantir la cohérence des développements et le respect des
-									délais.
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="col-lg-12 mt-4" data-aos="fade-up" data-aos-delay="100">
-						<div class="icon-box experience-card">
-							<div class="exp-header">
-								<h4 class="company-name">
-									<a href="https://www.effetb.com/" target="_blank">Effet B</a>
-								</h4>
-								<span class="exp-date">Avril 2023 - Juin 2023</span>
-							</div>
-							<p class="job-title"><em>Stagiaire Développeur Fullstack</em></p>
-
-							<div class="tech-stack mb-3">
-								<span class="badge">PHP</span>
-								<span class="badge">Symfony</span>
-								<span class="badge">Gestion de Projet</span>
-								<span class="badge">Maintenance Evolutive</span>
-							</div>
-
-							<ul class="exp-list">
-								<li>
-									<strong>Maintenance à grande échelle :</strong> Évolution d'un
-									progiciel de gestion utilisé par
-									<strong>6650 utilisateurs</strong> dans 41 établissements.
-								</li>
-								<li>
-									<strong>Conception technique :</strong> Participation active
-									aux réunions de conception et au suivi de projet.
-								</li>
-								<li>
-									<strong>Rigueur opérationnelle :</strong> Mise en œuvre de
-									correctifs sur un environnement de production réel.
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="portfolio" class="portfolio">
-			<div class="container">
-				<div class="section-title">
-					<h2>Mes Projets</h2>
-				</div>
-
-				<div class="row">
-					<div class="col-lg-12 d-flex justify-content-center">
-						<ul id="portfolio-flters">
-							<li data-filter="*" class="filter-active">Tout</li>
-							<li data-filter=".personnal-projects">Projets Personnels</li>
-							<li data-filter=".professional-projects">
-								Projets Pros / Scolaires
-							</li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="row portfolio-container">
-					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-						<center>
-							<h4>FastTrack</h4>
-						</center>
-						<div class="portfolio-wrap">
-							<img
-								src="assets/img/project/FastTrack.jpg"
-								class="img-fluid"
-								alt="FastTrack - Application mobile sur la Formule 1"
-							/>
-							<div class="portfolio-info">
-								<div class="portfolio-links">
-									<a
-										href="projects/fasttrack.html"
-										data-gall="portfolioDetailsGallery"
-										data-vbtype="iframe"
-										class="venobox"
-										title="Voir les détails du projet FastTrack"
-										><i class="bx bx-info-circle"></i
-									></a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-4 col-md-6 portfolio-item personnal-projects">
-						<center>
-							<h4>So crève to 1989</h4>
-						</center>
-						<div class="portfolio-wrap">
-							<img
-								src="assets/img/project/crève.jpg"
-								class="img-fluid"
-								alt="So crève to 1989 - Bot Discord musical"
-							/>
-							<div class="portfolio-info">
-								<div class="portfolio-links">
-									<a
-										href="projects/crève.html"
-										data-gall="portfolioDetailsGallery"
-										data-vbtype="iframe"
-										class="venobox"
-										title="Voir les détails du projet So crève to 1989"
-										><i class="bx bx-info-circle"></i
-									></a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-4 col-md-6 portfolio-item personnal-projects">
-						<center>
-							<h4>Mangeuse de Kinoa</h4>
-						</center>
-						<div class="portfolio-wrap">
-							<img
-								src="assets/img/project/Kinoa.jpg"
-								class="img-fluid"
-								alt="Mangeuse de Kinoa - Jeu vidéo ou application ludique"
-							/>
-							<div class="portfolio-info">
-								<div class="portfolio-links">
-									<a
-										href="projects/kinoa.html"
-										data-gall="portfolioDetailsGallery"
-										data-vbtype="iframe"
-										class="venobox"
-										title="Voir les détails du projet Mangeuse de Kinoa"
-										><i class="bx bx-info-circle"></i
-									></a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-						<center>
-							<h4>Mcdo_surfer</h4>
-						</center>
-						<div class="portfolio-wrap">
-							<img
-								src="assets/img/project/mcdosurfer.jpg"
-								class="img-fluid"
-								alt="Mcdo_surfer - Projet web"
-							/>
-							<div class="portfolio-info">
-								<div class="portfolio-links">
-									<a
-										href="projects/mcdosurfer.html"
-										data-gall="portfolioDetailsGallery"
-										data-vbtype="iframe"
-										class="venobox"
-										title="Voir les détails du projet Mcdo_surfer"
-										><i class="bx bx-info-circle"></i
-									></a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-						<center>
-							<h4>Edukid</h4>
-						</center>
-						<div class="portfolio-wrap">
-							<img
-								src="assets/img/project/edukid.jpg"
-								class="img-fluid"
-								alt="Edukid - Application éducative pour enfants"
-							/>
-							<div class="portfolio-info">
-								<div class="portfolio-links">
-									<a
-										href="projects/edukid.html"
-										data-gall="portfolioDetailsGallery"
-										data-vbtype="iframe"
-										class="venobox"
-										title="Voir les détails du projet Edukid"
-										><i class="bx bx-info-circle"></i
-									></a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-4 col-md-6 portfolio-item professional-projects">
-						<center>
-							<h4>Vegetabillis Auditor</h4>
-						</center>
-						<div class="portfolio-wrap">
-							<img
-								src="assets/img/project/va.jpg"
-								class="img-fluid"
-								alt="Vegetabillis Auditor - Projet de capture de données et audit"
-							/>
-							<div class="portfolio-info">
-								<div class="portfolio-links">
-									<a
-										href="projects/vegetabillisauditor.html"
-										data-gall="portfolioDetailsGallery"
-										data-vbtype="iframe"
-										class="venobox"
-										title="Voir les détails du projet Vegetabillis Auditor"
-										><i class="bx bx-info-circle"></i
-									></a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="skills" class="services">
-			<div class="container">
-				<div class="section-title">
-					<h2>Compétences</h2>
-				</div>
-
-				<div class="row">
-					<div class="col-lg-12 mb-4" data-aos="fade-up">
-						<div class="skill-box">
-							<h4 class="skill-header">Langages & Bases de données</h4>
-							<div class="logo-container">
-								<div class="logo-item" data-tooltip="PHP">
-									<img src="./assets/img/logos/PHP.svg" alt="PHP" />
-								</div>
-								<div class="logo-item" data-tooltip="Kotlin">
-									<img src="./assets/img/logos/Kotlin.svg" alt="Kotlin" />
-								</div>
-								<div class="logo-item" data-tooltip="Java">
-									<img src="./assets/img/logos/Java.svg" alt="Java" />
-								</div>
-								<div class="logo-item" data-tooltip="JavaScript">
-									<img src="./assets/img/logos/Javascript.svg" alt="JS" />
-								</div>
-								<div class="logo-item" data-tooltip="TypeScript">
-									<img
-										src="./assets/img/logos/TypeScript.svg"
-										alt="TypeScript"
-									/>
-								</div>
-								<div class="logo-item" data-tooltip="HTML5">
-									<img src="./assets/img/logos/HTML.svg" alt="HTML" />
-								</div>
-								<div class="logo-item" data-tooltip="CSS3">
-									<img src="./assets/img/logos/CSS.svg" alt="CSS" />
-								</div>
-								<div class="logo-item" data-tooltip="SQL">
-									<img src="./assets/img/logos/SQL.svg" alt="SQL" />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-						<div class="skill-box">
-							<h4 class="skill-header">Frameworks</h4>
-							<div class="logo-container">
-								<div class="logo-item" data-tooltip="Symfony">
-									<img src="./assets/img/logos/Symfony2.svg" alt="Symfony" />
-								</div>
-								<div class="logo-item" data-tooltip="Flutter">
-									<img src="./assets/img/logos/Flutter.svg" alt="Flutter" />
-								</div>
-								<div class="logo-item" data-tooltip="Unity">
-									<img src="./assets/img/logos/Unity.svg" alt="Unity" />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-						<div class="skill-box">
-							<h4 class="skill-header">Outils & IDE</h4>
-							<div class="logo-container">
-								<div class="logo-item" data-tooltip="Android Studio">
-									<img
-										src="./assets/img/logos/AndroidStudio.svg"
-										alt="Android Studio"
-									/>
-								</div>
-								<div class="logo-item" data-tooltip="VS Code">
-									<img src="./assets/img/logos/VSCode.svg" alt="VS Code" />
-								</div>
-								<div class="logo-item" data-tooltip="Git">
-									<img src="./assets/img/logos/Git.svg" alt="Git" />
-								</div>
-								<div class="logo-item" data-tooltip="Suite Jetbrains">
-									<img src="./assets/img/logos/Jetbrains.svg" alt="Jetbrains" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="links" class="services">
-			<div class="container">
-				<div class="section-title">
-					<h2>Mon CV</h2>
-				</div>
-				<div class="row">
-					<div
-						class="col-md-3 mt-4 mt-md-0 icon-box"
-						data-aos="fade-up"
-						data-aos-delay="100"
-					>
-						<a
-							href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing"
-							target="_blank"
-						>
-							<div class="icon"><i class="icofont-page"></i></div>
-						</a>
-						<h4 class="title">
-							<a
-								href="https://drive.google.com/file/d/1grGRR1rcRiZi3WodFZfUZZeGKClvJvLp/view?usp=sharing"
-								target="_blank"
-								>CV (PDF)</a
-							>
-						</h4>
-						<p class="description" style="color: #fff">
-							Télécharger mon CV au format PDF
-						</p>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section id="contacts" class="contact">
-			<div class="container">
-				<div class="section-title">
-					<h2>Me Contacter</h2>
-				</div>
-
-				<div class="row mt-2">
-					<div class="col-md-4 d-flex align-items-stretch" data-aos="fade-up">
-						<div class="info-box">
-							<i class="bx bx-map"></i>
-							<h3>Localisation</h3>
-							<p>Bourg-en-Bresse, France</p>
-						</div>
-					</div>
-
-					<div
-						class="col-md-4 mt-4 mt-md-0 d-flex align-items-stretch"
-						data-aos="fade-up"
-						data-aos-delay="100"
-					>
-						<div class="info-box">
-							<i class="bx bx-envelope"></i>
-							<h3>Email</h3>
-							<p>damien.vaiton01@gmail.com</p>
-						</div>
-					</div>
-
-					<div
-						class="col-md-4 mt-4 mt-md-0 d-flex align-items-stretch"
-						data-aos="fade-up"
-						data-aos-delay="200"
-					>
-						<div class="info-box">
-							<i class="bx bx-share-alt"></i>
-							<h3>Réseaux Sociaux</h3>
-							<div class="social-links">
-								<a
-									href="https://www.linkedin.com/in/damien-vaiton/"
-									target="_blank"
-									class="linkedin"
-								>
-									<i class="bx bxl-linkedin"></i>
-								</a>
-								<a
-									href="https://github.com/Damienvaiton"
-									target="_blank"
-									class="github"
-								>
-									<i class="bx bxl-github"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<script src="assets/vendor/jquery/jquery.min.js"></script>
-		<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-		<script src="assets/vendor/php-email-form/validate.js"></script>
-		<script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
-		<script src="assets/vendor/counterup/counterup.min.js"></script>
-		<script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
-		<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-		<script src="assets/vendor/venobox/venobox.min.js"></script>
-		<script src="assets/vendor/typed.js/typed.min.js"></script>
-
-		<script type="text/javascript">
-			// J'ai traduit les textes qui défilent aussi
-			var typed = new Typed(".typing", {
-				strings: ["Développeur", "Développeur Fullstack", "Passionné"],
-				loop: true,
-				typeSpeed: 65,
-				backSpeed: 65,
-			});
-		</script>
-
-		<script src="assets/js/main.js"></script>
-
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@type": "Person",
-				"name": "Damien Vaiton",
-				"url": "https://damienvaiton.fr",
-				"jobTitle": "Développeur Fullstack",
-				"alumniOf": {
-					"@type": "EducationalOrganization",
-					"name": "IUT Lyon 1 - Bourg-en-Bresse"
-				},
-				"address": {
-					"@type": "PostalAddress",
-					"addressLocality": "Bourg-en-Bresse",
-					"addressRegion": "Auvergne-Rhône-Alpes",
-					"addressCountry": "FR"
-				},
-				"sameAs": [
-					"https://www.linkedin.com/in/damien-vaiton/",
-					"https://github.com/Damienvaiton"
-				],
-				"knowsAbout": [
-					"PHP",
-					"Symfony",
-					"JavaScript",
-					"SQL",
-					"Développement Web"
-				]
-			}
-		</script>
-	</body>
+    <script src="assets/js/site.js"></script>
+  </body>
 </html>

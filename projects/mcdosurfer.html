@@ -1,184 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>McDo Surfer · Damien Vaiton</title>
+    <meta name="description" content="McDo Surfer, jeu de type runner infini développé avec Unity et C# pendant le BUT Informatique." />
+    <link rel="canonical" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
+    <link rel="icon" href="../favicon.png" />
+    <meta name="theme-color" content="#080b1d" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="McDo Surfer · Damien Vaiton" />
+    <meta property="og:description" content="Un runner infini façon Subway Surfers, pour apprendre les bases du moteur Unity." />
+    <meta property="og:url" content="https://damienvaiton.fr/projects/mcdosurfer.html" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/project/mcdosurfer.jpg" />
 
-		<title>Damien Vaiton | Mcdo Surfer (Unity & C#)</title>
-		<meta
-			name="description"
-			content="Découvrez Mcdo Surfer : un jeu de type runner développé avec Unity et C# par Damien Vaiton, Alexis Boizard et Ewen Cervasi."
-		/>
-		<link
-			rel="canonical"
-			href="https://damienvaiton.fr/projects/mcdosurfer.html"
-		/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/site.css" />
 
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=UA-169007209-3"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-			gtag("config", "UA-169007209-3");
-		</script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+    </script>
+  </head>
 
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Poppins:300,400,500,600,700"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/bootstrap/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link
-			href="../assets/vendor/boxicons/css/boxicons.min.css"
-			rel="stylesheet"
-		/>
-		<link href="../assets/vendor/venobox/venobox.css" rel="stylesheet" />
-		<link href="../assets/css/style.css" rel="stylesheet" />
-	</head>
+  <body>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5BB8W2X"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
 
-	<body style="background-color: #040b14; color: #fff">
-		<main id="main">
-			<div class="container-fluid pb-4">
-				<div class="project-card">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2 class="project-title-custom">
-								<i class="bx bx-game"></i> Mcdo Surfer
-							</h2>
+    <div class="sky" aria-hidden="true"></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="glow" aria-hidden="true"></div>
 
-							<div class="row mt-4">
-								<div class="col-md-6">
-									<span class="section-label-custom">Stack Technique</span>
-									<div class="mb-4">
-										<span class="tech-badge">Unity</span>
-										<span class="tech-badge">C#</span>
-										<span class="tech-badge">Game Design</span>
-									</div>
+    <header class="nav">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="../index.html" class="brand">Damien Vaiton</a>
+        <ul class="nav-links">
+          <li><a href="../index.html#projets">Projets</a></li>
+          <li><a href="../index.html#parcours">Parcours</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+        <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </nav>
+    </header>
 
-									<span class="section-label-custom">Code Source</span>
-									<a
-										href="https://github.com/alexisboizard/mcdo_surfer"
-										target="_blank"
-										class="github-btn-custom"
-									>
-										<i class="bx bxl-github mr-2"></i> Consulter sur GitHub
-									</a>
-								</div>
-								<div class="col-md-6 mt-4 mt-md-0">
-									<span class="section-label-custom">Contexte du Projet</span>
-									<p>
-										Ce jeu a été réalisé durant le cours de **Unity en 3ème
-										année de BUT informatique**. L'objectif était de maîtriser
-										les fondamentaux du moteur de jeu Unity à travers la
-										création d'un runner.
-									</p>
-								</div>
-							</div>
+    <main>
+      <section class="p-hero">
+        <div class="container">
+          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> La tracklist</a>
+          <div><span class="time fade-in" style="--d: 0.2s">Piste 04</span></div>
+          <h1>
+              <span class="line"><span style="--i: 0">McDo Surfer</span></span>
+          </h1>
+          <p class="p-tagline fade-in" style="--d: 0.6s">Un runner infini façon Subway Surfers, pour apprendre les bases du moteur Unity.</p>
+          <div class="p-actions fade-in" style="--d: 0.75s">
+              <a href="https://github.com/alexisboizard/mcdo_surfer" target="_blank" rel="noopener" class="btn">Code sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt>Contexte</dt><dd>Cours d'Unity, BUT 3e année</dd></div><div><dt>Plateforme</dt><dd>Mobile</dd></div><div><dt>Moteur</dt><dd>Unity · C#</dd></div></dl>
+        </div>
+      </section>
 
-							<hr class="my-5" style="border-color: rgba(255, 255, 255, 0.1)" />
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Notes de pochette</span>
+          <h2 class="split">Le <em class="gold">projet</em></h2>
+          <div class="p-intro">
+            <div>
+              <p class="reveal">Ce jeu a été réalisé pendant le <strong>cours d'Unity de 3e année</strong> de BUT Informatique. L'objectif : maîtriser les fondamentaux du moteur en construisant un jeu complet.</p>
+              <p class="reveal">Le runner : un genre simple à prendre en main, mais qui oblige à gérer la physique, les collisions, la génération du niveau et le score.</p>
+            </div>
+            <div class="p-side reveal">
+              <h3>Stack technique</h3>
+              <ul><li>Unity</li><li>C#</li><li>Game design</li></ul>
+              
+            </div>
+          </div>
+        </div>
+      </section>
 
-							<div class="row">
-								<div class="col-md-12">
-									<h4 style="color: #12d640" class="mb-4 text-uppercase">
-										Gameplay & Développement
-									</h4>
-									<div class="row mt-4">
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-run feature-icon-custom"></i> Type
-												Runner
-											</h5>
-											<p class="text-white-50 small">
-												Un jeu simple inspiré de classiques comme Subway Surfer,
-												idéal pour débuter sur Unity.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-infinite feature-icon-custom"></i> Mode
-												Infini
-											</h5>
-											<p class="text-white-50 small">
-												Le joueur peut progresser aussi longtemps qu'il évite
-												les obstacles, offrant une rejouabilité infinie.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-star feature-icon-custom"></i>
-												Collectables
-											</h5>
-											<p class="text-white-50 small">
-												Intégration d'un système de score basé sur la collecte
-												d'objets durant la course.
-											</p>
-										</div>
-										<div class="col-md-6 mb-3">
-											<h5>
-												<i class="bx bx-error-alt feature-icon-custom"></i>
-												Physique & Obstacles
-											</h5>
-											<p class="text-white-50 small">
-												Gestion des collisions et de la réactivité du personnage
-												face aux éléments du décor.
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Ce qu'il fait</span>
+          <h2 class="split">Les <em class="gold">fonctionnalités</em></h2>
+          <ol class="features">
+            <li class="reveal" style="--d: 0.0s"><div><h3>Runner</h3><p>Un gameplay inspiré des classiques comme Subway Surfers : on court, on esquive.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3>Mode infini</h3><p>Tant que le joueur évite les obstacles, la partie continue.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3>Objets à ramasser</h3><p>Un système de score basé sur les objets collectés pendant la course.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3>Physique et obstacles</h3><p>Collisions et réactions du personnage face aux éléments du décor.</p></div></li>
+          </ol>
+        </div>
+      </section>
 
-							<div class="mt-5 text-center">
-								<h4 style="color: #12d640" class="mb-4 text-uppercase">
-									Captures d'écran du jeu
-								</h4>
-								<div class="row justify-content-center">
-									<div class="col-md-5 mb-3">
-										<img
-											src="../assets/img/project/images/mcdosurfer1.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Mcdo Surfer 1"
-										/>
-									</div>
-									<div class="col-md-5 mb-3">
-										<img
-											src="../assets/img/project/images/mcdosurfer2.jpg"
-											class="img-fluid screenshot-img-custom"
-											alt="Capture Mcdo Surfer 2"
-										/>
-									</div>
-								</div>
-							</div>
+      <section class="p-section">
+        <div class="container">
+          <span class="time reveal">Captures</span>
+          <h2 class="split">En <em class="gold">images</em></h2>
+          <div class="gallery reveal">
+            <figure><img src="../assets/img/project/images/mcdosurfer1.jpg" alt="Partie en cours" loading="lazy" /><figcaption>Partie en cours</figcaption></figure>
+            <figure><img src="../assets/img/project/images/mcdosurfer2.jpg" alt="Écran de jeu" loading="lazy" /><figcaption>Écran de jeu</figcaption></figure>
+          </div>
 
-							<div class="text-center mt-5">
-								<a
-									href="https://damienvaiton.fr"
-									target="_top"
-									class="btn"
-									style="
-										color: #12d640;
-										border: 1px solid #12d640;
-										border-radius: 50px;
-										padding: 10px 30px;
-									"
-								>
-									<i class="bx bx-left-arrow-alt"></i> Retour au Portfolio
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
+          <a href="kinoa.html" class="next">
+            <small>Piste suivante · 05</small>
+            <strong>Mangeuse de Kinoa <em class="gold">→</em></strong>
+          </a>
+        </div>
+      </section>
+    </main>
 
-		<script src="../assets/vendor/jquery/jquery.min.js"></script>
-		<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="../assets/js/main.js"></script>
-	</body>
+    <footer class="footer">
+      <div class="container">
+        <span>© <span data-year>2026</span> Damien Vaiton</span>
+        <a href="../index.html">Retour à l'accueil</a>
+      </div>
+    </footer>
+
+    <script src="../assets/js/site.js"></script>
+  </body>
 </html>

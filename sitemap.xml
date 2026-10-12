@@ -2,38 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://damienvaiton.fr/</loc>
-    <lastmod>2026-01-05</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>1.00</priority>
-  </url>
-
-  <url>
-    <loc>https://damienvaiton.fr/projects/vegetabillisauditor.html</loc>
-    <lastmod>2026-01-05</lastmod>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://damienvaiton.fr/projects/edukid.html</loc>
-    <lastmod>2026-01-05</lastmod>
-    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/fasttrack.html</loc>
-    <lastmod>2026-01-05</lastmod>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/projects/vegetabillisauditor.html</loc>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/projects/edukid.html</loc>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/mcdosurfer.html</loc>
-    <lastmod>2026-01-05</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/kinoa.html</loc>
-    <lastmod>2026-01-05</lastmod>
-    <priority>0.20</priority>
-  </url>
-   <url>
-    <loc>https://damienvaiton.fr/projects/crève.html</loc>
-    <lastmod>2026-01-05</lastmod>
-    <priority>0.10</priority>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.60</priority>
   </url>
 </urlset>
