@@ -154,6 +154,8 @@
     var points = timed.map(function (el) {
       return { top: el.getBoundingClientRect().top + y, m: minutesOf(el.dataset.time) };
     });
+    // En haut de page, il est minuit pile
+    points[0].top = Math.max(points[0].top, window.innerHeight * 0.45);
     var last = points[points.length - 1];
     // La dernière section atteint son heure quand on arrive en bas de page
     last.top = Math.min(last.top, max + window.innerHeight * 0.45);
