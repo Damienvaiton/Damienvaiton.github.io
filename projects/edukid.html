@@ -3,16 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Edukid · Damien Vaiton</title>
-    <meta name="description" content="Edukid, application Android éducative pour les enfants de moins de 6 ans, développée en Kotlin." />
+    <title data-i18n="p.edukid.title">Edukid · Damien Vaiton</title>
+    <meta name="description" content="Edukid, application Android éducative pour les enfants de moins de 6 ans, développée en Kotlin." data-i18n-attr="content:p.edukid.desc" />
     <link rel="canonical" href="https://damienvaiton.fr/projects/edukid.html" />
-    <link rel="icon" href="../favicon.png" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Edukid · Damien Vaiton" />
     <meta property="og:description" content="Des mini-jeux pour apprendre les couleurs, les formes, les chiffres et les lettres, pensés pour les moins de 6 ans." />
     <meta property="og:url" content="https://damienvaiton.fr/projects/edukid.html" />
-    <meta property="og:image" content="https://damienvaiton.fr/assets/img/project/edukid.jpg" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/og/edukid.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,10 +61,11 @@
       <nav class="nav-inner" aria-label="Navigation principale">
         <a href="../index.html" class="brand">Damien Vaiton</a>
         <ul class="nav-links">
-          <li><a href="../index.html#projets">Projets</a></li>
-          <li><a href="../index.html#parcours">Parcours</a></li>
+          <li><a href="../index.html#projets" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="../index.html#parcours" data-i18n="nav.background">Parcours</a></li>
           <li><a href="../index.html#contact">Contact</a></li>
         </ul>
+        <button class="lang-btn" type="button" aria-label="Changer de langue / Switch language"><span data-l="fr">FR</span><span data-l="en">EN</span></button>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
         </button>
@@ -68,31 +75,31 @@
     <main>
       <section class="p-hero">
         <div class="container">
-          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> La tracklist</a>
-          <div><span class="time fade-in" style="--d: 0.2s">Piste 04</span></div>
+          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> <span data-i18n="p.back">La tracklist</span></a>
+          <div><span class="time fade-in" style="--d: 0.2s" data-i18n="p.edukid.track">Piste 04</span></div>
           <h1>
               <span class="line"><span style="--i: 0">Edukid</span></span>
           </h1>
-          <p class="p-tagline fade-in" style="--d: 0.6s">Des mini-jeux pour apprendre les couleurs, les formes, les chiffres et les lettres, pensés pour les moins de 6 ans.</p>
+          <p class="p-tagline fade-in" style="--d: 0.6s" data-i18n="p.edukid.tagline">Des mini-jeux pour apprendre les couleurs, les formes, les chiffres et les lettres, pensés pour les moins de 6 ans.</p>
           <div class="p-actions fade-in" style="--d: 0.75s">
-              <a href="https://github.com/Damienvaiton/SAE3A" target="_blank" rel="noopener" class="btn">Code sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-              <a href="https://app.bitrise.io/app/5aa8d4e8-d0b8-47cf-9ee7-02065340c39b/build/a209a65f-26e1-411d-9c3a-be1163237c0d/artifact/619ee3252115abdd/p/b3fd5e16609a176c88006b6c38ab6c0c" target="_blank" rel="noopener" class="link">Télécharger l'APK</a>
+              <a href="https://github.com/Damienvaiton/SAE3A" target="_blank" rel="noopener" class="btn"><span data-i18n="p.github">Code sur GitHub</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a href="https://app.bitrise.io/app/5aa8d4e8-d0b8-47cf-9ee7-02065340c39b/build/a209a65f-26e1-411d-9c3a-be1163237c0d/artifact/619ee3252115abdd/p/b3fd5e16609a176c88006b6c38ab6c0c" target="_blank" rel="noopener" class="link" data-i18n="p.apk">Télécharger l'APK</a>
           </div>
-          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt>Contexte</dt><dd>Projet BUT, 3e année</dd></div><div><dt>Plateforme</dt><dd>Android</dd></div><div><dt>Public</dt><dd>Enfants de moins de 6 ans</dd></div></dl>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt data-i18n="fact.Contexte">Contexte</dt><dd data-i18n="p.edukid.fact0">Projet BUT, 3e année</dd></div><div><dt data-i18n="fact.Plateforme">Plateforme</dt><dd data-i18n="p.edukid.fact1">Android</dd></div><div><dt data-i18n="fact.Public">Public</dt><dd data-i18n="p.edukid.fact2">Enfants de moins de 6 ans</dd></div></dl>
         </div>
       </section>
 
       <section class="p-section">
         <div class="container">
-          <span class="time reveal">Notes de pochette</span>
-          <h2 class="split">Le <em class="gold">projet</em></h2>
+          <span class="time reveal" data-i18n="p.notesTime">Notes de pochette</span>
+          <h2 class="split" data-i18n="p.projectTitle">Le <em class="gold">projet</em></h2>
           <div class="p-intro">
             <div>
-              <p class="reveal">Développée en <strong>3e année de BUT Informatique</strong>, Edukid propose aux tout-petits un environnement d'apprentissage ludique et sécurisé.</p>
-              <p class="reveal">Le défi principal : concevoir une interface qu'un enfant qui ne sait pas encore lire peut utiliser seul, avec de grandes zones tactiles, beaucoup de couleurs et très peu de texte.</p>
+              <p class="reveal" data-i18n="p.edukid.intro0">Développée en <strong>3e année de BUT Informatique</strong>, Edukid propose aux tout-petits un environnement d'apprentissage ludique et sécurisé.</p>
+              <p class="reveal" data-i18n="p.edukid.intro1">Le défi principal : concevoir une interface qu'un enfant qui ne sait pas encore lire peut utiliser seul, avec de grandes zones tactiles, beaucoup de couleurs et très peu de texte.</p>
             </div>
             <div class="p-side reveal">
-              <h3>Stack technique</h3>
+              <h3 data-i18n="p.stackTitle">Stack technique</h3>
               <ul><li>Kotlin</li><li>MVVM</li><li>Room</li><li>LiveData</li><li>Coroutines</li></ul>
               
             </div>
@@ -102,29 +109,29 @@
 
       <section class="p-section">
         <div class="container">
-          <span class="time reveal">Ce qu'il fait</span>
-          <h2 class="split">Les <em class="gold">fonctionnalités</em></h2>
+          <span class="time reveal" data-i18n="p.featTime">Ce qu'il fait</span>
+          <h2 class="split" data-i18n="p.featTitle">Les <em class="gold">fonctionnalités</em></h2>
           <ol class="features">
-            <li class="reveal" style="--d: 0.0s"><div><h3>Mini-jeux variés</h3><p>Des jeux classés par thème : animaux, couleurs, formes, chiffres et lettres.</p></div></li>
-            <li class="reveal" style="--d: 0.1s"><div><h3>Interface adaptée</h3><p>Une navigation pensée pour de très jeunes enfants : simple, visuelle, sans piège.</p></div></li>
-            <li class="reveal" style="--d: 0.0s"><div><h3>Apprentissage actif</h3><p>Les bases s'acquièrent en jouant, avec des retours immédiats.</p></div></li>
-            <li class="reveal" style="--d: 0.1s"><div><h3>Données locales</h3><p>Room stocke la progression sur l'appareil, sans compte ni connexion.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.edukid.f0t">Mini-jeux variés</h3><p data-i18n="p.edukid.f0d">Des jeux classés par thème : animaux, couleurs, formes, chiffres et lettres.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.edukid.f1t">Interface adaptée</h3><p data-i18n="p.edukid.f1d">Une navigation pensée pour de très jeunes enfants : simple, visuelle, sans piège.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.edukid.f2t">Apprentissage actif</h3><p data-i18n="p.edukid.f2d">Les bases s'acquièrent en jouant, avec des retours immédiats.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.edukid.f3t">Données locales</h3><p data-i18n="p.edukid.f3d">Room stocke la progression sur l'appareil, sans compte ni connexion.</p></div></li>
           </ol>
         </div>
       </section>
 
       <section class="p-section">
         <div class="container">
-          <span class="time reveal">Captures</span>
-          <h2 class="split">En <em class="gold">images</em></h2>
+          <span class="time reveal" data-i18n="p.capTime">Captures</span>
+          <h2 class="split" data-i18n="p.capTitle">En <em class="gold">images</em></h2>
           <div class="gallery reveal">
-            <figure><img src="../assets/img/project/images/edukidhome.jpg" alt="Accueil d&#x27;Edukid" loading="lazy" /><figcaption>Accueil d&#x27;Edukid</figcaption></figure>
-            <figure><img src="../assets/img/project/images/edukidtheme.jpg" alt="Choix du thème" loading="lazy" /><figcaption>Choix du thème</figcaption></figure>
-            <figure><img src="../assets/img/project/images/edukidgame.jpg" alt="Un mini-jeu" loading="lazy" /><figcaption>Un mini-jeu</figcaption></figure>
+            <figure><img src="../assets/img/project/images/edukidhome.jpg" alt="Accueil d&#x27;Edukid" data-i18n-attr="alt:p.edukid.cap0" loading="lazy" /><figcaption data-i18n="p.edukid.cap0">Accueil d&#x27;Edukid</figcaption></figure>
+            <figure><img src="../assets/img/project/images/edukidtheme.jpg" alt="Choix du thème" data-i18n-attr="alt:p.edukid.cap1" loading="lazy" /><figcaption data-i18n="p.edukid.cap1">Choix du thème</figcaption></figure>
+            <figure><img src="../assets/img/project/images/edukidgame.jpg" alt="Un mini-jeu" data-i18n-attr="alt:p.edukid.cap2" loading="lazy" /><figcaption data-i18n="p.edukid.cap2">Un mini-jeu</figcaption></figure>
           </div>
 
           <a href="mcdosurfer.html" class="next">
-            <small>Piste suivante · 05</small>
+            <small data-i18n="p.edukid.next">Piste suivante · 05</small>
             <strong>McDo Surfer <em class="gold">→</em></strong>
           </a>
         </div>
@@ -134,10 +141,11 @@
     <footer class="footer">
       <div class="container">
         <span>© <span data-year>2026</span> Damien Vaiton</span>
-        <a href="../index.html">Retour à l'accueil</a>
+        <a href="../index.html" data-i18n="p.home">Retour à l'accueil</a>
       </div>
     </footer>
 
+    <script src="../assets/js/i18n.js"></script>
     <script src="../assets/js/site.js"></script>
   </body>
 </html>

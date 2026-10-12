@@ -252,6 +252,37 @@ p {
 .clock.dawn-on .moon {
   display: none;
 }
+.clock + .lang-btn {
+  margin-left: -26px;
+}
+.lang-btn {
+  display: flex;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.lang-btn:hover,
+.lang-btn:focus-visible {
+  border-color: var(--gold);
+}
+.lang-btn span {
+  padding: 0 5px;
+  transition: color 0.3s;
+}
+.lang-btn span + span {
+  border-left: 1px solid var(--line);
+}
+.lang-btn .on {
+  color: var(--gold-soft);
+}
 .menu-btn {
   display: none;
   background: none;
@@ -373,6 +404,9 @@ p {
   display: flex;
   align-items: center;
   padding: 120px 0 80px;
+}
+.hero-grid > * {
+  min-width: 0;
 }
 .hero-grid {
   display: grid;
@@ -1165,7 +1199,8 @@ p {
   display: inline-block;
   margin-top: 54px;
   font-family: var(--serif);
-  font-size: clamp(24px, 3.6vw, 46px);
+  font-size: clamp(20px, 6.2vw, 46px);
+  overflow-wrap: anywhere;
   position: relative;
   padding-bottom: 8px;
 }
@@ -1928,6 +1963,24 @@ html.leaving body {
   }
   .p-section {
     padding-top: 90px;
+  }
+}
+
+@media (max-width: 560px) {
+  .nav-inner {
+    gap: 8px;
+  }
+  .clock + .lang-btn {
+    margin-left: 0;
+  }
+  .brand {
+    font-size: 19px;
+  }
+  .clock {
+    padding: 7px 10px;
+  }
+  .clock svg {
+    display: none;
   }
 }
 

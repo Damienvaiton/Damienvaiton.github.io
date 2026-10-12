@@ -5,6 +5,48 @@
   var finePointer = window.matchMedia("(pointer: fine)").matches;
   root.classList.add("js");
 
+  // ---------- Langue : français dans le HTML, anglais dans i18n.js ----------
+  var EN = window.I18N_EN || {};
+  var lang = (function () {
+    try {
+      var saved = localStorage.getItem("lang");
+      if (saved === "fr" || saved === "en") return saved;
+    } catch (e) {}
+    return /^fr/i.test(navigator.language || "fr") ? "fr" : "en";
+  })();
+  function tr(key, fr) {
+    return lang === "en" && EN[key] != null ? EN[key] : fr;
+  }
+  function applyLang() {
+    root.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      if (el._fr === undefined) el._fr = el.innerHTML;
+      el.innerHTML = tr(el.getAttribute("data-i18n"), el._fr);
+    });
+    document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
+      el._frAttr = el._frAttr || {};
+      el.getAttribute("data-i18n-attr").split(";").forEach(function (pair) {
+        var parts = pair.split(":");
+        var attr = parts[0];
+        if (!(attr in el._frAttr)) el._frAttr[attr] = el.getAttribute(attr);
+        el.setAttribute(attr, tr(parts[1], el._frAttr[attr]));
+      });
+    });
+    document.querySelectorAll(".lang-btn [data-l]").forEach(function (sp) {
+      sp.classList.toggle("on", sp.getAttribute("data-l") === lang);
+    });
+  }
+  applyLang();
+  document.querySelectorAll(".lang-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      lang = lang === "fr" ? "en" : "fr";
+      try {
+        localStorage.setItem("lang", lang);
+      } catch (e) {}
+      applyLang();
+    });
+  });
+
   window.addEventListener("load", function () {
     requestAnimationFrame(function () {
       root.classList.add("loaded");
@@ -331,7 +373,7 @@
   });
   if (window.console && console.log) {
     console.log(
-      "%c✦ Psst… clique sur l'horloge, ou tape « midnights ».",
+      "%c" + tr("js.hint", "✦ Psst… clique sur l'horloge, ou tape « midnights »."),
       "font: italic 15px Georgia, serif; color: #d9b45f; padding: 6px 0;"
     );
   }
@@ -578,11 +620,11 @@
 
   // ---------- Copier l'email ----------
   document.querySelectorAll("[data-copy]").forEach(function (btn) {
-    var initial = btn.textContent;
     btn.addEventListener("click", function () {
       if (!navigator.clipboard) return;
+      var initial = btn.textContent;
       navigator.clipboard.writeText(btn.dataset.copy).then(function () {
-        btn.textContent = "Copié ✦";
+        btn.textContent = tr("js.copied", "Copié ✦");
         setTimeout(function () {
           btn.textContent = initial;
         }, 1800);

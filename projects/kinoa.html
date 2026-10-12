@@ -3,16 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mangeuse de Kinoa · Damien Vaiton</title>
-    <meta name="description" content="Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution de rôles et quiz." />
+    <title data-i18n="p.kinoa.title">Mangeuse de Kinoa · Damien Vaiton</title>
+    <meta name="description" content="Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution de rôles et quiz." data-i18n-attr="content:p.kinoa.desc" />
     <link rel="canonical" href="https://damienvaiton.fr/projects/kinoa.html" />
-    <link rel="icon" href="../favicon.png" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Mangeuse de Kinoa · Damien Vaiton" />
     <meta property="og:description" content="Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz." />
     <meta property="og:url" content="https://damienvaiton.fr/projects/kinoa.html" />
-    <meta property="og:image" content="https://damienvaiton.fr/assets/img/project/Kinoa.jpg" />
+    <meta property="og:image" content="https://damienvaiton.fr/assets/img/og/kinoa.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,10 +61,11 @@
       <nav class="nav-inner" aria-label="Navigation principale">
         <a href="../index.html" class="brand">Damien Vaiton</a>
         <ul class="nav-links">
-          <li><a href="../index.html#projets">Projets</a></li>
-          <li><a href="../index.html#parcours">Parcours</a></li>
+          <li><a href="../index.html#projets" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="../index.html#parcours" data-i18n="nav.background">Parcours</a></li>
           <li><a href="../index.html#contact">Contact</a></li>
         </ul>
+        <button class="lang-btn" type="button" aria-label="Changer de langue / Switch language"><span data-l="fr">FR</span><span data-l="en">EN</span></button>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
         </button>
@@ -68,33 +75,33 @@
     <main>
       <section class="p-hero">
         <div class="container">
-          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> La tracklist</a>
-          <div><span class="time fade-in" style="--d: 0.2s">Piste 06</span></div>
+          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> <span data-i18n="p.back">La tracklist</span></a>
+          <div><span class="time fade-in" style="--d: 0.2s" data-i18n="p.kinoa.track">Piste 06</span></div>
           <h1>
               <span class="line"><span style="--i: 0">Mangeuse de</span></span>
               <span class="line"><span style="--i: 1">Kinoa</span></span>
           </h1>
-          <p class="p-tagline fade-in" style="--d: 0.6s">Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz.</p>
+          <p class="p-tagline fade-in" style="--d: 0.6s" data-i18n="p.kinoa.tagline">Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz.</p>
           <div class="p-actions fade-in" style="--d: 0.75s">
-              <a href="https://github.com/Damienvaiton/Botdiscord" target="_blank" rel="noopener" class="btn">Code sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a href="https://github.com/Damienvaiton/Botdiscord" target="_blank" rel="noopener" class="btn"><span data-i18n="p.github">Code sur GitHub</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
-          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt>Contexte</dt><dd>Projet perso</dd></div><div><dt>Plateforme</dt><dd>Discord</dd></div><div><dt>Statut</dt><dd>Terminé, plus maintenu</dd></div></dl>
+          <dl class="p-facts fade-in" style="--d: 0.9s"><div><dt data-i18n="fact.Contexte">Contexte</dt><dd data-i18n="p.kinoa.fact0">Projet perso</dd></div><div><dt data-i18n="fact.Plateforme">Plateforme</dt><dd data-i18n="p.kinoa.fact1">Discord</dd></div><div><dt data-i18n="fact.Statut">Statut</dt><dd data-i18n="p.kinoa.fact2">Terminé, plus maintenu</dd></div></dl>
         </div>
       </section>
 
       <section class="p-section">
         <div class="container">
-          <span class="time reveal">Notes de pochette</span>
-          <h2 class="split">Le <em class="gold">projet</em></h2>
+          <span class="time reveal" data-i18n="p.notesTime">Notes de pochette</span>
+          <h2 class="split" data-i18n="p.projectTitle">Le <em class="gold">projet</em></h2>
           <div class="p-intro">
             <div>
-              <p class="reveal">Un projet perso né sur un serveur Discord entre amis : automatiser l'accueil des nouveaux membres et ajouter un peu de jeu.</p>
-              <p class="reveal">Le bot tourne sous <strong>Node.js</strong> : Discord.js gère le dialogue avec l'API Discord, Axios récupère les données externes des quiz.</p>
+              <p class="reveal" data-i18n="p.kinoa.intro0">Un projet perso né sur un serveur Discord entre amis : automatiser l'accueil des nouveaux membres et ajouter un peu de jeu.</p>
+              <p class="reveal" data-i18n="p.kinoa.intro1">Le bot tourne sous <strong>Node.js</strong> : Discord.js gère le dialogue avec l'API Discord, Axios récupère les données externes des quiz.</p>
             </div>
             <div class="p-side reveal">
-              <h3>Stack technique</h3>
+              <h3 data-i18n="p.stackTitle">Stack technique</h3>
               <ul><li>JavaScript</li><li>Node.js</li><li>Discord.js</li><li>Axios</li></ul>
-              <p>Ce bot n'est plus maintenu : je suis passé à un bot Discord plus ambitieux, <a class="link" href="kitty.html">Kitty</a>.</p>
+              <p data-i18n="p.kinoa.note">Ce bot n'est plus maintenu : je suis passé à un bot Discord plus ambitieux, <a class="link" href="kitty.html">Kitty</a>.</p>
             </div>
           </div>
         </div>
@@ -102,28 +109,28 @@
 
       <section class="p-section">
         <div class="container">
-          <span class="time reveal">Ce qu'il fait</span>
-          <h2 class="split">Les <em class="gold">fonctionnalités</em></h2>
+          <span class="time reveal" data-i18n="p.featTime">Ce qu'il fait</span>
+          <h2 class="split" data-i18n="p.featTitle">Les <em class="gold">fonctionnalités</em></h2>
           <ol class="features">
-            <li class="reveal" style="--d: 0.0s"><div><h3>Gestion des membres</h3><p>Attribution automatique d'un rôle dès qu'un nouvel utilisateur arrive sur le serveur.</p></div></li>
-            <li class="reveal" style="--d: 0.1s"><div><h3>Quiz</h3><p>Des jeux interactifs, comme un quiz sur les drapeaux, pour animer la communauté.</p></div></li>
-            <li class="reveal" style="--d: 0.0s"><div><h3>API Discord</h3><p>Discord.js pour dialoguer simplement et efficacement avec l'API Discord.</p></div></li>
-            <li class="reveal" style="--d: 0.1s"><div><h3>Animation</h3><p>Des commandes autour des centres d'intérêt communs des membres du serveur.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.kinoa.f0t">Gestion des membres</h3><p data-i18n="p.kinoa.f0d">Attribution automatique d'un rôle dès qu'un nouvel utilisateur arrive sur le serveur.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.kinoa.f1t">Quiz</h3><p data-i18n="p.kinoa.f1d">Des jeux interactifs, comme un quiz sur les drapeaux, pour animer la communauté.</p></div></li>
+            <li class="reveal" style="--d: 0.0s"><div><h3 data-i18n="p.kinoa.f2t">API Discord</h3><p data-i18n="p.kinoa.f2d">Discord.js pour dialoguer simplement et efficacement avec l'API Discord.</p></div></li>
+            <li class="reveal" style="--d: 0.1s"><div><h3 data-i18n="p.kinoa.f3t">Animation</h3><p data-i18n="p.kinoa.f3d">Des commandes autour des centres d'intérêt communs des membres du serveur.</p></div></li>
           </ol>
         </div>
       </section>
 
       <section class="p-section">
         <div class="container">
-          <span class="time reveal">Captures</span>
-          <h2 class="split">En <em class="gold">images</em></h2>
+          <span class="time reveal" data-i18n="p.capTime">Captures</span>
+          <h2 class="split" data-i18n="p.capTitle">En <em class="gold">images</em></h2>
           <div class="gallery landscape reveal">
-            <figure><img src="../assets/img/project/images/Kinoa1.jpg" alt="Le bot en action sur Discord" loading="lazy" /><figcaption>Le bot en action sur Discord</figcaption></figure>
-            <figure><img src="../assets/img/project/images/Kinoa2.jpg" alt="Une commande du bot" loading="lazy" /><figcaption>Une commande du bot</figcaption></figure>
+            <figure><img src="../assets/img/project/images/Kinoa1.jpg" alt="Le bot en action sur Discord" data-i18n-attr="alt:p.kinoa.cap0" loading="lazy" /><figcaption data-i18n="p.kinoa.cap0">Le bot en action sur Discord</figcaption></figure>
+            <figure><img src="../assets/img/project/images/Kinoa2.jpg" alt="Une commande du bot" data-i18n-attr="alt:p.kinoa.cap1" loading="lazy" /><figcaption data-i18n="p.kinoa.cap1">Une commande du bot</figcaption></figure>
           </div>
 
           <a href="kitty.html" class="next">
-            <small>Piste suivante · 01</small>
+            <small data-i18n="p.kinoa.next">Piste suivante · 01</small>
             <strong>Kitty <em class="gold">→</em></strong>
           </a>
         </div>
@@ -133,10 +140,11 @@
     <footer class="footer">
       <div class="container">
         <span>© <span data-year>2026</span> Damien Vaiton</span>
-        <a href="../index.html">Retour à l'accueil</a>
+        <a href="../index.html" data-i18n="p.home">Retour à l'accueil</a>
       </div>
     </footer>
 
+    <script src="../assets/js/i18n.js"></script>
     <script src="../assets/js/site.js"></script>
   </body>
 </html>
