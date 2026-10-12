@@ -425,15 +425,32 @@
       if (!npTrack) return;
       npText.removeAttribute("data-i18n");
       npText.textContent = "";
+      var inner = document.createElement("span");
+      inner.className = "np-inner";
       var label = npTrack.live ? tr("js.npNow", "En écoute") : tr("js.npLast", "Dernière écoute");
-      npText.appendChild(document.createTextNode(label + " · "));
+      inner.appendChild(document.createTextNode(label + " · "));
       var em = document.createElement("em");
       em.textContent = npTrack.name;
-      npText.appendChild(em);
-      npText.appendChild(document.createTextNode(" — " + npTrack.artist));
+      inner.appendChild(em);
+      inner.appendChild(document.createTextNode(" — " + npTrack.artist));
+      npText.appendChild(inner);
       np.classList.toggle("paused", !npTrack.live);
       np.title = npTrack.name + " — " + npTrack.artist;
+      fitNowPlaying();
     }
+    // Si le texte dépasse, il défile d'un bout à l'autre
+    function fitNowPlaying() {
+      var inner = npText.querySelector(".np-inner");
+      if (!inner) return;
+      npText.classList.remove("scroll");
+      var overflow = inner.scrollWidth - npText.clientWidth;
+      if (overflow > 2) {
+        npText.style.setProperty("--dist", overflow + 20 + "px");
+        npText.style.setProperty("--dur", Math.max(6, (overflow + 20) / 25) + "s");
+        npText.classList.add("scroll");
+      }
+    }
+    window.addEventListener("resize", fitNowPlaying);
     langHooks.push(renderNowPlaying);
     function fetchNowPlaying() {
       if (document.hidden) return;

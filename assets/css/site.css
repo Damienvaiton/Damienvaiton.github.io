@@ -658,11 +658,36 @@ picture {
   font-size: 15px;
   color: var(--ink);
 }
-.now-playing > span:last-child {
-  max-width: 300px;
+.now-playing {
+  max-width: calc(100% - 44px);
+}
+/* Titre du morceau : défile s'il est trop long, comme dans un lecteur */
+.np-text {
+  display: block;
+  min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+}
+.np-inner {
+  display: inline-block;
+}
+.np-text.scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 18px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 18px), transparent);
+}
+.np-text.scroll .np-inner {
+  padding: 0 10px;
+  animation: np-scroll var(--dur, 8s) ease-in-out infinite alternate;
+}
+@keyframes np-scroll {
+  0%,
+  15% {
+    transform: translateX(0);
+  }
+  85%,
+  100% {
+    transform: translateX(calc(-1 * var(--dist, 0px)));
+  }
 }
 .now-playing.paused .eq i {
   animation-play-state: paused;
