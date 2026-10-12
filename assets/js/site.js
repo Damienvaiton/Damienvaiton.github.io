@@ -336,6 +336,26 @@
     );
   }
 
+  // ---------- Transition de sortie (navigateurs sans View Transitions) ----------
+  if (!("CSSViewTransitionRule" in window) && !reduced) {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a[href]");
+      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (a.target === "_blank" || a.hasAttribute("download")) return;
+      var url = new URL(a.href, location.href);
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname && url.search === location.search) return; // simple ancre
+      e.preventDefault();
+      root.classList.add("leaving");
+      setTimeout(function () {
+        location.href = url.href;
+      }, 380);
+    });
+    window.addEventListener("pageshow", function () {
+      root.classList.remove("leaving");
+    });
+  }
+
   // ---------- Halo qui suit la souris ----------
   var glow = document.querySelector(".glow");
   if (glow && finePointer && !reduced) {

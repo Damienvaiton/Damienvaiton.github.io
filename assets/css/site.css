@@ -1720,6 +1720,37 @@ p {
   color: transparent;
 }
 
+/* ---------- Transitions entre les pages ---------- */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root) {
+  animation: page-out 0.45s var(--ease) both;
+}
+::view-transition-new(root) {
+  animation: page-in 0.7s var(--ease) both;
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale(0.985);
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale(1.015);
+  }
+}
+/* Repli pour les navigateurs sans View Transitions */
+html.leaving body {
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 0.4s var(--ease), filter 0.4s var(--ease);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1020px) {
   .hero-grid {
@@ -1901,6 +1932,9 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
   *,
   *::before,
   *::after {
