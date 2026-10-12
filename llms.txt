@@ -1,0 +1,41 @@
+# Damien Vaiton
+
+> Portfolio de Damien Vaiton, développeur web PHP/Symfony et React basé à Bourg-en-Bresse (Ain, France), diplômé d'un BUT Informatique (IUT Lyon 1). Le site présente ses projets (bots Discord, applications Android, IoT, jeu Unity), son parcours et ses coordonnées.
+
+Damien Vaiton développe des applications web, de la logique métier en PHP avec Symfony jusqu'aux interfaces en React. Sur son temps libre, il crée des bots Discord en TypeScript, dont Kitty, un bot de blind test de paroles pour une communauté de fans de pop. Le site existe en français (par défaut) et en anglais (`?lang=en`).
+
+## Profil
+
+- Nom : Damien Vaiton
+- Métier : développeur web (PHP, Symfony, React)
+- Localisation : Bourg-en-Bresse, Ain, Auvergne-Rhône-Alpes, France
+- Formation : BUT Informatique, IUT Lyon 1, site de Bourg-en-Bresse (2021-2025)
+- Compétences : PHP, Symfony, React, TypeScript, JavaScript, SQL, Twig, Kotlin, Java, Android, Node.js, Discord.js, Unity, C#, Arduino, Firebase, Git
+- Langues : français, anglais (TOEIC 790/990, niveau B2)
+- Contact : damien.vaiton01@gmail.com
+- LinkedIn : https://www.linkedin.com/in/damien-vaiton/
+- GitHub : https://github.com/Damienvaiton
+
+## Projets
+
+- [Kitty](https://damienvaiton.fr/projects/kitty.html): Bot Discord en TypeScript (discord.js) pour une communauté de fans de pop : blind test de paroles avec mode duel, paroles à compléter, rôles par album, question du jour bilingue et alertes Instagram. Paroles via l'API Genius, catalogue de 666 chansons sur 44 albums.
+- [FastTrack](https://damienvaiton.fr/projects/fasttrack.html): Application Android en Kotlin (MVVM, Retrofit, Room, Coroutines) pour suivre la Formule 1 : prochaine course avec compte à rebours, calendrier, classements pilotes et écuries. Projet du cours de programmation avancée du BUT Informatique.
+- [Vegetabillis Auditor](https://damienvaiton.fr/projects/vegetabillisauditor.html): Système IoT pour le département biologie de l'IUT de Bourg-en-Bresse : capteurs Arduino (O₂, CO₂, luminosité), stockage temps réel dans Firebase et application Android Java de visualisation et d'administration.
+- [Edukid](https://damienvaiton.fr/projects/edukid.html): Application Android éducative en Kotlin (MVVM, Room) pour les enfants de moins de 6 ans : mini-jeux sur les animaux, couleurs, formes, chiffres et lettres. Projet de 3e année de BUT Informatique.
+- [McDo Surfer](https://damienvaiton.fr/projects/mcdosurfer.html): Jeu mobile de type runner infini (inspiré de Subway Surfers) développé avec Unity et C# pendant le cours d'Unity de 3e année de BUT Informatique.
+- [Mangeuse de Kinoa](https://damienvaiton.fr/projects/kinoa.html): Bot Discord en Node.js (Discord.js, Axios) : attribution automatique de rôles et quiz sur les drapeaux. Projet terminé, remplacé par Kitty.
+
+## Parcours
+
+- [Accueil du portfolio](https://damienvaiton.fr/): présentation, projets, compétences, parcours et contact
+- Stage de développeur fullstack chez Lalemant France (nov. 2024 - mars 2025) : outils de cotation et de réponse aux appels d'offres en PHP, JavaScript et SQL
+- Stage de développeur fullstack chez Effet B (avr. - juin 2023) : maintenance évolutive en PHP/Symfony d'un progiciel de gestion utilisé par 6 650 utilisateurs dans 41 établissements
+- BUT Informatique, IUT Lyon 1, Bourg-en-Bresse (2021-2025)
+- Baccalauréat général, spécialités Mathématiques et NSI, section européenne anglais, Lycée Joseph-Marie Carriat (2018-2021)
+- Certifications : TOEIC Listening & Reading 790/990 (B2), certification DPO (RGPD) de la CNIL
+
+## Optional
+
+- [Version complète pour les IA](https://damienvaiton.fr/llms-full.txt): tout le contenu du site en texte brut
+- [Version anglaise du site](https://damienvaiton.fr/?lang=en)
+- [CV (PDF)](https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing)

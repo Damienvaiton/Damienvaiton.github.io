@@ -1,0 +1,155 @@
+# Damien Vaiton : portfolio complet
+
+> Développeur web PHP/Symfony et React basé à Bourg-en-Bresse (Ain, France), diplômé d'un BUT Informatique (IUT Lyon 1). Ce fichier reprend tout le contenu du site https://damienvaiton.fr en texte brut, pour les moteurs de recherche et les assistants IA.
+
+Dernière mise à jour : 2026-10-12.
+
+## En bref (English summary)
+
+Damien Vaiton is a web developer based in Bourg-en-Bresse, France. He builds web applications with PHP/Symfony on the back end and React on the front end, and holds a Computer Science degree (BUT Informatique, IUT Lyon 1, 2021-2025). His personal projects include Kitty, a TypeScript Discord bot running lyric blind tests for a pop fan community, Android apps in Kotlin and Java, an Arduino IoT system and a Unity game. Contact: damien.vaiton01@gmail.com.
+
+## Présentation
+
+Développeur web à Bourg-en-Bresse, sorti d'un BUT Informatique. Damien fait surtout du Symfony et du React, et des bots Discord sur son temps libre. Fan de pop, ça se voit dans ses projets : Kitty, son dernier bot Discord, fait passer des blind tests de paroles sur un serveur de fans de Taylor Swift, Sabrina Carpenter ou Olivia Rodrigo. Le reste du temps : basket, foot, voyages, jeux vidéo et beaucoup de musique.
+
+## Compétences
+
+- Au quotidien : PHP, Symfony, React, TypeScript, JavaScript, SQL
+- Déjà pratiqué : Kotlin, Java, Flutter, Unity, Arduino, Node.js
+- Outils : Git, JetBrains, VS Code, Android Studio, HTML et CSS
+
+## Parcours
+
+### Expérience
+
+- **Lalemant France** (nov. 2024 - mars 2025, stage de 5 mois), développeur fullstack : nouvelles fonctionnalités (outils de cotation et de réponse aux appels d'offres dans l'application interne), maintenance (tickets, correction de bugs), travail en équipe agile. PHP, JavaScript, SQL.
+- **Effet B** (avr. - juin 2023, stage de 3 mois), développeur fullstack : maintenance évolutive d'un progiciel de gestion utilisé par 6 650 utilisateurs dans 41 établissements, participation à la conception et au suivi de projet, correctifs en production. PHP, Symfony, gestion de projet.
+
+### Formation
+
+- **BUT Informatique** (2021-2025, Bac + 3), IUT Lyon 1, Bourg-en-Bresse : développement web, mobile et logiciel, bases de données, gestion de projet en équipe.
+- **Baccalauréat général** (2018-2021), Lycée Joseph-Marie Carriat : spécialités Mathématiques et NSI, section européenne anglais.
+
+### Certifications
+
+- TOEIC Listening & Reading : 790/990 (niveau B2)
+- Certification DPO (RGPD), CNIL
+
+## Projets
+
+### 01. Kitty
+
+Un bot Discord fait maison pour une communauté de fans de pop : blind tests de paroles, rôles par album et actus des artistes.
+
+- Page : https://damienvaiton.fr/projects/kitty.html
+- Contexte : Projet perso; Plateforme : Discord; Code : Dépôt privé
+- Stack : TypeScript, Node.js, Discord.js, API Genius, Cheerio
+- Code source : dépôt privé
+
+Kitty anime un serveur Discord de fans de pop, autour de Taylor Swift, Sabrina Carpenter, Gracie Abrams, Olivia Rodrigo ou Conan Gray. C'est mon plus gros projet perso, et celui qui mélange le plus le code et la musique. Il est écrit en TypeScript avec discord.js. Les paroles viennent de l'API Genius, et un script construit le catalogue à partir des tracklists officielles : 666 chansons, réparties sur 44 albums.
+
+Fonctionnalités :
+
+- **Blind test de paroles** : /guess affiche quelques lignes d'une chanson : le premier qui trouve le titre gagne. On choisit les artistes, les albums et le nombre de lignes.
+- **Mode duel** : On peut défier un autre membre : seuls les deux joueurs répondent. Les séries de victoires sont annoncées, jusqu'à « LÉGENDAIRE ».
+- **Indices et réponses proches** : Artiste, album, pendu ou ligne en plus. Une réponse presque juste est repérée grâce à la distance de Levenshtein.
+- **Paroles à compléter** : /fill cache des mots dans un extrait, avec trois niveaux de difficulté et des indices lettre par lettre ou par syllabe.
+- **Rôles par album** : Des boutons avec les emojis du serveur pour choisir ses albums préférés et recevoir le rôle correspondant.
+- **Vie du serveur** : Accueil en français ou en anglais, question du jour bilingue, alertes des nouveaux posts Instagram, et un statut « En écoute » qui change toutes les 5 minutes.
+
+### 02. FastTrack
+
+Le championnat de Formule 1 dans la poche : prochaine course, calendrier et classements, toujours à jour.
+
+- Page : https://damienvaiton.fr/projects/fasttrack.html
+- Contexte : Projet BUT Informatique; Plateforme : Android; Stack : Kotlin · MVVM
+- Stack : Kotlin, MVVM, Retrofit, Room, LiveData, Coroutines
+- Code source : https://github.com/Damienvaiton/Fasttrack
+
+Réalisé pour le cours de programmation avancée de l'IUT Informatique de Bourg-en-Bresse, FastTrack s'adresse aux fans de F1 qui veulent suivre la saison sans chercher l'info partout. L'app récupère les données de course depuis une API, les met en cache localement et les affiche dans une interface pensée pour une lecture rapide.
+
+Fonctionnalités :
+
+- **Prochaine course** : La prochaine épreuve du calendrier, avec un compte à rebours jusqu'au départ.
+- **Calendrier complet** : Toutes les dates et tous les circuits de la saison en un coup d'œil.
+- **Classement pilotes** : Les points et positions de chaque pilote au championnat.
+- **Classement écuries** : La hiérarchie des constructeurs au fil de la saison.
+
+### 03. Vegetabillis Auditor
+
+Des capteurs Arduino jusqu'au smartphone : le suivi en temps réel d'expériences de biologie.
+
+- Page : https://damienvaiton.fr/projects/vegetabillisauditor.html
+- Contexte : Projet BUT, 2e année; Client : Département biologie de l'IUT; Plateforme : Arduino + Android
+- Stack : Java, Arduino, Firebase, MVVM, IoT
+- Code source : https://github.com/Damienvaiton/SAE-S3
+
+Un projet mené pour le département biologie de l'IUT de Bourg-en-Bresse, qui avait besoin de suivre des expériences sans rester collé aux instruments. Une carte Arduino relève les capteurs, envoie les mesures dans le cloud, et une app Android les affiche en direct pour les enseignants et les étudiants.
+
+Fonctionnalités :
+
+- **Acquisition IoT** : Mesures en temps réel d'O₂, de CO₂ et de luminosité via une carte Arduino.
+- **Stockage cloud** : Synchronisation immédiate des mesures dans Firebase, consultables à distance.
+- **Graphiques en direct** : Visualisation des courbes sur Android, directement depuis la salle de TP ou ailleurs.
+- **Administration** : Gestion des données collectées depuis l'interface mobile.
+
+### 04. Edukid
+
+Des mini-jeux pour apprendre les couleurs, les formes, les chiffres et les lettres, pensés pour les moins de 6 ans.
+
+- Page : https://damienvaiton.fr/projects/edukid.html
+- Contexte : Projet BUT, 3e année; Plateforme : Android; Public : Enfants de moins de 6 ans
+- Stack : Kotlin, MVVM, Room, LiveData, Coroutines
+- Code source : https://github.com/Damienvaiton/SAE3A
+
+Développée en 3e année de BUT Informatique, Edukid propose aux tout-petits un environnement d'apprentissage ludique et sécurisé. Le défi principal : concevoir une interface qu'un enfant qui ne sait pas encore lire peut utiliser seul, avec de grandes zones tactiles, beaucoup de couleurs et très peu de texte.
+
+Fonctionnalités :
+
+- **Mini-jeux variés** : Des jeux classés par thème : animaux, couleurs, formes, chiffres et lettres.
+- **Interface adaptée** : Une navigation pensée pour de très jeunes enfants : simple, visuelle, sans piège.
+- **Apprentissage actif** : Les bases s'acquièrent en jouant, avec des retours immédiats.
+- **Données locales** : Room stocke la progression sur l'appareil, sans compte ni connexion.
+
+### 05. McDo Surfer
+
+Un runner infini façon Subway Surfers, pour apprendre les bases du moteur Unity.
+
+- Page : https://damienvaiton.fr/projects/mcdosurfer.html
+- Contexte : Cours d'Unity, BUT 3e année; Plateforme : Mobile; Moteur : Unity · C#
+- Stack : Unity, C#, Game design
+- Code source : https://github.com/alexisboizard/mcdo_surfer
+
+Ce jeu a été réalisé pendant le cours d'Unity de 3e année de BUT Informatique. L'objectif : maîtriser les fondamentaux du moteur en construisant un jeu complet. Le runner : un genre simple à prendre en main, mais qui oblige à gérer la physique, les collisions, la génération du niveau et le score.
+
+Fonctionnalités :
+
+- **Runner** : Un gameplay inspiré des classiques comme Subway Surfers : on court, on esquive.
+- **Mode infini** : Tant que le joueur évite les obstacles, la partie continue.
+- **Objets à ramasser** : Un système de score basé sur les objets collectés pendant la course.
+- **Physique et obstacles** : Collisions et réactions du personnage face aux éléments du décor.
+
+### 06. Mangeuse de Kinoa
+
+Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz.
+
+- Page : https://damienvaiton.fr/projects/kinoa.html
+- Contexte : Projet perso; Plateforme : Discord; Statut : Terminé, plus maintenu
+- Stack : JavaScript, Node.js, Discord.js, Axios
+- Code source : https://github.com/Damienvaiton/Botdiscord
+
+Un projet perso né sur un serveur Discord entre amis : automatiser l'accueil des nouveaux membres et ajouter un peu de jeu. Le bot tourne sous Node.js : Discord.js gère le dialogue avec l'API Discord, Axios récupère les données externes des quiz.
+
+Fonctionnalités :
+
+- **Gestion des membres** : Attribution automatique d'un rôle dès qu'un nouvel utilisateur arrive sur le serveur.
+- **Quiz** : Des jeux interactifs, comme un quiz sur les drapeaux, pour animer la communauté.
+- **API Discord** : Discord.js pour dialoguer simplement et efficacement avec l'API Discord.
+- **Animation** : Des commandes autour des centres d'intérêt communs des membres du serveur.
+
+## Contact
+
+- Email : damien.vaiton01@gmail.com
+- LinkedIn : https://www.linkedin.com/in/damien-vaiton/
+- GitHub : https://github.com/Damienvaiton
+- CV : https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing

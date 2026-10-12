@@ -3,63 +3,259 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title data-i18n="meta.title">Damien Vaiton · Développeur web Symfony & React</title>
-    <meta
-      name="description"
-      data-i18n-attr="content:meta.desc"
-      content="Damien Vaiton, développeur web diplômé d'un BUT Informatique. Applications web en PHP/Symfony et React. Projets, parcours et contact."
-    />
+    <title data-i18n="meta.title">Damien Vaiton · Développeur web PHP Symfony &amp; React</title>
+    <meta name="description" content="Portfolio de Damien Vaiton, développeur web PHP/Symfony et React à Bourg-en-Bresse (Ain). Bots Discord, apps Android, IoT : projets, parcours et contact." data-i18n-attr="content:meta.desc" />
+    <meta name="author" content="Damien Vaiton" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href="https://damienvaiton.fr/" />
+    <link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/" />
+    <link rel="alternate" hreflang="en" href="https://damienvaiton.fr/?lang=en" />
+    <link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/" />
+    <link rel="me" href="https://www.linkedin.com/in/damien-vaiton/" />
+    <link rel="me" href="https://github.com/Damienvaiton" />
+
+    <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="assets/css/site.css" />
+
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
+    <meta name="color-scheme" content="dark" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Damien Vaiton · Développeur web" />
-    <meta property="og:description" content="Développeur web, Symfony côté back, React côté front." />
+    <meta property="og:site_name" content="Damien Vaiton" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Damien Vaiton · Développeur web PHP Symfony &amp; React" />
+    <meta property="og:description" content="Portfolio de Damien Vaiton, développeur web PHP/Symfony et React à Bourg-en-Bresse (Ain). Bots Discord, apps Android, IoT : projets, parcours et contact." />
     <meta property="og:url" content="https://damienvaiton.fr/" />
     <meta property="og:image" content="https://damienvaiton.fr/assets/img/og/home.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Damien Vaiton, développeur web entre Symfony et React" />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="profile:first_name" content="Damien" />
+    <meta property="profile:last_name" content="Vaiton" />
+    <meta property="profile:username" content="Damienvaiton" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Damien Vaiton · Développeur web PHP Symfony &amp; React" />
+    <meta name="twitter:description" content="Portfolio de Damien Vaiton, développeur web PHP/Symfony et React à Bourg-en-Bresse (Ain). Bots Discord, apps Android, IoT : projets, parcours et contact." />
+    <meta name="twitter:image" content="https://damienvaiton.fr/assets/img/og/home.jpg" />
+    <meta name="twitter:image:alt" content="Damien Vaiton, développeur web entre Symfony et React" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="assets/css/site.css" />
-
-    <!-- Google Tag Manager -->
+    <!-- Google Tag Manager (chargé après l'affichage pour ne pas ralentir la page) -->
     <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          var j = document.createElement("script");
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-5BB8W2X";
+          document.head.appendChild(j);
+        }, 1500);
+      });
     </script>
 
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Damien Vaiton",
-        "url": "https://damienvaiton.fr",
-        "image": "https://damienvaiton.fr/assets/img/profile.jpg",
-        "jobTitle": "Développeur web",
-        "alumniOf": { "@type": "EducationalOrganization", "name": "IUT Lyon 1 - Bourg-en-Bresse" },
-        "address": { "@type": "PostalAddress", "addressLocality": "Bourg-en-Bresse", "addressCountry": "FR" },
-        "sameAs": ["https://www.linkedin.com/in/damien-vaiton/", "https://github.com/Damienvaiton"],
-        "knowsAbout": ["PHP", "Symfony", "React", "TypeScript", "SQL", "Développement web"]
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://damienvaiton.fr/#website",
+      "url": "https://damienvaiton.fr/",
+      "name": "Damien Vaiton",
+      "alternateName": "Portfolio de Damien Vaiton",
+      "description": "Portfolio de Damien Vaiton, développeur web PHP/Symfony et React à Bourg-en-Bresse (Ain). Bots Discord, apps Android, IoT : projets, parcours et contact.",
+      "inLanguage": [
+        "fr-FR",
+        "en"
+      ],
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "publisher": {
+        "@id": "https://damienvaiton.fr/#person"
       }
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://damienvaiton.fr/#profilepage",
+      "url": "https://damienvaiton.fr/",
+      "name": "Damien Vaiton · Développeur web PHP Symfony & React",
+      "description": "Portfolio de Damien Vaiton, développeur web PHP/Symfony et React à Bourg-en-Bresse (Ain). Bots Discord, apps Android, IoT : projets, parcours et contact.",
+      "inLanguage": "fr-FR",
+      "dateModified": "2026-10-12",
+      "isPartOf": {
+        "@id": "https://damienvaiton.fr/#website"
+      },
+      "mainEntity": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "about": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://damienvaiton.fr/assets/img/og/home.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "hasPart": {
+        "@type": "ItemList",
+        "@id": "https://damienvaiton.fr/#projets",
+        "name": "Projets de Damien Vaiton",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://damienvaiton.fr/projects/kitty.html",
+            "name": "Kitty"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://damienvaiton.fr/projects/fasttrack.html",
+            "name": "FastTrack"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "https://damienvaiton.fr/projects/vegetabillisauditor.html",
+            "name": "Vegetabillis Auditor"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "https://damienvaiton.fr/projects/edukid.html",
+            "name": "Edukid"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "https://damienvaiton.fr/projects/mcdosurfer.html",
+            "name": "McDo Surfer"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "https://damienvaiton.fr/projects/kinoa.html",
+            "name": "Mangeuse de Kinoa"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://damienvaiton.fr/#person",
+      "name": "Damien Vaiton",
+      "givenName": "Damien",
+      "familyName": "Vaiton",
+      "url": "https://damienvaiton.fr/",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://damienvaiton.fr/assets/img/profile.jpg",
+        "width": 800,
+        "height": 800
+      },
+      "jobTitle": "Développeur web",
+      "description": "Développeur web PHP/Symfony et React basé à Bourg-en-Bresse (Ain, France), diplômé d'un BUT Informatique à l'IUT Lyon 1. Crée aussi des bots Discord, des applications Android et des projets IoT.",
+      "email": "mailto:damien.vaiton01@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bourg-en-Bresse",
+        "addressRegion": "Auvergne-Rhône-Alpes",
+        "addressCountry": "FR"
+      },
+      "nationality": {
+        "@type": "Country",
+        "name": "France"
+      },
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "IUT Lyon 1, site de Bourg-en-Bresse"
+        },
+        {
+          "@type": "HighSchool",
+          "name": "Lycée Joseph-Marie Carriat"
+        }
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "BUT Informatique",
+          "credentialCategory": "degree",
+          "educationalLevel": "Bac + 3",
+          "recognizedBy": {
+            "@type": "CollegeOrUniversity",
+            "name": "Université Claude Bernard Lyon 1"
+          }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "TOEIC Listening & Reading : 790/990 (niveau B2)",
+          "credentialCategory": "certificate"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Certification DPO (RGPD), CNIL",
+          "credentialCategory": "certificate"
+        }
+      ],
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Développeur web",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Bourg-en-Bresse"
+        },
+        "skills": "PHP, Symfony, React, TypeScript, JavaScript, SQL"
+      },
+      "knowsAbout": [
+        "Développement web",
+        "PHP",
+        "Symfony",
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "SQL",
+        "Twig",
+        "Kotlin",
+        "Java",
+        "Android",
+        "Node.js",
+        "Discord.js",
+        "Unity",
+        "C#",
+        "Arduino",
+        "IoT",
+        "Firebase",
+        "Git"
+      ],
+      "knowsLanguage": [
+        {
+          "@type": "Language",
+          "name": "Français",
+          "alternateName": "fr"
+        },
+        {
+          "@type": "Language",
+          "name": "English",
+          "alternateName": "en"
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/damien-vaiton/",
+        "https://github.com/Damienvaiton"
+      ]
+    }
+  ]
+}
     </script>
   </head>
 
@@ -73,6 +269,7 @@
       ></iframe
     ></noscript>
 
+    <a class="skip" href="#contenu" data-i18n="nav.skip">Aller au contenu</a>
     <div class="sky" aria-hidden="true"></div>
     <div class="dawn" aria-hidden="true"></div>
     <canvas class="stars" aria-hidden="true"></canvas>
@@ -92,22 +289,24 @@
         <span class="clock" title="L'heure avance avec la page" data-i18n-attr="title:nav.clock">
           <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 18h20M5 18a7 7 0 0 1 14 0M12 5V3M5.6 8.6 4.2 7.2M18.4 8.6l1.4-1.4"/></svg>
-          <span>00:00</span>
+          <span class="sr-only" data-i18n="nav.clockLabel">Horloge, cliquer pour une surprise :</span>
+          <span class="clock-time">00:00</span>
         </span>
-        <button class="lang-btn" type="button" aria-label="Changer de langue / Switch language"><span data-l="fr">FR</span><span data-l="en">EN</span></button>
+        <button class="lang-btn" type="button"><span class="sr-only" data-i18n="nav.langLabel">Langue :</span><span data-l="fr">FR</span> <span data-l="en">EN</span></button>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
         </button>
       </nav>
     </header>
 
-    <main>
+    <main id="contenu">
       <!-- ============ 00:00 Intro ============ -->
       <section class="hero" id="intro" data-time="00:00">
         <div class="container hero-grid">
           <div>
             <span class="time fade-in" style="--d: 0.1s">00:00 — Intro</span>
             <h1>
+              <span class="sr-only">Damien Vaiton, </span>
               <span class="line"><span style="--i: 0" data-i18n="hero.l1">Développeur web,</span></span>
               <span class="line"><span style="--i: 1" data-i18n="hero.l2">entre <em class="gold">Symfony</em></span></span>
               <span class="line"><span style="--i: 2">&amp; <em class="gold">React</em>.</span></span>
@@ -362,7 +561,7 @@
         <div class="container about">
           <figure class="portrait reveal">
             <div class="portrait-img">
-              <img src="assets/img/profile.jpg" alt="Portrait de Damien Vaiton" data-i18n-attr="alt:about.alt" width="800" height="800" loading="lazy" />
+              <picture><source srcset="assets/img/profile.webp" type="image/webp" /><img src="assets/img/profile.jpg" alt="Portrait de Damien Vaiton" data-i18n-attr="alt:about.alt" width="800" height="800" loading="lazy" decoding="async" /></picture>
             </div>
             <figcaption data-i18n="about.caption">Bourg-en-Bresse, après minuit.</figcaption>
           </figure>

@@ -7,13 +7,21 @@
 
   // ---------- Langue : français dans le HTML, anglais dans i18n.js ----------
   var EN = window.I18N_EN || {};
+  // Priorité : ?lang= dans l'URL (liens hreflang), puis le choix mémorisé,
+  // puis la langue du navigateur. Les robots d'indexation voient le français.
+  var urlLang = new URLSearchParams(location.search).get("lang");
+  var isBot = /bot|crawl|spider|slurp|lighthouse|headlesschrome|gptbot|claude|perplexity/i.test(navigator.userAgent);
   var lang = (function () {
+    if (urlLang === "fr" || urlLang === "en") return urlLang;
     try {
       var saved = localStorage.getItem("lang");
       if (saved === "fr" || saved === "en") return saved;
     } catch (e) {}
+    if (isBot) return "fr";
     return /^fr/i.test(navigator.language || "fr") ? "fr" : "en";
   })();
+  var canonical = document.querySelector('link[rel="canonical"]');
+  var canonicalFr = canonical && canonical.getAttribute("href");
   function tr(key, fr) {
     return lang === "en" && EN[key] != null ? EN[key] : fr;
   }
@@ -35,6 +43,7 @@
     document.querySelectorAll(".lang-btn [data-l]").forEach(function (sp) {
       sp.classList.toggle("on", sp.getAttribute("data-l") === lang);
     });
+    if (canonical && canonicalFr) canonical.setAttribute("href", lang === "en" ? canonicalFr + "?lang=en" : canonicalFr);
   }
   applyLang();
   document.querySelectorAll(".lang-btn").forEach(function (btn) {
@@ -43,6 +52,11 @@
       try {
         localStorage.setItem("lang", lang);
       } catch (e) {}
+      // L'URL reflète la langue affichée (lien partageable, cohérent avec hreflang)
+      var u = new URL(location.href);
+      if (lang === "en") u.searchParams.set("lang", "en");
+      else u.searchParams.delete("lang");
+      history.replaceState(null, "", u.pathname + u.search + u.hash);
       applyLang();
     });
   });
@@ -436,7 +450,7 @@
 
   // ---------- Horloge : 00:00 en haut, l'aube en bas ----------
   var clock = document.querySelector(".clock");
-  var clockText = clock && clock.querySelector("span");
+  var clockText = clock && clock.querySelector(".clock-time");
   var timed = Array.prototype.slice.call(document.querySelectorAll("[data-time]"));
   var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 

@@ -3,43 +3,161 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title data-i18n="p.kinoa.title">Mangeuse de Kinoa · Damien Vaiton</title>
-    <meta name="description" content="Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution de rôles et quiz." data-i18n-attr="content:p.kinoa.desc" />
+    <title data-i18n="p.kinoa.title">Mangeuse de Kinoa, bot Discord Node.js · Damien Vaiton</title>
+    <meta name="description" content="Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution automatique de rôles et quiz sur les drapeaux pour un serveur d&#x27;amis." data-i18n-attr="content:p.kinoa.desc" />
+    <meta name="author" content="Damien Vaiton" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/kinoa.html?lang=en" />
+    <link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <link rel="me" href="https://www.linkedin.com/in/damien-vaiton/" />
+    <link rel="me" href="https://github.com/Damienvaiton" />
+
+    <link rel="preload" href="../assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="../favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <meta name="theme-color" content="#080b1d" />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:site_name" content="Damien Vaiton" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="Mangeuse de Kinoa · Damien Vaiton" />
-    <meta property="og:description" content="Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz." />
+    <meta property="og:title" content="Mangeuse de Kinoa, bot Discord Node.js · Damien Vaiton" />
+    <meta property="og:description" content="Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution automatique de rôles et quiz sur les drapeaux pour un serveur d&#x27;amis." />
     <meta property="og:url" content="https://damienvaiton.fr/projects/kinoa.html" />
     <meta property="og:image" content="https://damienvaiton.fr/assets/img/og/kinoa.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mangeuse de Kinoa : Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz." />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="article:author" content="https://damienvaiton.fr/" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mangeuse de Kinoa, bot Discord Node.js · Damien Vaiton" />
+    <meta name="twitter:description" content="Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution automatique de rôles et quiz sur les drapeaux pour un serveur d&#x27;amis." />
+    <meta name="twitter:image" content="https://damienvaiton.fr/assets/img/og/kinoa.jpg" />
+    <meta name="twitter:image:alt" content="Mangeuse de Kinoa : Un bot Discord pour animer un serveur entre amis : rôles automatiques et quiz." />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="../assets/css/site.css" />
-
-    <!-- Google Tag Manager -->
+    <!-- Google Tag Manager (chargé après l'affichage pour ne pas ralentir la page) -->
     <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-5BB8W2X");
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+          var j = document.createElement("script");
+          j.async = true;
+          j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-5BB8W2X";
+          document.head.appendChild(j);
+        }, 1500);
+      });
+    </script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://damienvaiton.fr/projects/kinoa.html",
+      "url": "https://damienvaiton.fr/projects/kinoa.html",
+      "name": "Mangeuse de Kinoa, bot Discord Node.js · Damien Vaiton",
+      "description": "Mangeuse de Kinoa, bot Discord en Node.js et Discord.js : attribution automatique de rôles et quiz sur les drapeaux pour un serveur d'amis.",
+      "inLanguage": "fr-FR",
+      "dateModified": "2026-10-12",
+      "isPartOf": {
+        "@id": "https://damienvaiton.fr/#website"
+      },
+      "about": {
+        "@id": "https://damienvaiton.fr/projects/kinoa.html#app"
+      },
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "breadcrumb": {
+        "@id": "https://damienvaiton.fr/projects/kinoa.html#breadcrumb"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://damienvaiton.fr/assets/img/og/kinoa.jpg",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://damienvaiton.fr/projects/kinoa.html#app",
+      "name": "Mangeuse de Kinoa",
+      "description": "Bot Discord en Node.js (Discord.js, Axios) : attribution automatique de rôles et quiz sur les drapeaux. Projet terminé, remplacé par Kitty.",
+      "applicationCategory": "CommunicationApplication",
+      "operatingSystem": "Discord",
+      "url": "https://damienvaiton.fr/projects/kinoa.html",
+      "image": "https://damienvaiton.fr/assets/img/og/kinoa.jpg",
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "creator": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "inLanguage": "fr"
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://damienvaiton.fr/projects/kinoa.html#code",
+      "name": "Mangeuse de Kinoa (code source)",
+      "programmingLanguage": [
+        "JavaScript"
+      ],
+      "runtimePlatform": "Node.js",
+      "author": {
+        "@id": "https://damienvaiton.fr/#person"
+      },
+      "targetProduct": {
+        "@id": "https://damienvaiton.fr/projects/kinoa.html#app"
+      },
+      "codeRepository": "https://github.com/Damienvaiton/Botdiscord"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://damienvaiton.fr/projects/kinoa.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://damienvaiton.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Projets",
+          "item": "https://damienvaiton.fr/#projets"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Mangeuse de Kinoa",
+          "item": "https://damienvaiton.fr/projects/kinoa.html"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://damienvaiton.fr/#person",
+      "name": "Damien Vaiton",
+      "url": "https://damienvaiton.fr/",
+      "sameAs": [
+        "https://www.linkedin.com/in/damien-vaiton/",
+        "https://github.com/Damienvaiton"
+      ]
+    }
+  ]
+}
     </script>
   </head>
 
@@ -53,29 +171,30 @@
       ></iframe
     ></noscript>
 
+    <a class="skip" href="#contenu" data-i18n="nav.skip">Aller au contenu</a>
     <div class="sky" aria-hidden="true"></div>
     <canvas class="stars" aria-hidden="true"></canvas>
     <div class="glow" aria-hidden="true"></div>
 
     <header class="nav">
       <nav class="nav-inner" aria-label="Navigation principale">
-        <a href="../index.html" class="brand">Damien Vaiton</a>
+        <a href="../" class="brand">Damien Vaiton</a>
         <ul class="nav-links">
-          <li><a href="../index.html#projets" data-i18n="nav.projects">Projets</a></li>
-          <li><a href="../index.html#parcours" data-i18n="nav.background">Parcours</a></li>
-          <li><a href="../index.html#contact">Contact</a></li>
+          <li><a href="../#projets" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="../#parcours" data-i18n="nav.background">Parcours</a></li>
+          <li><a href="../#contact">Contact</a></li>
         </ul>
-        <button class="lang-btn" type="button" aria-label="Changer de langue / Switch language"><span data-l="fr">FR</span><span data-l="en">EN</span></button>
+        <button class="lang-btn" type="button"><span class="sr-only" data-i18n="nav.langLabel">Langue :</span><span data-l="fr">FR</span> <span data-l="en">EN</span></button>
         <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
         </button>
       </nav>
     </header>
 
-    <main>
+    <main id="contenu">
       <section class="p-hero">
         <div class="container">
-          <a href="../index.html#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> <span data-i18n="p.back">La tracklist</span></a>
+          <a href="../#projets" class="back fade-in" style="--d: 0.1s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> <span data-i18n="p.back">La tracklist</span></a>
           <div><span class="time fade-in" style="--d: 0.2s" data-i18n="p.kinoa.track">Piste 06</span></div>
           <h1>
               <span class="line"><span style="--i: 0">Mangeuse de</span></span>
@@ -125,8 +244,8 @@
           <span class="time reveal" data-i18n="p.capTime">Captures</span>
           <h2 class="split" data-i18n="p.capTitle">En <em class="gold">images</em></h2>
           <div class="gallery landscape reveal">
-            <figure><img src="../assets/img/project/images/Kinoa1.jpg" alt="Le bot en action sur Discord" data-i18n-attr="alt:p.kinoa.cap0" loading="lazy" /><figcaption data-i18n="p.kinoa.cap0">Le bot en action sur Discord</figcaption></figure>
-            <figure><img src="../assets/img/project/images/Kinoa2.jpg" alt="Une commande du bot" data-i18n-attr="alt:p.kinoa.cap1" loading="lazy" /><figcaption data-i18n="p.kinoa.cap1">Une commande du bot</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/Kinoa1.webp" type="image/webp" /><img src="../assets/img/project/images/Kinoa1.jpg" alt="Le bot en action sur Discord" data-i18n-attr="alt:p.kinoa.cap0" width="540" height="491" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.kinoa.cap0">Le bot en action sur Discord</figcaption></figure>
+            <figure><picture><source srcset="../assets/img/project/images/Kinoa2.webp" type="image/webp" /><img src="../assets/img/project/images/Kinoa2.jpg" alt="Une commande du bot" data-i18n-attr="alt:p.kinoa.cap1" width="540" height="98" loading="lazy" decoding="async" /></picture><figcaption data-i18n="p.kinoa.cap1">Une commande du bot</figcaption></figure>
           </div>
 
           <a href="kitty.html" class="next">
@@ -140,7 +259,7 @@
     <footer class="footer">
       <div class="container">
         <span>© <span data-year>2026</span> Damien Vaiton</span>
-        <a href="../index.html" data-i18n="p.home">Retour à l'accueil</a>
+        <a href="../" data-i18n="p.home">Retour à l'accueil</a>
       </div>
     </footer>
 
