@@ -1,2 +1,4 @@
 .idea
 .DS_Store
+# Exports d'emploi du temps (données personnelles) : jamais dans le repo
+*.ics

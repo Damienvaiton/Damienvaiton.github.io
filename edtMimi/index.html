@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+			name="viewport"
+		/>
+		<meta name="robots" content="noindex, nofollow, noarchive" />
+
+		<link rel="manifest" href="manifest.webmanifest" />
+		<meta name="theme-color" content="#111418" />
+
+		<!-- Optimisation pour Safari / iOS -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="apple-mobile-web-app-title" content="Edt" />
+		<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+		<title>Edt</title>
+
+		<link rel="stylesheet" href="style.css" />
+	</head>
+
+	<body>
+		<main class="wrap">
+			<header>
+				<h1>Edt</h1>
+				<div id="statusLine" class="status">Chargement…</div>
+			</header>
+
+			<!-- Mise à jour : la fac ne fournit pas de lien d'abonnement, il faut
+			     réexporter le .ics à chaque changement puis l'importer ici. -->
+			<section class="update">
+				<div class="actions">
+					<a class="btn primary" id="fetchLink" href="#" target="_blank" rel="noopener">
+						1. Récupérer l'EDT
+					</a>
+					<label class="btn">
+						2. Importer le fichier
+						<input type="file" id="icsFileInput" class="visually-hidden" />
+					</label>
+				</div>
+				<p class="help">
+					Sur la page de la fac, touche « Export iCal ». Reviens ensuite ici,
+					touche « Importer le fichier » et choisis le .ics dans Téléchargements.
+				</p>
+			</section>
+
+			<section id="changesBox" class="changes" hidden></section>
+
+			<nav class="week-nav">
+				<button class="btn" id="prevWeek" aria-label="Semaine précédente">‹</button>
+				<div id="weekLabel" class="week-label">—</div>
+				<button class="btn" id="nextWeek" aria-label="Semaine suivante">›</button>
+			</nav>
+			<div class="week-tools">
+				<button class="btn" id="todayBtn">Aujourd'hui</button>
+				<label class="check">
+					<input type="checkbox" id="hideResInput" />
+					Masquer les réservations
+				</label>
+			</div>
+
+			<div id="weekList"></div>
+		</main>
+
+		<script src="app.js" defer></script>
+	</body>
+</html>
