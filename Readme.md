@@ -23,6 +23,7 @@ poussé sur `main` est publié tel quel.
 | `tools/build-en.py` | Génère `en/` et `sitemap.xml` à partir des pages françaises |
 | `edt/` | Application séparée, à ne pas modifier et non indexée (voir `robots.txt`) |
 | `robots.txt`, `sitemap.xml` | Référencement |
+| `.github/workflows/indexnow.yml` | Envoie les URL du sitemap à IndexNow (Bing…) après chaque publication |
 | `llms.txt`, `llms-full.txt` | Présentation du site pour les assistants IA |
 
 ## Modifier un texte
