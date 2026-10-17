@@ -1,4 +1,4 @@
-// Ciel étoilé, horloge de la nuit, apparitions, aperçus des projets.
+// Ciel étoilé, horloge de la nuit, apparitions, secrets, bracelet d'amitié.
 (function () {
   var root = document.documentElement;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -85,6 +85,53 @@
       applyLang();
     });
   });
+
+  // ---------- Secrets (la liste est sur la piste 13) ----------
+  var SECRETS = ["clock", "owl", "dawn", "bracelet", "track13"];
+  function foundSecrets() {
+    try {
+      var list = JSON.parse(localStorage.getItem("secrets") || "[]");
+      return Array.isArray(list)
+        ? list.filter(function (k) {
+            return SECRETS.indexOf(k) >= 0;
+          })
+        : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function secret(id, delay) {
+    var list = foundSecrets();
+    if (list.indexOf(id) >= 0) return;
+    list.push(id);
+    try {
+      localStorage.setItem("secrets", JSON.stringify(list));
+    } catch (e) {
+      return;
+    }
+    if (id === "track13") return;
+    setTimeout(function () {
+      toast(tr("js.secret", "✦ Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length));
+    }, delay || 600);
+  }
+  function toast(text) {
+    var t = document.createElement("div");
+    t.className = "secret-toast";
+    t.setAttribute("role", "status");
+    t.textContent = text;
+    document.body.appendChild(t);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        t.classList.add("on");
+      });
+    });
+    setTimeout(function () {
+      t.classList.remove("on");
+      setTimeout(function () {
+        t.remove();
+      }, 700);
+    }, 3400);
+  }
 
   // Les animations d'entrée démarrent dès que le DOM est prêt (le script est en
   // fin de page) : sans attendre images et polices, pour un meilleur LCP.
@@ -318,6 +365,7 @@
   function midnight() {
     if (eggOpen) return;
     eggOpen = true;
+    secret("clock", 6200);
     var ov = document.createElement("div");
     ov.className = "clock-egg";
     ov.setAttribute("role", "dialog");
@@ -410,7 +458,7 @@
   });
   if (window.console && console.log) {
     console.log(
-      "%c" + tr("js.hint", "✦ Psst… clique sur l'horloge, ou tape « midnights »."),
+      "%c" + tr("js.hint", "✦ Psst… clique sur l'horloge, ou tape « midnights ». Et quelque part, il y a une piste 13."),
       "font: italic 15px Georgia, serif; color: #d9b45f; padding: 6px 0;"
     );
   }
@@ -439,7 +487,24 @@
   var np = document.querySelector(".now-playing[data-lastfm-user]");
   if (np && np.dataset.lastfmUser && np.dataset.lastfmKey) {
     var npText = np.querySelector("[data-i18n]");
+    var vinylLabel = np.querySelector(".vinyl-label");
     var npTrack = null;
+    var coverUrl = null;
+    // La pochette de l'album devient l'étiquette du vinyle
+    function setCover(src) {
+      if (!vinylLabel || src === coverUrl) return;
+      coverUrl = src;
+      // Last.fm renvoie une image grise générique quand il n'a pas de pochette
+      if (!src || /2a96cbd8b46e442fc41c2b86b821562f/.test(src) || !/^https:\/\/[^"'()\s\\]+$/.test(src)) {
+        vinylLabel.style.backgroundImage = "";
+        return;
+      }
+      var im = new Image();
+      im.onload = function () {
+        if (coverUrl === src) vinylLabel.style.backgroundImage = 'url("' + src + '")';
+      };
+      im.src = src;
+    }
     function renderNowPlaying() {
       if (!npTrack) return;
       npText.removeAttribute("data-i18n");
@@ -455,6 +520,7 @@
       npText.appendChild(inner);
       np.classList.toggle("paused", !npTrack.live);
       np.title = npTrack.name + " — " + npTrack.artist;
+      setCover(npTrack.cover);
       fitNowPlaying();
     }
     // Si le texte dépasse, il défile d'un bout à l'autre
@@ -484,7 +550,11 @@
         .then(function (data) {
           var t = data && data.recenttracks && data.recenttracks.track && data.recenttracks.track[0];
           if (!t) return;
+          var img = (t.image || []).filter(function (i) {
+            return i.size === "medium";
+          })[0];
           npTrack = {
+            cover: img && img["#text"],
             name: t.name,
             artist: (t.artist && (t.artist["#text"] || t.artist.name)) || "",
             live: !!(t["@attr"] && t["@attr"].nowplaying === "true"),
@@ -529,6 +599,7 @@
       }
       owl.querySelector(".owl-close").addEventListener("click", hide);
       setTimeout(hide, 10000);
+      secret("owl", 10800);
     }, 2500);
   })();
 
@@ -582,6 +653,7 @@
     return (n < 10 ? "0" : "") + n;
   }
 
+  var dawnFound = false;
   function onScroll() {
     var y = window.scrollY;
     if (nav) nav.classList.toggle("scrolled", y > 30);
@@ -614,6 +686,10 @@
     var dawn = Math.max(0, Math.min(1, (m - 270) / 90));
     root.style.setProperty("--dawn", dawn.toFixed(3));
     if (clock) clock.classList.toggle("dawn-on", dawn > 0.5);
+    if (dawn >= 0.99 && !dawnFound) {
+      dawnFound = true;
+      secret("dawn");
+    }
 
     // Lien actif
     var current = null;
@@ -751,6 +827,348 @@
       g.classList.remove("dragging");
     });
   });
+
+  // ---------- Bracelet d'amitié ----------
+  // Comme à l'Eras Tour : des perles lettres sur un fil, entourées de perles rondes.
+  // Le même mot donne toujours le même bracelet (couleurs tirées depuis le mot).
+  var BEADS = [
+    ["#fff4cf", "#d9b45f", "#8a6a22"], // or
+    ["#6670d6", "#2a3180", "#10133a"], // nuit
+    ["#ece3ff", "#a68fe8", "#5e4aa3"], // lavande
+    ["#ffffff", "#dcd9ea", "#9a96b5"], // perle
+    ["#ffdbe6", "#e690ad", "#9c4766"], // rose
+  ];
+  function cleanWord(v) {
+    return (v || "")
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9 &!?♥]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 14);
+  }
+  function seeded(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return function () {
+      h = (h + 0x6d2b79f5) | 0;
+      var t = Math.imul(h ^ (h >>> 15), h | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  // compact : moins de perles autour du mot, pour les petits écrans
+  function beadsFor(word, compact) {
+    var rand = seeded(word || "✦");
+    var side = compact ? 1 : 2;
+    var seq = [];
+    function rounds(n) {
+      for (var i = 0; i < n; i++) seq.push({ t: "round", c: BEADS[(rand() * BEADS.length) | 0] });
+    }
+    rounds(side);
+    seq.push({ t: "star" });
+    rounds(side);
+    word.split("").forEach(function (ch) {
+      if (ch === " ") rounds(1);
+      else seq.push({ t: "letter", ch: ch, gold: rand() < 0.2 });
+    });
+    rounds(side);
+    seq.push({ t: "star" });
+    rounds(side);
+    return seq;
+  }
+  function roundRect(g, x, y, w, h, r) {
+    g.beginPath();
+    g.moveTo(x + r, y);
+    g.arcTo(x + w, y, x + w, y + h, r);
+    g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r);
+    g.arcTo(x, y, x + w, y, r);
+    g.closePath();
+  }
+  function starPath(g, r) {
+    g.beginPath();
+    g.moveTo(0, -r);
+    g.quadraticCurveTo(r * 0.18, -r * 0.18, r, 0);
+    g.quadraticCurveTo(r * 0.18, r * 0.18, 0, r);
+    g.quadraticCurveTo(-r * 0.18, r * 0.18, -r, 0);
+    g.quadraticCurveTo(-r * 0.18, -r * 0.18, 0, -r);
+    g.closePath();
+  }
+  // prog : de 0 à 1, les perles tombent une à une sur le fil
+  function drawBracelet(g, W, H, word, prog) {
+    var seq = beadsFor(word, W < 520);
+    var n = seq.length;
+    var units = 0;
+    seq.forEach(function (b) {
+      units += b.t === "letter" ? 1 : 0.78;
+    });
+    var unit = Math.min(H * 0.27, (W * 0.88) / (units + (n - 1) * 0.08));
+    var gap = unit * 0.08;
+    var total = unit * units + gap * (n - 1);
+    var cx = W / 2;
+    var baseY = H * 0.36;
+    var sag = H * 0.2;
+    function yAt(px) {
+      var k = (px - cx) / (W * 0.5);
+      return baseY + sag * (1 - k * k);
+    }
+    function angleAt(px) {
+      return Math.atan((-2 * sag * (px - cx)) / (W * W * 0.25));
+    }
+
+    // Le fil, avec un nœud et deux brins à chaque bout
+    g.save();
+    g.strokeStyle = "rgba(236, 211, 148, 0.6)";
+    g.lineWidth = Math.max(1, unit * 0.05);
+    g.lineCap = "round";
+    g.beginPath();
+    for (var sx = W * 0.05; sx <= W * 0.95; sx += 3) {
+      if (sx === W * 0.05) g.moveTo(sx, yAt(sx));
+      else g.lineTo(sx, yAt(sx));
+    }
+    g.stroke();
+    [W * 0.05, W * 0.95].forEach(function (ex, side) {
+      var dir = side ? 1 : -1;
+      var ey = yAt(ex);
+      g.fillStyle = "rgba(236, 211, 148, 0.8)";
+      g.beginPath();
+      g.arc(ex, ey, unit * 0.09, 0, Math.PI * 2);
+      g.fill();
+      for (var k = 0; k < 2; k++) {
+        g.beginPath();
+        g.moveTo(ex, ey);
+        g.quadraticCurveTo(ex + dir * unit * 0.3, ey + unit * (0.25 + k * 0.2), ex + dir * unit * (0.25 + k * 0.15), ey + unit * (0.6 + k * 0.25));
+        g.stroke();
+      }
+    });
+    g.restore();
+
+    var x = cx - total / 2;
+    seq.forEach(function (b, i) {
+      var bw = b.t === "letter" ? unit : unit * 0.78;
+      var bx = x + bw / 2;
+      x += bw + gap;
+      var appear = prog >= 1 ? 1 : Math.max(0, Math.min(1, (prog * (n + 6) - i) / 6));
+      if (appear <= 0) return;
+      var e = 1 - Math.pow(1 - appear, 3);
+      var by = yAt(bx) - (1 - e) * H * 0.3;
+      g.save();
+      g.globalAlpha = e;
+      g.translate(bx, by);
+      g.rotate(angleAt(bx));
+      g.shadowColor = "rgba(0, 0, 0, 0.4)";
+      g.shadowBlur = unit * 0.25;
+      g.shadowOffsetY = unit * 0.08;
+      if (b.t === "letter") {
+        var s = unit;
+        var grad = g.createLinearGradient(0, -s / 2, 0, s / 2);
+        if (b.gold) {
+          grad.addColorStop(0, "#fff4cf");
+          grad.addColorStop(0.5, "#e2c06e");
+          grad.addColorStop(1, "#a8862f");
+        } else {
+          grad.addColorStop(0, "#ffffff");
+          grad.addColorStop(1, "#d9d5ca");
+        }
+        roundRect(g, -s / 2, -s / 2, s, s, s * 0.18);
+        g.fillStyle = grad;
+        g.fill();
+        g.shadowColor = "transparent";
+        g.fillStyle = "rgba(255, 255, 255, 0.55)";
+        roundRect(g, -s * 0.38, -s * 0.42, s * 0.5, s * 0.14, s * 0.07);
+        g.fill();
+        g.fillStyle = b.gold ? "#2b1f06" : "#14163a";
+        g.font = "500 " + Math.round(s * 0.56) + "px Inter, system-ui, sans-serif";
+        g.textAlign = "center";
+        g.textBaseline = "middle";
+        g.fillText(b.ch, 0, s * 0.04);
+      } else if (b.t === "star") {
+        var rs = unit * 0.46;
+        var sg = g.createLinearGradient(-rs, -rs, rs, rs);
+        sg.addColorStop(0, "#fff4cf");
+        sg.addColorStop(0.5, "#d9b45f");
+        sg.addColorStop(1, "#9c7a2b");
+        starPath(g, rs);
+        g.fillStyle = sg;
+        g.fill();
+      } else {
+        var r = unit * 0.39;
+        var rg = g.createRadialGradient(-r * 0.35, -r * 0.4, r * 0.05, 0, 0, r);
+        rg.addColorStop(0, b.c[0]);
+        rg.addColorStop(0.55, b.c[1]);
+        rg.addColorStop(1, b.c[2]);
+        g.beginPath();
+        g.arc(0, 0, r, 0, Math.PI * 2);
+        g.fillStyle = rg;
+        g.fill();
+      }
+      g.restore();
+    });
+  }
+
+  var bCanvas = document.querySelector(".bracelet-canvas");
+  if (bCanvas && bCanvas.getContext) {
+    var bCtx = bCanvas.getContext("2d");
+    var bInput = document.getElementById("bracelet-word");
+    var bForm = document.querySelector(".bracelet-form");
+    var bShown = false;
+    var fontsReady =
+      document.fonts && document.fonts.load
+        ? Promise.all([document.fonts.load("500 20px Inter"), document.fonts.load("italic 300 20px Fraunces")]).catch(function () {})
+        : Promise.resolve();
+    var bWord = function () {
+      return cleanWord(bInput.value);
+    };
+    var renderBracelet = function (prog) {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var W = bCanvas.clientWidth;
+      var H = bCanvas.clientHeight;
+      if (!W || !H) return;
+      if (bCanvas.width !== Math.round(W * dpr) || bCanvas.height !== Math.round(H * dpr)) {
+        bCanvas.width = Math.round(W * dpr);
+        bCanvas.height = Math.round(H * dpr);
+      }
+      bCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      bCtx.clearRect(0, 0, W, H);
+      drawBracelet(bCtx, W, H, bWord(), prog);
+    };
+    var labelBracelet = function () {
+      var w = bWord();
+      bCanvas.setAttribute("aria-label", tr("js.braceletAlt", "Bracelet d'amitié") + (w ? " : " + w : ""));
+    };
+    var showBracelet = function () {
+      if (bShown) return;
+      bShown = true;
+      fontsReady.then(function () {
+        if (reduced) return renderBracelet(1);
+        var t0 = performance.now();
+        (function anim(t) {
+          var k = Math.min(1, (t - t0) / 1800);
+          renderBracelet(k);
+          if (k < 1) requestAnimationFrame(anim);
+        })(t0);
+      });
+    };
+    labelBracelet();
+    if ("IntersectionObserver" in window) {
+      var bio = new IntersectionObserver(
+        function (entries) {
+          if (entries[0].isIntersecting) {
+            bio.disconnect();
+            showBracelet();
+          }
+        },
+        { threshold: 0.4 }
+      );
+      bio.observe(bCanvas);
+    } else {
+      showBracelet();
+    }
+    langHooks.push(labelBracelet);
+    window.addEventListener("resize", function () {
+      if (bShown) renderBracelet(1);
+    });
+    bInput.addEventListener("input", function () {
+      bShown = true;
+      renderBracelet(1);
+      labelBracelet();
+      if (bWord()) secret("bracelet", 1200);
+    });
+    // Téléchargement : le bracelet sur un ciel de nuit, au format des réseaux sociaux
+    bForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var word = bWord();
+      var out = document.createElement("canvas");
+      out.width = 1200;
+      out.height = 630;
+      var g = out.getContext("2d");
+      var sky = g.createLinearGradient(0, 0, 0, 630);
+      sky.addColorStop(0, "#151a45");
+      sky.addColorStop(1, "#080b1d");
+      g.fillStyle = sky;
+      g.fillRect(0, 0, 1200, 630);
+      var halo = g.createRadialGradient(600, 300, 0, 600, 300, 520);
+      halo.addColorStop(0, "rgba(217, 180, 95, 0.12)");
+      halo.addColorStop(1, "rgba(217, 180, 95, 0)");
+      g.fillStyle = halo;
+      g.fillRect(0, 0, 1200, 630);
+      var rand = seeded("sky" + word);
+      for (var i = 0; i < 160; i++) {
+        g.fillStyle = (rand() < 0.1 ? "rgba(236,211,148," : "rgba(236,233,247,") + (rand() * 0.6 + 0.15) + ")";
+        g.beginPath();
+        g.arc(rand() * 1200, rand() * 630, rand() * 1.4 + 0.3, 0, Math.PI * 2);
+        g.fill();
+      }
+      fontsReady.then(function () {
+        g.save();
+        g.translate(60, 130);
+        drawBracelet(g, 1080, 320, word, 1);
+        g.restore();
+        g.fillStyle = "#ecd394";
+        g.font = "italic 300 34px Fraunces, Georgia, serif";
+        g.textAlign = "center";
+        g.fillText("damienvaiton.fr", 600, 560);
+        out.toBlob(function (blob) {
+          if (!blob) return;
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "bracelet-" + (word.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "midnights") + ".png";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () {
+            URL.revokeObjectURL(a.href);
+          }, 2000);
+        }, "image/png");
+      });
+      if (word) secret("bracelet", 1200);
+    });
+  }
+
+  // ---------- Piste 13 : les secrets trouvés ----------
+  var secretList = document.querySelector(".secrets");
+  if (secretList) {
+    secret("track13");
+    var got = foundSecrets();
+    secretList.querySelectorAll("[data-secret]").forEach(function (li) {
+      var found = got.indexOf(li.getAttribute("data-secret")) >= 0;
+      li.classList.toggle("found", found);
+    });
+    var countEl = document.querySelector(".secrets-n");
+    if (countEl) countEl.textContent = got.length;
+    var allEl = document.querySelector(".secrets-all");
+    if (allEl && got.length === SECRETS.length) {
+      allEl.hidden = false;
+      setTimeout(function () {
+        meteorShower(4000);
+      }, 1200);
+    }
+  }
+
+  // Crédits de la piste 13 : le morceau le plus écouté du mois, via Last.fm
+  var topEl = document.querySelector("[data-lastfm-top]");
+  if (topEl && topEl.dataset.lastfmUser && topEl.dataset.lastfmKey) {
+    fetch(
+      "https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&format=json&period=1month&limit=1" +
+        "&user=" + encodeURIComponent(topEl.dataset.lastfmUser) +
+        "&api_key=" + encodeURIComponent(topEl.dataset.lastfmKey)
+    )
+      .then(function (r) {
+        return r.ok ? r.json() : null;
+      })
+      .then(function (data) {
+        var t = data && data.toptracks && data.toptracks.track && data.toptracks.track[0];
+        if (!t) return;
+        topEl.removeAttribute("data-i18n");
+        topEl.textContent = t.name + " — " + ((t.artist && t.artist.name) || "");
+      })
+      .catch(function () {});
+  }
 
   // ---------- Copier l'email ----------
   document.querySelectorAll("[data-copy]").forEach(function (btn) {

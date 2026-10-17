@@ -342,7 +342,7 @@
 <pre><code data-i18n="hero.code"><span class="cl" style="--n:0"><span class="tk-c">// Open after midnight</span></span><span class="cl" style="--n:1"><span class="tk-a">#[Route('/damien')]</span></span><span class="cl" style="--n:2"><span class="tk-k">public function</span> <span class="tk-f">portrait</span>(): <span class="tk-k">Response</span></span><span class="cl" style="--n:3">{</span><span class="cl" style="--n:4">    <span class="tk-k">return</span> $this-&gt;<span class="tk-f">render</span>(<span class="tk-s">'dev.html.twig'</span>, [</span><span class="cl" style="--n:5">        <span class="tk-s">'role'</span>    =&gt; <span class="tk-s">'Web developer'</span>,</span><span class="cl" style="--n:6">        <span class="tk-s">'passion'</span> =&gt; <span class="tk-s">'music'</span>,</span><span class="cl" style="--n:7">        <span class="tk-s">'stack'</span>   =&gt; [<span class="tk-s">'Symfony'</span>, <span class="tk-s">'React'</span>],</span><span class="cl" style="--n:8">        <span class="tk-s">'city'</span>    =&gt; <span class="tk-s">'Bourg-en-Bresse'</span>,</span><span class="cl" style="--n:9">    ]);</span><span class="cl" style="--n:10">}<span class="caret"></span></span></code></pre>
             <!-- Last.fm : renseigner data-lastfm-user et data-lastfm-key pour afficher l'écoute en direct -->
             <div class="now-playing" data-lastfm-user="Damienlaloutre" data-lastfm-key="c28248f85e5b11555624ff92a8bd7fd2">
-              <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span class="vinyl" aria-hidden="true"><span class="vinyl-disc"><span class="vinyl-label"></span></span></span>
               <span class="np-text" data-i18n="hero.playing">Now playing · <em>Midnights</em></span>
             </div>
           </div>
@@ -422,6 +422,12 @@
                 <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
             </li>
+            <li class="track track-ghost">
+              <a href="piste-13.html">
+                <span class="track-n">13</span>
+                <h3 data-i18n="track.ghost">Hidden track</h3>
+              </a>
+            </li>
           </ol>
         </div>
       </section>
@@ -482,17 +488,17 @@
               <span class="time reveal" data-i18n="bg.time">03:00 — Background</span>
               <h2 class="split" data-i18n="bg.title">The <em class="gold">chapters</em></h2>
             </div>
-            <p class="reveal" data-i18n="bg.sub">Two internships, a Computer Science degree and two certifications.</p>
+            <p class="reveal" data-i18n="bg.sub">Four eras: high school, the degree and two internships. Certifications come as bonus tracks.</p>
           </div>
 
           <div class="frise reveal" aria-hidden="true">
             <div class="frise-row">
               <span class="frise-label" data-i18n="bg.exp">Experience</span>
-              <div class="frise-track"><span class="bar exp" style="--l: 66.43%; --w: 3.57%; --i: 2"><em>Effet B</em></span><span class="bar exp" style="--l: 89.0%; --w: 6.0%; --i: 3"><em>Lalemant</em></span></div>
+              <div class="frise-track"><span class="bar exp" style="--l: 66.43%; --w: 3.57%; --i: 2; --c: var(--era-3)"><em>Effet B</em></span><span class="bar exp" style="--l: 89.0%; --w: 6.0%; --i: 3; --c: var(--era-4)"><em>Lalemant</em></span></div>
             </div>
             <div class="frise-row">
               <span class="frise-label" data-i18n="bg.edu">Education</span>
-              <div class="frise-track"><span class="bar edu" style="--l: 1.0%; --w: 40.43%; --i: 0"><em data-i18n="bg.barBac">High school</em></span><span class="bar edu" style="--l: 43.86%; --w: 54.71%; --i: 1"><em data-i18n="bg.barBut">CS degree (BUT)</em></span></div>
+              <div class="frise-track"><span class="bar edu" style="--l: 1.0%; --w: 40.43%; --i: 0; --c: var(--era-1)"><em data-i18n="bg.barBac">High school</em></span><span class="bar edu" style="--l: 43.86%; --w: 54.71%; --i: 1; --c: var(--era-2)"><em data-i18n="bg.barBut">CS degree (BUT)</em></span></div>
             </div>
             <div class="frise-row">
               <span class="frise-label"></span>
@@ -500,25 +506,51 @@
             </div>
           </div>
 
-          <div class="parcours">
-            <div class="parcours-col">
-              <h3 class="col-title reveal" data-i18n="bg.expTitle">Experience <span>2 internships</span></h3>
-
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date" data-i18n="bg.lalDate">Nov. 2024 — Mar. 2025</span><span class="xp-tag" data-i18n="bg.lalTag">Internship · 5 months</span></div>
-                <h4><a href="https://lalemant.com/" target="_blank" rel="noopener">Lalemant France</a></h4>
-                <div class="xp-role" data-i18n="bg.fullstack">Full-stack developer</div>
-                <ul data-i18n="bg.lalList">
-                  <li><strong>New features:</strong> quoting and tender-response tools in the internal application.</li>
-                  <li><strong>Maintenance:</strong> handling tickets and fixing bugs.</li>
-                  <li><strong>Agile team</strong>, with deadlines to meet.</li>
+          <ol class="eras">
+            <li class="era reveal" style="--c: var(--era-1)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">I</span>
+                <span class="era-name">Era I</span>
+                <span class="era-date">2018 — 2021</span>
+              </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.bacTag">Diploma</span>
+                <h3 data-i18n="bg.bacTitle">Baccalauréat (high school diploma)</h3>
+                <div class="xp-role" data-i18n="bg.bacSchool">Joseph-Marie Carriat high school</div>
+                <ul data-i18n="bg.bacList">
+                  <li><strong>Majors:</strong> Mathematics and Computer Science.</li>
+                  <li><strong>European section</strong>, English.</li>
                 </ul>
-                <div class="xp-tags">PHP · JavaScript · SQL</div>
               </article>
+            </li>
 
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date" data-i18n="bg.ebDate">Apr. — Jun. 2023</span><span class="xp-tag" data-i18n="bg.ebTag">Internship · 3 months</span></div>
-                <h4><a href="https://www.effetb.com/" target="_blank" rel="noopener">Effet B</a></h4>
+            <li class="era reveal" style="--c: var(--era-2)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">II</span>
+                <span class="era-name">Era II</span>
+                <span class="era-date">2021 — 2025</span>
+              </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.butTag">Degree · 3 years</span>
+                <h3 data-i18n="bg.butTitle">Computer Science degree (BUT)</h3>
+                <div class="xp-role">IUT Lyon 1, Bourg-en-Bresse</div>
+                <ul data-i18n="bg.butList">
+                  <li><strong>Development:</strong> web, mobile and software.</li>
+                  <li><strong>Databases</strong> and team project management.</li>
+                  <li><strong>Projects:</strong> <a class="link" href="projects/fasttrack.html">FastTrack</a>, <a class="link" href="projects/edukid.html">Edukid</a>, <a class="link" href="projects/vegetabillisauditor.html">Vegetabillis Auditor</a>, <a class="link" href="projects/mcdosurfer.html">McDo Surfer</a>.</li>
+                </ul>
+              </article>
+            </li>
+
+            <li class="era reveal" style="--c: var(--era-3)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">III</span>
+                <span class="era-name">Era III</span>
+                <span class="era-date" data-i18n="bg.ebDate">Apr. — Jun. 2023</span>
+              </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.ebTag">Internship · 3 months</span>
+                <h3><a href="https://www.effetb.com/" target="_blank" rel="noopener">Effet B</a></h3>
                 <div class="xp-role" data-i18n="bg.fullstack">Full-stack developer</div>
                 <ul data-i18n="bg.ebList">
                   <li><strong>Ongoing maintenance</strong> of a management software package: <strong>6,650 users</strong> across 41 facilities.</li>
@@ -527,41 +559,37 @@
                 </ul>
                 <div class="xp-tags" data-i18n="bg.ebTags">PHP · Symfony · Project management</div>
               </article>
-            </div>
+            </li>
 
-            <div class="parcours-col">
-              <h3 class="col-title reveal" data-i18n="bg.eduTitle">Education <span>3-year degree</span></h3>
-
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date">2021 — 2025</span><span class="xp-tag" data-i18n="bg.butTag">Degree · 3 years</span></div>
-                <h4 data-i18n="bg.butTitle">Computer Science degree (BUT)</h4>
-                <div class="xp-role">IUT Lyon 1, Bourg-en-Bresse</div>
-                <ul data-i18n="bg.butList">
-                  <li><strong>Development:</strong> web, mobile and software.</li>
-                  <li><strong>Databases</strong> and team project management.</li>
-                  <li><strong>Projects:</strong> <a class="link" href="projects/fasttrack.html">FastTrack</a>, <a class="link" href="projects/edukid.html">Edukid</a>, <a class="link" href="projects/vegetabillisauditor.html">Vegetabillis Auditor</a>, <a class="link" href="projects/mcdosurfer.html">McDo Surfer</a>.</li>
-                </ul>
-              </article>
-
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date">2018 — 2021</span><span class="xp-tag" data-i18n="bg.bacTag">Diploma</span></div>
-                <h4 data-i18n="bg.bacTitle">Baccalauréat (high school diploma)</h4>
-                <div class="xp-role" data-i18n="bg.bacSchool">Joseph-Marie Carriat high school</div>
-                <ul data-i18n="bg.bacList">
-                  <li><strong>Majors:</strong> Mathematics and Computer Science.</li>
-                  <li><strong>European section</strong>, English.</li>
-                </ul>
-              </article>
-
-              <h3 class="col-title col-title-sub reveal">Certifications</h3>
-              <div class="certs">
-                <a class="cert reveal" href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing" target="_blank" rel="noopener">
-                  <b data-i18n="bg.english">English B2</b><span>TOEIC 790/990</span><i data-i18n="bg.cert">Certificate ↗</i>
-                </a>
-                <a class="cert reveal" style="--d: 0.1s" href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link" target="_blank" rel="noopener">
-                  <b data-i18n="bg.dpo">DPO certification</b><span data-i18n="bg.gdpr">GDPR · CNIL</span><i data-i18n="bg.cert">Certificate ↗</i>
-                </a>
+            <li class="era reveal" style="--c: var(--era-4)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">IV</span>
+                <span class="era-name">Era IV</span>
+                <span class="era-date" data-i18n="bg.lalDate">Nov. 2024 — Mar. 2025</span>
               </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.lalTag">Internship · 5 months</span>
+                <h3><a href="https://lalemant.com/" target="_blank" rel="noopener">Lalemant France</a></h3>
+                <div class="xp-role" data-i18n="bg.fullstack">Full-stack developer</div>
+                <ul data-i18n="bg.lalList">
+                  <li><strong>New features:</strong> quoting and tender-response tools in the internal application.</li>
+                  <li><strong>Maintenance:</strong> handling tickets and fixing bugs.</li>
+                  <li><strong>Agile team</strong>, with deadlines to meet.</li>
+                </ul>
+                <div class="xp-tags">PHP · JavaScript · SQL</div>
+              </article>
+            </li>
+          </ol>
+
+          <div class="bonus">
+            <h3 class="col-title reveal" data-i18n="bg.bonus">Bonus tracks <span>Certifications</span></h3>
+            <div class="certs">
+              <a class="cert reveal" href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing" target="_blank" rel="noopener">
+                <b data-i18n="bg.english">English B2</b><span>TOEIC 790/990</span><i data-i18n="bg.cert">Certificate ↗</i>
+              </a>
+              <a class="cert reveal" style="--d: 0.1s" href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link" target="_blank" rel="noopener">
+                <b data-i18n="bg.dpo">DPO certification</b><span data-i18n="bg.gdpr">GDPR · CNIL</span><i data-i18n="bg.cert">Certificate ↗</i>
+              </a>
             </div>
           </div>
         </div>
@@ -597,6 +625,16 @@
             <a class="link" href="https://github.com/Damienvaiton" target="_blank" rel="noopener">GitHub</a>
           </div>
           <button class="copy reveal" type="button" data-copy="damien.vaiton01@gmail.com" data-i18n="contact.copy">Copy address</button>
+
+          <div class="bracelet reveal">
+            <p class="bracelet-lead" data-i18n="bracelet.lead">At the Eras Tour, fans trade friendship bracelets. Type a word and I'll make you one.</p>
+            <canvas class="bracelet-canvas" role="img" aria-label="Friendship bracelet" data-i18n-attr="aria-label:bracelet.alt"></canvas>
+            <form class="bracelet-form">
+              <label class="sr-only" for="bracelet-word" data-i18n="bracelet.label">The bracelet's word</label>
+              <input id="bracelet-word" name="mot" type="text" value="MIDNIGHTS" maxlength="14" autocomplete="off" spellcheck="false" />
+              <button class="bracelet-save" type="submit" data-i18n="bracelet.save">Download</button>
+            </form>
+          </div>
         </div>
       </section>
     </main>

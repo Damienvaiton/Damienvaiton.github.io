@@ -345,7 +345,7 @@
 <pre><code data-i18n="hero.code"><span class="cl" style="--n:0"><span class="tk-c">// Ouvert après minuit</span></span><span class="cl" style="--n:1"><span class="tk-a">#[Route('/damien')]</span></span><span class="cl" style="--n:2"><span class="tk-k">public function</span> <span class="tk-f">portrait</span>(): <span class="tk-k">Response</span></span><span class="cl" style="--n:3">{</span><span class="cl" style="--n:4">    <span class="tk-k">return</span> $this-&gt;<span class="tk-f">render</span>(<span class="tk-s">'dev.html.twig'</span>, [</span><span class="cl" style="--n:5">        <span class="tk-s">'poste'</span>   =&gt; <span class="tk-s">'Développeur web'</span>,</span><span class="cl" style="--n:6">        <span class="tk-s">'passion'</span> =&gt; <span class="tk-s">'la musique'</span>,</span><span class="cl" style="--n:7">        <span class="tk-s">'stack'</span>   =&gt; [<span class="tk-s">'Symfony'</span>, <span class="tk-s">'React'</span>],</span><span class="cl" style="--n:8">        <span class="tk-s">'ville'</span>   =&gt; <span class="tk-s">'Bourg-en-Bresse'</span>,</span><span class="cl" style="--n:9">    ]);</span><span class="cl" style="--n:10">}<span class="caret"></span></span></code></pre>
             <!-- Last.fm : renseigner data-lastfm-user et data-lastfm-key pour afficher l'écoute en direct -->
             <div class="now-playing" data-lastfm-user="Damienlaloutre" data-lastfm-key="c28248f85e5b11555624ff92a8bd7fd2">
-              <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span class="vinyl" aria-hidden="true"><span class="vinyl-disc"><span class="vinyl-label"></span></span></span>
               <span class="np-text" data-i18n="hero.playing">En fond sonore · <em>Midnights</em></span>
             </div>
           </div>
@@ -425,6 +425,12 @@
                 <svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
             </li>
+            <li class="track track-ghost">
+              <a href="piste-13.html">
+                <span class="track-n">13</span>
+                <h3 data-i18n="track.ghost">Piste cachée</h3>
+              </a>
+            </li>
           </ol>
         </div>
       </section>
@@ -485,17 +491,17 @@
               <span class="time reveal" data-i18n="bg.time">03:00 — Parcours</span>
               <h2 class="split" data-i18n="bg.title">Les <em class="gold">chapitres</em></h2>
             </div>
-            <p class="reveal" data-i18n="bg.sub">Deux stages en entreprise, un BUT Informatique et deux certifications.</p>
+            <p class="reveal" data-i18n="bg.sub">Quatre eras : le lycée, le BUT et deux stages en entreprise. Les certifications sont en bonus.</p>
           </div>
 
           <div class="frise reveal" aria-hidden="true">
             <div class="frise-row">
               <span class="frise-label" data-i18n="bg.exp">Expérience</span>
-              <div class="frise-track"><span class="bar exp" style="--l: 66.43%; --w: 3.57%; --i: 2"><em>Effet B</em></span><span class="bar exp" style="--l: 89.0%; --w: 6.0%; --i: 3"><em>Lalemant</em></span></div>
+              <div class="frise-track"><span class="bar exp" style="--l: 66.43%; --w: 3.57%; --i: 2; --c: var(--era-3)"><em>Effet B</em></span><span class="bar exp" style="--l: 89.0%; --w: 6.0%; --i: 3; --c: var(--era-4)"><em>Lalemant</em></span></div>
             </div>
             <div class="frise-row">
               <span class="frise-label" data-i18n="bg.edu">Formation</span>
-              <div class="frise-track"><span class="bar edu" style="--l: 1.0%; --w: 40.43%; --i: 0"><em data-i18n="bg.barBac">Bac général</em></span><span class="bar edu" style="--l: 43.86%; --w: 54.71%; --i: 1"><em data-i18n="bg.barBut">BUT Informatique</em></span></div>
+              <div class="frise-track"><span class="bar edu" style="--l: 1.0%; --w: 40.43%; --i: 0; --c: var(--era-1)"><em data-i18n="bg.barBac">Bac général</em></span><span class="bar edu" style="--l: 43.86%; --w: 54.71%; --i: 1; --c: var(--era-2)"><em data-i18n="bg.barBut">BUT Informatique</em></span></div>
             </div>
             <div class="frise-row">
               <span class="frise-label"></span>
@@ -503,25 +509,51 @@
             </div>
           </div>
 
-          <div class="parcours">
-            <div class="parcours-col">
-              <h3 class="col-title reveal" data-i18n="bg.expTitle">Expérience <span>2 stages</span></h3>
-
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date" data-i18n="bg.lalDate">Nov. 2024 — Mars 2025</span><span class="xp-tag" data-i18n="bg.lalTag">Stage · 5 mois</span></div>
-                <h4><a href="https://lalemant.com/" target="_blank" rel="noopener">Lalemant France</a></h4>
-                <div class="xp-role" data-i18n="bg.fullstack">Développeur fullstack</div>
-                <ul data-i18n="bg.lalList">
-                  <li><strong>Nouvelles fonctionnalités :</strong> outils de cotation et de réponse aux appels d'offres dans l'application interne.</li>
-                  <li><strong>Maintenance :</strong> traitement des tickets et correction de bugs.</li>
-                  <li><strong>Équipe agile</strong>, avec des délais à tenir.</li>
+          <ol class="eras">
+            <li class="era reveal" style="--c: var(--era-1)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">I</span>
+                <span class="era-name">Era I</span>
+                <span class="era-date">2018 — 2021</span>
+              </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.bacTag">Diplôme</span>
+                <h3 data-i18n="bg.bacTitle">Baccalauréat général</h3>
+                <div class="xp-role" data-i18n="bg.bacSchool">Lycée Joseph-Marie Carriat</div>
+                <ul data-i18n="bg.bacList">
+                  <li><strong>Spécialités</strong> Mathématiques et NSI.</li>
+                  <li><strong>Section européenne</strong> anglais.</li>
                 </ul>
-                <div class="xp-tags">PHP · JavaScript · SQL</div>
               </article>
+            </li>
 
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date" data-i18n="bg.ebDate">Avr. — Juin 2023</span><span class="xp-tag" data-i18n="bg.ebTag">Stage · 3 mois</span></div>
-                <h4><a href="https://www.effetb.com/" target="_blank" rel="noopener">Effet B</a></h4>
+            <li class="era reveal" style="--c: var(--era-2)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">II</span>
+                <span class="era-name">Era II</span>
+                <span class="era-date">2021 — 2025</span>
+              </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.butTag">Diplôme · Bac + 3</span>
+                <h3 data-i18n="bg.butTitle">BUT Informatique</h3>
+                <div class="xp-role">IUT Lyon 1, Bourg-en-Bresse</div>
+                <ul data-i18n="bg.butList">
+                  <li><strong>Développement</strong> web, mobile et logiciel.</li>
+                  <li><strong>Bases de données</strong> et gestion de projet en équipe.</li>
+                  <li><strong>Projets :</strong> <a class="link" href="projects/fasttrack.html">FastTrack</a>, <a class="link" href="projects/edukid.html">Edukid</a>, <a class="link" href="projects/vegetabillisauditor.html">Vegetabillis Auditor</a>, <a class="link" href="projects/mcdosurfer.html">McDo Surfer</a>.</li>
+                </ul>
+              </article>
+            </li>
+
+            <li class="era reveal" style="--c: var(--era-3)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">III</span>
+                <span class="era-name">Era III</span>
+                <span class="era-date" data-i18n="bg.ebDate">Avr. — Juin 2023</span>
+              </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.ebTag">Stage · 3 mois</span>
+                <h3><a href="https://www.effetb.com/" target="_blank" rel="noopener">Effet B</a></h3>
                 <div class="xp-role" data-i18n="bg.fullstack">Développeur fullstack</div>
                 <ul data-i18n="bg.ebList">
                   <li><strong>Maintenance évolutive</strong> d'un progiciel de gestion : <strong>6 650 utilisateurs</strong> dans 41 établissements.</li>
@@ -530,41 +562,37 @@
                 </ul>
                 <div class="xp-tags" data-i18n="bg.ebTags">PHP · Symfony · Gestion de projet</div>
               </article>
-            </div>
+            </li>
 
-            <div class="parcours-col">
-              <h3 class="col-title reveal" data-i18n="bg.eduTitle">Formation <span>Bac + 3</span></h3>
-
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date">2021 — 2025</span><span class="xp-tag" data-i18n="bg.butTag">Diplôme · Bac + 3</span></div>
-                <h4 data-i18n="bg.butTitle">BUT Informatique</h4>
-                <div class="xp-role">IUT Lyon 1, Bourg-en-Bresse</div>
-                <ul data-i18n="bg.butList">
-                  <li><strong>Développement</strong> web, mobile et logiciel.</li>
-                  <li><strong>Bases de données</strong> et gestion de projet en équipe.</li>
-                  <li><strong>Projets :</strong> <a class="link" href="projects/fasttrack.html">FastTrack</a>, <a class="link" href="projects/edukid.html">Edukid</a>, <a class="link" href="projects/vegetabillisauditor.html">Vegetabillis Auditor</a>, <a class="link" href="projects/mcdosurfer.html">McDo Surfer</a>.</li>
-                </ul>
-              </article>
-
-              <article class="xp reveal">
-                <div class="xp-top"><span class="xp-date">2018 — 2021</span><span class="xp-tag" data-i18n="bg.bacTag">Diplôme</span></div>
-                <h4 data-i18n="bg.bacTitle">Baccalauréat général</h4>
-                <div class="xp-role" data-i18n="bg.bacSchool">Lycée Joseph-Marie Carriat</div>
-                <ul data-i18n="bg.bacList">
-                  <li><strong>Spécialités</strong> Mathématiques et NSI.</li>
-                  <li><strong>Section européenne</strong> anglais.</li>
-                </ul>
-              </article>
-
-              <h3 class="col-title col-title-sub reveal">Certifications</h3>
-              <div class="certs">
-                <a class="cert reveal" href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing" target="_blank" rel="noopener">
-                  <b data-i18n="bg.english">Anglais B2</b><span>TOEIC 790/990</span><i data-i18n="bg.cert">Certificat ↗</i>
-                </a>
-                <a class="cert reveal" style="--d: 0.1s" href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link" target="_blank" rel="noopener">
-                  <b data-i18n="bg.dpo">Certification DPO</b><span data-i18n="bg.gdpr">RGPD · CNIL</span><i data-i18n="bg.cert">Certificat ↗</i>
-                </a>
+            <li class="era reveal" style="--c: var(--era-4)">
+              <div class="era-side">
+                <span class="era-n" aria-hidden="true">IV</span>
+                <span class="era-name">Era IV</span>
+                <span class="era-date" data-i18n="bg.lalDate">Nov. 2024 — Mars 2025</span>
               </div>
+              <article class="era-body">
+                <span class="era-tag" data-i18n="bg.lalTag">Stage · 5 mois</span>
+                <h3><a href="https://lalemant.com/" target="_blank" rel="noopener">Lalemant France</a></h3>
+                <div class="xp-role" data-i18n="bg.fullstack">Développeur fullstack</div>
+                <ul data-i18n="bg.lalList">
+                  <li><strong>Nouvelles fonctionnalités :</strong> outils de cotation et de réponse aux appels d'offres dans l'application interne.</li>
+                  <li><strong>Maintenance :</strong> traitement des tickets et correction de bugs.</li>
+                  <li><strong>Équipe agile</strong>, avec des délais à tenir.</li>
+                </ul>
+                <div class="xp-tags">PHP · JavaScript · SQL</div>
+              </article>
+            </li>
+          </ol>
+
+          <div class="bonus">
+            <h3 class="col-title reveal" data-i18n="bg.bonus">Bonus tracks <span>Certifications</span></h3>
+            <div class="certs">
+              <a class="cert reveal" href="https://drive.google.com/file/d/11U-DjS6peTOISALp1NRMBTojJb4Ol3__/view?usp=sharing" target="_blank" rel="noopener">
+                <b data-i18n="bg.english">Anglais B2</b><span>TOEIC 790/990</span><i data-i18n="bg.cert">Certificat ↗</i>
+              </a>
+              <a class="cert reveal" style="--d: 0.1s" href="https://drive.google.com/drive/folders/1KIa1j05-QuB4_6Sq1l_cFdiqdDd_4EJI?usp=drive_link" target="_blank" rel="noopener">
+                <b data-i18n="bg.dpo">Certification DPO</b><span data-i18n="bg.gdpr">RGPD · CNIL</span><i data-i18n="bg.cert">Certificat ↗</i>
+              </a>
             </div>
           </div>
         </div>
@@ -606,6 +634,16 @@
             <a class="link" href="https://github.com/Damienvaiton" target="_blank" rel="noopener">GitHub</a>
           </div>
           <button class="copy reveal" type="button" data-copy="damien.vaiton01@gmail.com" data-i18n="contact.copy">Copier l'adresse</button>
+
+          <div class="bracelet reveal">
+            <p class="bracelet-lead" data-i18n="bracelet.lead">À l'Eras Tour, on s'échange des bracelets d'amitié. Écris un mot, je te fabrique le tien.</p>
+            <canvas class="bracelet-canvas" role="img" aria-label="Bracelet d'amitié" data-i18n-attr="aria-label:bracelet.alt"></canvas>
+            <form class="bracelet-form">
+              <label class="sr-only" for="bracelet-word" data-i18n="bracelet.label">Le mot du bracelet</label>
+              <input id="bracelet-word" name="mot" type="text" value="MIDNIGHTS" maxlength="14" autocomplete="off" spellcheck="false" />
+              <button class="bracelet-save" type="submit" data-i18n="bracelet.save">Télécharger</button>
+            </form>
+          </div>
         </div>
       </section>
     </main>

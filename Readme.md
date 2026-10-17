@@ -12,10 +12,11 @@ poussé sur `main` est publié tel quel.
 | --- | --- |
 | `index.html` | Page d'accueil (projets, stack, parcours, à propos, contact) |
 | `projects/*.html` | Une page par projet |
+| `piste-13.html` | Piste cachée (secrets du site et crédits), non indexée |
 | `en/` | Version anglaise, **générée** par `tools/build-en.py` (ne pas modifier à la main) |
 | `404.html` | Page « perdue dans la nuit » servie par GitHub Pages |
 | `assets/css/site.css` | Tout le style du site |
-| `assets/js/site.js` | Animations, horloge, easter egg, langue, Last.fm |
+| `assets/js/site.js` | Animations, horloge, easter eggs, langue, Last.fm, bracelet |
 | `assets/js/i18n.js` | Traductions anglaises |
 | `assets/fonts/` | Polices hébergées localement (licence OFL) |
 | `assets/img/` | Photo, captures des projets (JPG + WebP), images de partage (`og/`) |
@@ -49,7 +50,9 @@ manquantes. Penser aussi à mettre à jour `llms.txt` / `llms-full.txt` si l'inf
 
 ## Last.fm
 
-La pastille « En fond sonore » affiche le morceau en cours d'écoute. Elle se règle dans
+La pastille « En fond sonore » affiche le morceau en cours d'écoute, sur un petit vinyle qui
+tourne avec la pochette de l'album en étiquette (il s'arrête si rien n'est en cours d'écoute).
+La piste 13 affiche aussi le morceau le plus écouté du mois. Elle se règle dans
 `index.html`, sur l'élément `.now-playing` :
 
 ```html
@@ -59,9 +62,16 @@ La pastille « En fond sonore » affiche le morceau en cours d'écoute. Elle se 
 La clé est une clé d'API Last.fm en lecture seule. Sans ces deux valeurs, la pastille affiche
 simplement « Midnights ».
 
-## Easter egg
+## Secrets
 
-Cliquer sur l'horloge du menu, ou taper « midnights » au clavier.
+Cinq secrets, listés (et cochés) sur la piste 13 ; ceux qu'un visiteur a trouvés sont
+mémorisés dans son navigateur (`localStorage.secrets`) :
+
+1. **L'horloge de minuit** : cliquer sur l'horloge du menu, ou taper « midnights ».
+2. **L'oiseau de nuit** : visiter le site entre minuit et 5 h.
+3. **Jusqu'à l'aube** : descendre jusqu'à 06:00 sur l'accueil.
+4. **Le bracelet d'amitié** : dans Contact, écrire un mot (le bracelet se télécharge en PNG).
+5. **La piste 13** : trois points discrets sous la tracklist, révélés au survol.
 
 ## Lancer le site en local
 

@@ -29,7 +29,7 @@ PERSON_EN = {
 
 
 def pages():
-    out = ["index.html"]
+    out = ["index.html", "piste-13.html"]
     out += sorted("projects/" + f for f in os.listdir(os.path.join(ROOT, "projects")) if f.endswith(".html"))
     return out
 
@@ -203,6 +203,8 @@ def build_sitemap(sources):
     entries = []
     for page in pages():
         src = sources[page]
+        if 'name="robots" content="noindex' in src:   # la piste cachée reste hors du sitemap
+            continue
         imgs = re.findall(r'property="og:image" content="([^"]+)"', src)
         base_dir = os.path.dirname(page)
         for img in re.findall(r'<img[^>]+src="([^"]+)"', src):
