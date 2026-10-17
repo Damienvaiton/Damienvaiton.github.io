@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+			name="viewport"
+		/>
+		<meta name="robots" content="noindex, nofollow, noarchive" />
+
+		<link rel="manifest" href="manifest.webmanifest" />
+		<meta name="theme-color" content="#140b26" />
+
+		<!-- Optimisation pour Safari / iOS -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta
+			name="apple-mobile-web-app-status-bar-style"
+			content="black-translucent"
+		/>
+		<meta name="apple-mobile-web-app-title" content="Star Ac" />
+		<link rel="apple-touch-icon" href="icon-180.png" />
+		<link rel="icon" type="image/png" href="icon-192.png" />
+		<title>Star Ac</title>
+
+		<link
+			href="https://fonts.googleapis.com/css?family=Space+Grotesk:400,500,600,700|IBM+Plex+Mono:400,500"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="topbar">
+				<div class="topbar-row wrap-max">
+					<div class="brand">
+						<span class="brand-star">⭐</span>
+						<div>
+							<h1>Star Ac</h1>
+							<p class="brand-sub mono" id="promoLabel">Promo 2026</p>
+						</div>
+					</div>
+					<div class="topbar-actions">
+						<button class="icon-btn" id="shareBtn" aria-label="Partager mon classement en image">
+							<i class="bx bx-share-alt"></i>
+						</button>
+						<button class="icon-btn" id="settingsBtn" aria-label="Réglages">
+							<i class="bx bx-cog"></i>
+						</button>
+					</div>
+				</div>
+			</header>
+
+			<main class="wrap-max">
+				<!-- ============== Mon classement ============== -->
+				<section class="view" id="view-classement" data-view="classement">
+					<div class="view-head">
+						<h2>Ton classement</h2>
+						<p class="hint" id="rankCount"></p>
+					</div>
+					<p class="hint">
+						Glisse avec <i class="bx bx-menu"></i> ou touche un·e élève pour
+						choisir sa place.
+					</p>
+					<ol class="rank-list" id="rankList"></ol>
+					<div id="rankEliminated"></div>
+				</section>
+
+				<!-- ============== Élèves ============== -->
+				<section class="view" id="view-eleves" data-view="eleves" hidden>
+					<div class="view-head">
+						<h2>Élèves</h2>
+					</div>
+					<form class="card add-form" id="addForm" autocomplete="off">
+						<label for="addInput">Ajouter un·e élève</label>
+						<div class="field-row">
+							<input
+								id="addInput"
+								type="text"
+								maxlength="40"
+								placeholder="Prénom"
+								enterkeyhint="done"
+							/>
+							<button class="btn btn-primary" type="submit" aria-label="Ajouter">
+								<i class="bx bx-plus"></i>
+							</button>
+						</div>
+						<p class="hint">
+							Si tu ré-ajoutes un·e élève éliminé·e, il ou elle revient dans la
+							course.
+						</p>
+					</form>
+					<div id="elevesLists"></div>
+				</section>
+
+				<!-- ============== Historique ============== -->
+				<section class="view" id="view-historique" data-view="historique" hidden>
+					<div class="view-head">
+						<h2>Historique</h2>
+					</div>
+					<div class="card">
+						<h3>📸 Photo du prime</h3>
+						<p class="hint">
+							Enregistre ton classement du soir pour voir qui monte et qui
+							descend d'un prime à l'autre. Une photo est aussi prise toute seule
+							avant chaque élimination.
+						</p>
+						<button class="btn btn-primary btn-block" data-act="photo">
+							<i class="bx bx-camera"></i> Enregistrer mon classement du jour
+						</button>
+					</div>
+					<div id="historiqueList"></div>
+				</section>
+
+				<!-- ============== Potes ============== -->
+				<section class="view" id="view-potes" data-view="potes" hidden>
+					<div class="view-head">
+						<h2>Comparer</h2>
+					</div>
+					<div class="card">
+						<h3>Partager mon classement</h3>
+						<p class="hint" id="pseudoLine"></p>
+						<div class="btn-row">
+							<button class="btn btn-primary" data-act="share-link">
+								<i class="bx bx-link"></i> Lien à comparer
+							</button>
+							<button class="btn" data-act="share-image">
+								<i class="bx bx-image"></i> Image
+							</button>
+							<button class="btn" data-act="share-text">
+								<i class="bx bx-text"></i> Texte
+							</button>
+						</div>
+						<p class="hint">
+							Le lien contient ton classement : envoie-le à tes potes pour
+							qu'ils le comparent au leur.
+						</p>
+					</div>
+
+					<form class="card" id="importForm" autocomplete="off">
+						<label for="importInput">Ajouter le classement d'un·e pote</label>
+						<div class="field-row">
+							<input
+								id="importInput"
+								type="text"
+								placeholder="Colle son lien ici"
+								enterkeyhint="done"
+							/>
+							<button class="btn btn-primary" type="submit" aria-label="Ajouter">
+								<i class="bx bx-check"></i>
+							</button>
+						</div>
+						<p class="hint">
+							Si l'app est sur ton écran d'accueil, le lien s'ouvre dans le
+							navigateur : colle-le plutôt ici.
+						</p>
+					</form>
+
+					<div id="potesList"></div>
+				</section>
+			</main>
+
+			<!-- ============== Barre d'onglets ============== -->
+			<nav class="tabbar" aria-label="Navigation">
+				<div class="tabbar-row wrap-max">
+					<button class="tab" data-tab="classement">
+						<i class="bx bx-trophy"></i><span>Classement</span>
+					</button>
+					<button class="tab" data-tab="eleves">
+						<i class="bx bx-group"></i><span>Élèves</span>
+					</button>
+					<button class="tab" data-tab="historique">
+						<i class="bx bx-history"></i><span>Historique</span>
+					</button>
+					<button class="tab" data-tab="potes">
+						<i class="bx bx-git-compare"></i><span>Comparer</span>
+					</button>
+				</div>
+			</nav>
+		</div>
+
+		<!-- ============== Feuille modale (bas d'écran) ============== -->
+		<div class="sheet" id="sheet" hidden>
+			<div class="sheet-backdrop" data-close></div>
+			<div class="sheet-panel" role="dialog" aria-modal="true">
+				<div class="sheet-grip"></div>
+				<div class="sheet-body" id="sheetBody"></div>
+			</div>
+		</div>
+
+		<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+		<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+		<script src="app.js" defer></script>
+	</body>
+</html>
