@@ -232,6 +232,8 @@ window.I18N_EN = {
   "404.home": "Back to home",
   "404.projects": "See the projects",
   "js.copied": "Copied ✦",
+  "js.owl": "Up at <b>{t}</b> too?<br /><em>Welcome, fellow night owl.</em>",
+  "js.owlClose": "Close",
   "js.npNow": "Now playing",
   "js.npLast": "Last played",
   "js.hint": "✦ Psst… click the clock, or type “midnights”."

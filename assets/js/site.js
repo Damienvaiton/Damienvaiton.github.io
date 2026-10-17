@@ -5,46 +5,67 @@
   var finePointer = window.matchMedia("(pointer: fine)").matches;
   root.classList.add("js");
 
-  // ---------- Langue : français dans le HTML, anglais dans i18n.js ----------
+  // ---------- Langue ----------
+  // Pages du portfolio : une version française (/) et une version anglaise (/en/),
+  // générées par tools/build-en.py et reliées par les liens hreflang. Le bouton
+  // FR | EN passe de l'une à l'autre. La page 404 (unique) se traduit sur place
+  // grâce à i18n.js.
   var EN = window.I18N_EN || {};
-  // Priorité : ?lang= dans l'URL (liens hreflang), puis le choix mémorisé,
-  // puis la langue du navigateur. Les robots d'indexation voient le français.
-  var urlLang = new URLSearchParams(location.search).get("lang");
+  var altFr = document.querySelector('link[rel="alternate"][hreflang="fr"]');
+  var altEn = document.querySelector('link[rel="alternate"][hreflang="en"]');
+  var staticPages = !!(altFr && altEn);
+  // Même chemin que le lien hreflang, mais sur le domaine courant (prod, local, préversion)
+  function altUrl(link) {
+    return location.origin + new URL(link.href).pathname + location.hash;
+  }
   var isBot = /bot|crawl|spider|slurp|lighthouse|headlesschrome|gptbot|claude|perplexity/i.test(navigator.userAgent);
-  var lang = (function () {
-    if (urlLang === "fr" || urlLang === "en") return urlLang;
-    try {
-      var saved = localStorage.getItem("lang");
-      if (saved === "fr" || saved === "en") return saved;
-    } catch (e) {}
-    if (isBot) return "fr";
-    return /^fr/i.test(navigator.language || "fr") ? "fr" : "en";
-  })();
-  var canonical = document.querySelector('link[rel="canonical"]');
-  var canonicalFr = canonical && canonical.getAttribute("href");
+  var urlLang = new URLSearchParams(location.search).get("lang");
+  var saved = null;
+  try {
+    saved = localStorage.getItem("lang");
+  } catch (e) {}
+  if (saved !== "fr" && saved !== "en") saved = null;
+  var browserLang = /^fr/i.test(navigator.language || "fr") ? "fr" : "en";
+  var lang;
+  if (staticPages) {
+    lang = root.lang === "en" ? "en" : "fr";
+    // Redirection vers l'autre version (jamais pour les robots) : ancienne URL ?lang=en,
+    // choix mémorisé, ou première visite depuis un navigateur qui n'est pas en français.
+    if (!isBot) {
+      var wanted = urlLang === "en" || urlLang === "fr" ? urlLang : saved;
+      if (!wanted && lang === "fr") wanted = browserLang;
+      if (wanted && wanted !== lang) {
+        location.replace(altUrl(wanted === "en" ? altEn : altFr));
+        return;
+      }
+    }
+  } else {
+    lang = urlLang === "en" || urlLang === "fr" ? urlLang : saved || (isBot ? "fr" : browserLang);
+  }
   function tr(key, fr) {
     return lang === "en" && EN[key] != null ? EN[key] : fr;
   }
   var langHooks = [];
   function applyLang() {
     root.lang = lang;
-    document.querySelectorAll("[data-i18n]").forEach(function (el) {
-      if (el._fr === undefined) el._fr = el.innerHTML;
-      el.innerHTML = tr(el.getAttribute("data-i18n"), el._fr);
-    });
-    document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
-      el._frAttr = el._frAttr || {};
-      el.getAttribute("data-i18n-attr").split(";").forEach(function (pair) {
-        var parts = pair.split(":");
-        var attr = parts[0];
-        if (!(attr in el._frAttr)) el._frAttr[attr] = el.getAttribute(attr);
-        el.setAttribute(attr, tr(parts[1], el._frAttr[attr]));
+    if (!staticPages) {
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        if (el._fr === undefined) el._fr = el.innerHTML;
+        el.innerHTML = tr(el.getAttribute("data-i18n"), el._fr);
       });
-    });
+      document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
+        el._frAttr = el._frAttr || {};
+        el.getAttribute("data-i18n-attr").split(";").forEach(function (pair) {
+          var parts = pair.split(":");
+          var attr = parts[0];
+          if (!(attr in el._frAttr)) el._frAttr[attr] = el.getAttribute(attr);
+          el.setAttribute(attr, tr(parts[1], el._frAttr[attr]));
+        });
+      });
+    }
     document.querySelectorAll(".lang-btn [data-l]").forEach(function (sp) {
       sp.classList.toggle("on", sp.getAttribute("data-l") === lang);
     });
-    if (canonical && canonicalFr) canonical.setAttribute("href", lang === "en" ? canonicalFr + "?lang=en" : canonicalFr);
     langHooks.forEach(function (fn) {
       fn();
     });
@@ -52,15 +73,15 @@
   applyLang();
   document.querySelectorAll(".lang-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      lang = lang === "fr" ? "en" : "fr";
+      var next = lang === "fr" ? "en" : "fr";
       try {
-        localStorage.setItem("lang", lang);
+        localStorage.setItem("lang", next);
       } catch (e) {}
-      // L'URL reflète la langue affichée (lien partageable, cohérent avec hreflang)
-      var u = new URL(location.href);
-      if (lang === "en") u.searchParams.set("lang", "en");
-      else u.searchParams.delete("lang");
-      history.replaceState(null, "", u.pathname + u.search + u.hash);
+      if (staticPages) {
+        location.href = altUrl(next === "en" ? altEn : altFr);
+        return;
+      }
+      lang = next;
       applyLang();
     });
   });
@@ -478,6 +499,38 @@
     setInterval(fetchNowPlaying, 60000);
     document.addEventListener("visibilitychange", fetchNowPlaying);
   }
+
+  // ---------- Clin d'œil : visite entre minuit et 5 h du matin ----------
+  (function () {
+    if (new Date().getHours() >= 5) return;
+    try {
+      if (sessionStorage.getItem("owl")) return;
+      sessionStorage.setItem("owl", "1");
+    } catch (e) {}
+    setTimeout(function () {
+      var d = new Date();
+      var time = pad(d.getHours()) + ":" + pad(d.getMinutes());
+      var owl = document.createElement("div");
+      owl.className = "owl";
+      owl.setAttribute("role", "status");
+      owl.innerHTML =
+        '<span class="owl-moon" aria-hidden="true">☾</span><p>' +
+        tr("js.owl", "Toi aussi tu traînes ici à <b>{t}</b>&nbsp;?<br /><em>Bienvenue chez les oiseaux de nuit.</em>").replace("{t}", time) +
+        '</p><button type="button" class="owl-close" aria-label="' + tr("js.owlClose", "Fermer") + '">×</button>';
+      document.body.appendChild(owl);
+      requestAnimationFrame(function () {
+        owl.classList.add("on");
+      });
+      function hide() {
+        owl.classList.remove("on");
+        setTimeout(function () {
+          owl.remove();
+        }, 700);
+      }
+      owl.querySelector(".owl-close").addEventListener("click", hide);
+      setTimeout(hide, 10000);
+    }, 2500);
+  })();
 
   // ---------- Halo qui suit la souris ----------
   var glow = document.querySelector(".glow");

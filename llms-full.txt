@@ -6,7 +6,7 @@ Dernière mise à jour : 2026-10-12.
 
 ## En bref (English summary)
 
-Damien Vaiton is a web developer based in Bourg-en-Bresse, France. He builds web applications with PHP/Symfony on the back end and React on the front end, and holds a Computer Science degree (BUT Informatique, IUT Lyon 1, 2021-2025). His personal projects include Kitty, a TypeScript Discord bot running lyric blind tests for a pop fan community, Android apps in Kotlin and Java, an Arduino IoT system and a Unity game. Contact: damien.vaiton01@gmail.com.
+Damien Vaiton is a web developer based in Bourg-en-Bresse, France. He builds web applications with PHP/Symfony on the back end and React on the front end, and holds a Computer Science degree (BUT Informatique, IUT Lyon 1, 2021-2025). His personal projects include Kitty, a TypeScript Discord bot running lyric blind tests for a pop fan community, Android apps in Kotlin and Java, an Arduino IoT system and a Unity game. Contact: damien.vaiton01@gmail.com. English version of the site: https://damienvaiton.fr/en/
 
 ## Présentation
 

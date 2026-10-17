@@ -2,7 +2,7 @@
 
 > Portfolio de Damien Vaiton, développeur web PHP/Symfony et React basé à Bourg-en-Bresse (Ain, France), diplômé d'un BUT Informatique (IUT Lyon 1). Le site présente ses projets (bots Discord, applications Android, IoT, jeu Unity), son parcours et ses coordonnées.
 
-Damien Vaiton développe des applications web, de la logique métier en PHP avec Symfony jusqu'aux interfaces en React. Sur son temps libre, il crée des bots Discord en TypeScript, dont Kitty, un bot de blind test de paroles pour une communauté de fans de pop. Le site existe en français (par défaut) et en anglais (`?lang=en`).
+Damien Vaiton développe des applications web, de la logique métier en PHP avec Symfony jusqu'aux interfaces en React. Sur son temps libre, il crée des bots Discord en TypeScript, dont Kitty, un bot de blind test de paroles pour une communauté de fans de pop. Le site existe en français (par défaut) et en anglais, sous https://damienvaiton.fr/en/.
 
 ## Profil
 
@@ -37,4 +37,4 @@ Damien Vaiton développe des applications web, de la logique métier en PHP avec
 ## Optional
 
 - [Version complète pour les IA](https://damienvaiton.fr/llms-full.txt): tout le contenu du site en texte brut
-- [Version anglaise du site](https://damienvaiton.fr/?lang=en)
+- [Version anglaise du site](https://damienvaiton.fr/en/)

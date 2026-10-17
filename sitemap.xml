@@ -4,26 +4,49 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://damienvaiton.fr/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/" />
     <image:image><image:loc>https://damienvaiton.fr/assets/img/og/home.jpg</image:loc></image:image>
     <image:image><image:loc>https://damienvaiton.fr/assets/img/profile.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://damienvaiton.fr/projects/kitty.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kitty.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/kitty.html?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kitty.html" />
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/kitty.jpg</image:loc></image:image>
+    <loc>https://damienvaiton.fr/en/</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/home.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/profile.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/projects/edukid.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/edukid.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/edukid.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/edukid.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/edukid.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidhome.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidtheme.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidgame.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/en/projects/edukid.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/edukid.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/edukid.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/edukid.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/edukid.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidhome.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidtheme.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidgame.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://damienvaiton.fr/projects/fasttrack.html</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/fasttrack.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/fasttrack.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/fasttrack.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/fasttrack.html" />
     <image:image><image:loc>https://damienvaiton.fr/assets/img/og/fasttrack.jpg</image:loc></image:image>
     <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/fasttrackhome.jpg</image:loc></image:image>
@@ -32,10 +55,78 @@
     <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/fasttrackshop.jpg</image:loc></image:image>
   </url>
   <url>
+    <loc>https://damienvaiton.fr/en/projects/fasttrack.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/fasttrack.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/fasttrack.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/fasttrack.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/fasttrack.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/fasttrackhome.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/fasttrackranking.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/fasttrackschedule.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/fasttrackshop.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/projects/kinoa.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/kinoa.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/kinoa.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/Kinoa1.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/Kinoa2.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/en/projects/kinoa.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/kinoa.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kinoa.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/kinoa.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/Kinoa1.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/Kinoa2.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/projects/kitty.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kitty.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/kitty.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kitty.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/kitty.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/en/projects/kitty.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kitty.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/kitty.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kitty.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/kitty.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/projects/mcdosurfer.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/mcdosurfer.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/mcdosurfer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/mcdosurfer1.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/mcdosurfer2.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://damienvaiton.fr/en/projects/mcdosurfer.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/mcdosurfer.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/mcdosurfer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/mcdosurfer1.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/mcdosurfer2.jpg</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://damienvaiton.fr/projects/vegetabillisauditor.html</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/vegetabillisauditor.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/vegetabillisauditor.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
     <image:image><image:loc>https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg</image:loc></image:image>
     <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/va1.jpg</image:loc></image:image>
@@ -43,34 +134,14 @@
     <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/va3.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://damienvaiton.fr/projects/edukid.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/edukid.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/edukid.html?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/edukid.html" />
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/edukid.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidhome.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidtheme.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/edukidgame.jpg</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://damienvaiton.fr/projects/mcdosurfer.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/mcdosurfer.html?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/mcdosurfer.html" />
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/mcdosurfer.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/mcdosurfer1.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/mcdosurfer2.jpg</image:loc></image:image>
-  </url>
-  <url>
-    <loc>https://damienvaiton.fr/projects/kinoa.html</loc>
-    <lastmod>2026-10-12</lastmod>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/kinoa.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/projects/kinoa.html?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/kinoa.html" />
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/kinoa.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/Kinoa1.jpg</image:loc></image:image>
-    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/Kinoa2.jpg</image:loc></image:image>
+    <loc>https://damienvaiton.fr/en/projects/vegetabillisauditor.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://damienvaiton.fr/en/projects/vegetabillisauditor.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://damienvaiton.fr/projects/vegetabillisauditor.html" />
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/og/vegetabillisauditor.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/va1.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/va2.jpg</image:loc></image:image>
+    <image:image><image:loc>https://damienvaiton.fr/assets/img/project/images/va3.jpg</image:loc></image:image>
   </url>
 </urlset>
