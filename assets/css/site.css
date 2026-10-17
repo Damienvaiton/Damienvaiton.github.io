@@ -1,9 +1,3 @@
-/* ==========================================================================
-   Damien Vaiton — portfolio
-   Une nuit, de 00:00 à l'aube. Bleu nuit, lavande, touches d'or.
-   ========================================================================== */
-
-/* ---------- Polices (hébergées localement, voir assets/fonts/LICENSE.txt) ---------- */
 @font-face {
   font-family: "Fraunces";
   font-style: normal;
@@ -21,19 +15,27 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url("../fonts/inter-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "JetBrains Mono";
+  font-family: "IBM Plex Sans";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
+  src: url("../fonts/plex-sans-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/plex-sans-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/plex-mono-400.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -43,14 +45,11 @@
   --ink: #ece9f7;
   --muted: #9b98be;
   --dim: #8784ad;
-  --haze: #b9acec;
+  --haze: #a9b2d4;
   --gold: #d9b45f;
   --gold-soft: #ecd394;
-  /* Une couleur par era du parcours */
   --era-1: #8fd3bb;
   --era-2: #b99df2;
-  --era-3: #8fc9f4;
-  --era-4: #e2c06e;
   --line: rgba(233, 207, 142, 0.2);
   --line-soft: rgba(255, 255, 255, 0.07);
   --gold-grad: linear-gradient(
@@ -65,15 +64,14 @@
   );
 
   --serif: "Fraunces", "Times New Roman", serif;
-  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
   --max: 1200px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dawn: 0;
   color-scheme: dark;
 }
 
-/* ---------- Base ---------- */
 *,
 *::before,
 *::after {
@@ -137,7 +135,6 @@ p {
   white-space: nowrap;
 }
 
-/* Texte doré qui scintille */
 .gold {
   background: var(--gold-grad);
   background-size: 220% 100%;
@@ -159,7 +156,7 @@ p {
 picture {
   display: contents;
 }
-/* Lien d'évitement : visible seulement au clavier */
+/* visible seulement au clavier */
 .skip {
   position: fixed;
   top: 12px;
@@ -177,7 +174,6 @@ picture {
   transform: none;
 }
 
-/* ---------- Ciel : nuit -> aube ---------- */
 .sky,
 .dawn,
 .stars {
@@ -202,26 +198,6 @@ picture {
   height: 100%;
   opacity: calc(1 - var(--dawn) * 0.75);
 }
-.glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 560px;
-  height: 560px;
-  margin: -280px 0 0 -280px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(185, 172, 236, 0.09), transparent 65%);
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.6s;
-  will-change: transform;
-}
-.glow.on {
-  opacity: 1;
-}
-
-/* ---------- Nav ---------- */
 .nav {
   position: fixed;
   inset: 0 0 auto 0;
@@ -359,7 +335,6 @@ picture {
   height: 18px;
 }
 
-/* ---------- Libellés de section ---------- */
 .time {
   display: inline-flex;
   align-items: center;
@@ -370,6 +345,9 @@ picture {
   text-transform: uppercase;
   color: var(--gold);
 }
+.time span {
+  color: var(--muted);
+}
 .time::before {
   content: "";
   width: 34px;
@@ -377,7 +355,6 @@ picture {
   background: var(--gold);
 }
 
-/* ---------- Boutons ---------- */
 .btn {
   position: relative;
   display: inline-flex;
@@ -458,7 +435,6 @@ picture {
   }
 }
 
-/* ---------- Hero ---------- */
 .hero {
   min-height: 100svh;
   display: flex;
@@ -523,11 +499,9 @@ picture {
   letter-spacing: 0.08em;
   color: var(--dim);
 }
-.hero-meta span::before {
-  content: "✦";
-  color: var(--gold);
-  margin-right: 10px;
-  font-size: 10px;
+.hero-meta span + span {
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
 }
 .js .fade-in {
   opacity: 0;
@@ -548,7 +522,6 @@ picture {
   transform: none;
 }
 
-/* Carte de code */
 .code-card {
   position: relative;
   border: 1px solid var(--line);
@@ -674,7 +647,7 @@ picture {
 .now-playing {
   max-width: calc(100% - 44px);
 }
-/* Titre du morceau : défile s'il est trop long, comme dans un lecteur */
+/* titres longs : défilement façon lecteur */
 .np-text {
   display: block;
   min-width: 0;
@@ -702,13 +675,16 @@ picture {
     transform: translateX(calc(-1 * var(--dist, 0px)));
   }
 }
-/* Vinyle : la pochette du morceau en étiquette, il tourne pendant l'écoute */
 .now-playing {
   padding: 6px 16px 6px 6px;
 }
 .vinyl {
   position: relative;
   flex: none;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -755,48 +731,26 @@ picture {
 .now-playing.paused .vinyl-disc {
   animation-play-state: paused;
 }
+.vinyl.scratch .vinyl-disc {
+  animation: scratch 0.7s cubic-bezier(0.3, 0, 0.2, 1);
+}
+@keyframes scratch {
+  0% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(-200deg);
+  }
+  100% {
+    transform: rotate(160deg);
+  }
+}
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* ---------- Bandeau défilant ---------- */
-.marquee {
-  overflow: hidden;
-  padding: 26px 0;
-  border-block: 1px solid var(--line-soft);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 48s linear infinite;
-}
-.marquee span {
-  display: flex;
-  align-items: center;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(28px, 3.4vw, 44px);
-  color: var(--muted);
-  white-space: nowrap;
-}
-.marquee span::after {
-  content: "✦";
-  font-style: normal;
-  font-size: 0.4em;
-  color: var(--gold);
-  margin: 0 0.9em;
-}
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* ---------- Sections ---------- */
 .section {
   padding: 140px 0;
 }
@@ -820,7 +774,6 @@ picture {
   font-size: 16px;
 }
 
-/* Mots qui montent */
 .split .w {
   display: inline-block;
   overflow: hidden;
@@ -838,7 +791,6 @@ picture {
   transform: none;
 }
 
-/* Apparition au scroll */
 .js .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -852,7 +804,6 @@ picture {
   filter: none;
 }
 
-/* ---------- Tracklist (projets) ---------- */
 .tracklist {
   list-style: none;
   margin: 0;
@@ -932,53 +883,6 @@ picture {
   transition: opacity 0.5s;
 }
 
-/* Piste 13 : après un silence, trois points. Elle ne se révèle qu'au survol */
-.track-ghost {
-  margin-top: 64px;
-}
-.tracklist .track-ghost a,
-.tracklist:hover .track-ghost a {
-  grid-template-columns: 72px 1fr;
-  padding: 18px 0;
-  border-bottom: none;
-  opacity: 1;
-}
-.track-ghost a > * {
-  opacity: 0;
-  filter: blur(3px);
-  transition: opacity 1.4s var(--ease), filter 1.4s var(--ease);
-}
-.track-ghost a:hover > *,
-.track-ghost a:focus-visible > * {
-  opacity: 0.8;
-  filter: none;
-}
-.track-ghost a::before {
-  content: "· · ·";
-  position: absolute;
-  left: 2px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--serif);
-  font-size: 20px;
-  color: var(--dim);
-  opacity: 0.5;
-  transition: opacity 0.8s;
-}
-.track-ghost a:hover::before,
-.track-ghost a:focus-visible::before {
-  opacity: 0;
-}
-.track-ghost a::after {
-  display: none;
-}
-.track-ghost h3 {
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(24px, 2.6vw, 32px);
-}
-
-/* ---------- Instruments (stack) ---------- */
 .instruments {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1061,7 +965,6 @@ picture {
   white-space: nowrap;
 }
 
-/* ---------- Parcours : frise + deux colonnes ---------- */
 .frise {
   margin-bottom: 70px;
 }
@@ -1178,7 +1081,6 @@ picture {
   padding: 48px 0 52px;
   border-bottom: 1px solid var(--line-soft);
 }
-/* Halo à la couleur de l'era */
 .era::before {
   content: "";
   position: absolute;
@@ -1282,36 +1184,56 @@ picture {
   font-size: 19px;
   color: var(--haze);
 }
-.era ul {
+.era-text {
+  max-width: 62ch;
   margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.era li {
-  position: relative;
-  padding-left: 20px;
   color: var(--muted);
   font-size: 15.5px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
-.era li + li {
-  margin-top: 6px;
-}
-.era li::before {
-  content: "✦";
-  position: absolute;
-  left: 0;
-  top: 2px;
-  font-size: 9px;
-  color: var(--c);
-}
-.era li strong {
-  color: var(--ink);
-  font-weight: 500;
-}
-.era li .link {
+.era-text .link {
   font-size: inherit;
   padding-bottom: 1px;
+}
+.stages {
+  margin-top: 34px;
+  display: grid;
+  gap: 30px;
+}
+.stage {
+  padding: 26px 0 0 28px;
+  border-top: 1px solid var(--line-soft);
+  border-left: 1px solid var(--gold);
+}
+.stage-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-bottom: 10px;
+}
+.stage-date {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--gold);
+}
+.stage .era-tag {
+  --c: var(--gold);
+  margin: 0;
+}
+.stage h4 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.15;
+}
+.stage h4 a {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.6s var(--ease);
+}
+.stage h4 a:hover {
+  background-size: 100% 1px;
 }
 .xp-tags {
   margin-top: 16px;
@@ -1342,7 +1264,6 @@ picture {
   color: var(--gold);
 }
 
-/* ---------- Moi ---------- */
 .about {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
@@ -1421,7 +1342,6 @@ picture {
   color: var(--ink);
   font-weight: 500;
 }
-/* ---------- Contact (l'aube) ---------- */
 .contact {
   padding: 180px 0 120px;
   text-align: center;
@@ -1499,7 +1419,6 @@ picture {
   color: var(--gold-soft);
 }
 
-/* ---------- Footer ---------- */
 .footer {
   padding: 34px 0 44px;
   border-top: 1px solid var(--line-soft);
@@ -1521,7 +1440,6 @@ picture {
   color: var(--gold-soft);
 }
 
-/* ---------- Pages projet ---------- */
 .p-hero {
   padding: 170px 0 0;
 }
@@ -1744,7 +1662,6 @@ picture {
   transform: translateX(16px);
 }
 
-/* Mention « dépôt privé » */
 .private {
   display: inline-flex;
   align-items: center;
@@ -1764,7 +1681,6 @@ picture {
   border-radius: 50%;
 }
 
-/* ---------- Rendu d'un salon Discord (page Kitty) ---------- */
 .showcase-note {
   margin: -20px 0 34px;
   color: var(--muted);
@@ -1876,8 +1792,28 @@ picture {
 .dc-btn.primary {
   background: #5865f2;
 }
+button.dc-btn {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button.dc-btn.primary:hover {
+  background: #4752c4;
+}
+.dc-streak {
+  display: inline-block;
+}
+.dc-streak.bump {
+  animation: bump 0.5s var(--ease);
+}
+@keyframes bump {
+  40% {
+    transform: scale(1.5);
+    color: #ffb36b;
+  }
+}
 
-/* ---------- Easter egg : l'horloge de minuit ---------- */
 .clock {
   cursor: pointer;
   transition: border-color 0.4s, box-shadow 0.4s;
@@ -2009,7 +1945,6 @@ picture {
   color: transparent;
 }
 
-/* ---------- Transitions entre les pages ---------- */
 @view-transition {
   navigation: auto;
 }
@@ -2040,7 +1975,6 @@ html.leaving body {
   transition: opacity 0.4s var(--ease), filter 0.4s var(--ease);
 }
 
-/* ---------- Clin d'œil nocturne ---------- */
 .owl {
   position: fixed;
   left: 24px;
@@ -2108,7 +2042,6 @@ html.leaving body {
   }
 }
 
-/* ---------- Bracelet d'amitié (contact) ---------- */
 .bracelet {
   position: relative;
   max-width: 640px;
@@ -2116,13 +2049,14 @@ html.leaving body {
   padding-top: 64px;
 }
 .bracelet::before {
-  content: "✦";
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: var(--gold);
+  width: 40px;
+  height: 1px;
+  margin-left: -20px;
+  background: var(--gold);
 }
 .bracelet-lead {
   max-width: 460px;
@@ -2181,7 +2115,6 @@ html.leaving body {
   color: var(--night);
 }
 
-/* ---------- Secret trouvé ---------- */
 .secret-toast {
   position: fixed;
   left: 50%;
@@ -2208,8 +2141,18 @@ html.leaving body {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+a.secret-toast {
+  pointer-events: auto;
+  border-color: var(--gold);
+}
+a.secret-toast:hover {
+  background: rgba(30, 26, 20, 0.95);
+}
+.track-ghost .track-n,
+.track-ghost h3 {
+  font-style: italic;
+}
 
-/* ---------- Piste 13 ---------- */
 .secrets-head {
   display: flex;
   align-items: flex-end;
@@ -2248,7 +2191,8 @@ html.leaving body {
   border-bottom: 1px solid var(--line-soft);
 }
 .secret-mark {
-  font-size: 18px;
+  font-family: var(--mono);
+  font-size: 13px;
   color: var(--dim);
   transition: color 0.6s, text-shadow 0.6s;
 }
@@ -2281,9 +2225,15 @@ html.leaving body {
 .secret.found .s-found {
   display: inline;
 }
+.ticket-canvas {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 12 / 5;
+  margin: 0 auto 26px;
+}
 .secret.found .secret-mark {
   color: var(--gold);
-  text-shadow: 0 0 14px rgba(217, 180, 95, 0.7);
 }
 .secret.found h3 {
   color: var(--ink);
@@ -2291,49 +2241,6 @@ html.leaving body {
 .secret.found .secret-state {
   color: var(--gold);
 }
-.secrets-all {
-  margin-top: 30px;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 22px;
-  color: var(--gold-soft);
-}
-.secrets-all[hidden] {
-  display: none;
-}
-.credits {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0 60px;
-  margin: 0;
-  border-top: 1px solid var(--line-soft);
-}
-.credits div {
-  padding: 22px 0;
-  border-bottom: 1px solid var(--line-soft);
-}
-.credits dt {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.credits dd {
-  margin: 8px 0 0;
-  font-family: var(--serif);
-  font-size: 22px;
-  line-height: 1.35;
-}
-.credits dd small {
-  display: block;
-  margin-top: 4px;
-  font-family: var(--sans);
-  font-size: 14px;
-  color: var(--muted);
-}
-
-/* ---------- Responsive ---------- */
 @media (max-width: 1020px) {
   .hero-grid {
     grid-template-columns: 1fr;
@@ -2501,9 +2408,8 @@ html.leaving body {
   .era-body {
     padding-left: 24px;
   }
-  .tracklist .track-ghost a,
-  .tracklist:hover .track-ghost a {
-    grid-template-columns: 40px 1fr;
+  .stage {
+    padding-left: 18px;
   }
   .bracelet {
     margin-top: 90px;
@@ -2517,9 +2423,6 @@ html.leaving body {
   .secret-state {
     grid-column: 2;
     grid-row: auto;
-  }
-  .credits {
-    grid-template-columns: 1fr;
   }
   .portrait {
     margin-right: 22px;

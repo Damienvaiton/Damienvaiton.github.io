@@ -1,20 +1,15 @@
-// Ciel étoilé, horloge de la nuit, apparitions, secrets, bracelet d'amitié.
 (function () {
   var root = document.documentElement;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var finePointer = window.matchMedia("(pointer: fine)").matches;
   root.classList.add("js");
 
-  // ---------- Langue ----------
-  // Pages du portfolio : une version française (/) et une version anglaise (/en/),
-  // générées par tools/build-en.py et reliées par les liens hreflang. Le bouton
-  // FR | EN passe de l'une à l'autre. La page 404 (unique) se traduit sur place
-  // grâce à i18n.js.
+  // langue
+  // / et /en/ sont deux pages statiques (tools/build-en.py). Seule la 404 se traduit sur place.
   var EN = window.I18N_EN || {};
   var altFr = document.querySelector('link[rel="alternate"][hreflang="fr"]');
   var altEn = document.querySelector('link[rel="alternate"][hreflang="en"]');
   var staticPages = !!(altFr && altEn);
-  // Même chemin que le lien hreflang, mais sur le domaine courant (prod, local, préversion)
+  // même chemin que le hreflang, mais sur le domaine courant (marche aussi en local)
   function altUrl(link) {
     return location.origin + new URL(link.href).pathname + location.hash;
   }
@@ -29,8 +24,7 @@
   var lang;
   if (staticPages) {
     lang = root.lang === "en" ? "en" : "fr";
-    // Redirection vers l'autre version (jamais pour les robots) : ancienne URL ?lang=en,
-    // choix mémorisé, ou première visite depuis un navigateur qui n'est pas en français.
+    // pas de redirection pour les robots, sinon Google ne verrait jamais la version FR
     if (!isBot) {
       var wanted = urlLang === "en" || urlLang === "fr" ? urlLang : saved;
       if (!wanted && lang === "fr") wanted = browserLang;
@@ -86,8 +80,18 @@
     });
   });
 
-  // ---------- Secrets (la liste est sur la piste 13) ----------
-  var SECRETS = ["clock", "owl", "dawn", "bracelet", "track13"];
+  // chasse aux secrets
+  // indices dans la console ; la piste 13 n'apparaît qu'une fois les 6 trouvés
+  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lost"];
+  var HINTS = {
+    clock: "L'heure, en haut de la page, n'est pas qu'une décoration.",
+    vinyl: "Un vinyle, ça se scratche.",
+    dawn: "Va jusqu'au bout de la nuit.",
+    bracelet: "À l'Eras Tour, on s'échange quelque chose.",
+    kitty: "Kitty en est à 8 victoires d'affilée. Aide-la.",
+    lost: "Perds-toi.",
+  };
+  var PISTE_13 = (location.pathname.indexOf("/en/") === 0 ? "/en/" : "/") + "piste-13.html";
   function foundSecrets() {
     try {
       var list = JSON.parse(localStorage.getItem("secrets") || "[]");
@@ -100,24 +104,34 @@
       return [];
     }
   }
+  function unlocked() {
+    return foundSecrets().length === SECRETS.length;
+  }
   function secret(id, delay) {
     var list = foundSecrets();
     if (list.indexOf(id) >= 0) return;
     list.push(id);
+    var done = list.length === SECRETS.length;
     try {
       localStorage.setItem("secrets", JSON.stringify(list));
+      if (done) localStorage.setItem("secretsDone", String(Date.now()));
     } catch (e) {
       return;
     }
-    if (id === "track13") return;
     setTimeout(function () {
-      toast(tr("js.secret", "✦ Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length));
+      if (done) {
+        toast(tr("js.unlocked", "Piste 13 débloquée →"), PISTE_13);
+        addHiddenTrack();
+      } else {
+        toast(tr("js.secret", "Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length));
+      }
     }, delay || 600);
   }
-  function toast(text) {
-    var t = document.createElement("div");
+  function toast(text, href) {
+    var t = document.createElement(href ? "a" : "div");
     t.className = "secret-toast";
-    t.setAttribute("role", "status");
+    if (href) t.href = href;
+    else t.setAttribute("role", "status");
     t.textContent = text;
     document.body.appendChild(t);
     requestAnimationFrame(function () {
@@ -130,18 +144,31 @@
       setTimeout(function () {
         t.remove();
       }, 700);
-    }, 3400);
+    }, href ? 9000 : 3400);
   }
+  function addHiddenTrack() {
+    var list = document.querySelector(".tracklist");
+    if (!list || list.querySelector(".track-ghost")) return;
+    var li = document.createElement("li");
+    li.className = "track track-ghost";
+    li.innerHTML =
+      '<a href="piste-13.html"><span class="track-n">13</span><h3></h3><span class="track-desc"></span><span class="track-tech"></span>' +
+      '<svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>';
+    li.querySelector("h3").textContent = tr("track.ghost", "Piste cachée");
+    li.querySelector(".track-desc").textContent = tr("track.ghostDesc", "Tu as trouvé les six secrets.");
+    list.appendChild(li);
+  }
+  if (unlocked()) addHiddenTrack();
+  if (document.querySelector(".hero.lost")) secret("lost", 1500);
 
-  // Les animations d'entrée démarrent dès que le DOM est prêt (le script est en
-  // fin de page) : sans attendre images et polices, pour un meilleur LCP.
+  // sans attendre les images ni les polices (LCP)
   requestAnimationFrame(function () {
     requestAnimationFrame(function () {
       root.classList.add("loaded");
     });
   });
 
-  // ---------- Ciel étoilé ----------
+  // ciel
   var meteorShower = function () {};
   var canvas = document.querySelector(".stars");
   if (canvas && canvas.getContext) {
@@ -233,9 +260,7 @@
     requestAnimationFrame(draw);
   }
 
-  // ---------- Easter egg : l'horloge de minuit ----------
-  // Cliquer sur l'horloge du menu (ou taper « midnights ») fait apparaître
-  // une grande horloge qui avance jusqu'à minuit, puis pluie d'étoiles.
+  // easter egg : l'horloge de minuit
   var NUMERALS = ["XII", "I", "II", "III", "IIII", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
 
   function clockSvg() {
@@ -297,7 +322,6 @@
         color: colors[(Math.random() * colors.length) | 0],
       });
     }
-    // Étoiles filantes dessinées au-dessus du voile de l'horloge
     var streaks = [];
     for (var s2 = 0; s2 < 14; s2++) {
       streaks.push({
@@ -419,7 +443,6 @@
       timers.push(setTimeout(strike, 300));
       return;
     }
-    // Les aiguilles avancent jusqu'à minuit, en ralentissant à l'approche
     timers.push(
       setTimeout(function () {
         var t0 = performance.now();
@@ -457,13 +480,17 @@
     }
   });
   if (window.console && console.log) {
-    console.log(
-      "%c" + tr("js.hint", "✦ Psst… clique sur l'horloge, ou tape « midnights ». Et quelque part, il y a une piste 13."),
-      "font: italic 15px Georgia, serif; color: #d9b45f; padding: 6px 0;"
-    );
+    var got0 = foundSecrets();
+    var lines = [
+      tr("js.hunt", "Psst. {t} secrets sont cachés sur ce site ({n} trouvés).")
+        .replace("{t}", SECRETS.length)
+        .replace("{n}", got0.length),
+    ];
+    SECRETS.forEach(function (k) {
+      if (got0.indexOf(k) < 0) lines.push("· " + tr("t13." + k + "H", HINTS[k]));
+    });
+    console.log("%c" + lines.join("\n"), "font: italic 15px Georgia, serif; color: #d9b45f; padding: 6px 0; line-height: 1.6;");
   }
-
-  // ---------- Transition de sortie (navigateurs sans View Transitions) ----------
   if (!("CSSViewTransitionRule" in window) && !reduced) {
     document.addEventListener("click", function (e) {
       var a = e.target.closest && e.target.closest("a[href]");
@@ -483,14 +510,13 @@
     });
   }
 
-  // ---------- « En fond sonore » : écoute en direct via Last.fm ----------
+  // Last.fm
   var np = document.querySelector(".now-playing[data-lastfm-user]");
   if (np && np.dataset.lastfmUser && np.dataset.lastfmKey) {
     var npText = np.querySelector("[data-i18n]");
     var vinylLabel = np.querySelector(".vinyl-label");
     var npTrack = null;
     var coverUrl = null;
-    // La pochette de l'album devient l'étiquette du vinyle
     function setCover(src) {
       if (!vinylLabel || src === coverUrl) return;
       coverUrl = src;
@@ -516,14 +542,13 @@
       var em = document.createElement("em");
       em.textContent = npTrack.name;
       inner.appendChild(em);
-      inner.appendChild(document.createTextNode(" — " + npTrack.artist));
+      inner.appendChild(document.createTextNode(" · " + npTrack.artist));
       npText.appendChild(inner);
       np.classList.toggle("paused", !npTrack.live);
-      np.title = npTrack.name + " — " + npTrack.artist;
+      np.title = npTrack.name + " · " + npTrack.artist;
       setCover(npTrack.cover);
       fitNowPlaying();
     }
-    // Si le texte dépasse, il défile d'un bout à l'autre
     function fitNowPlaying() {
       var inner = npText.querySelector(".np-inner");
       if (!inner) return;
@@ -562,15 +587,12 @@
           renderNowPlaying();
         })
         .catch(function () {
-          // En cas d'erreur, on garde simplement le texte par défaut
         });
     }
     fetchNowPlaying();
     setInterval(fetchNowPlaying, 60000);
     document.addEventListener("visibilitychange", fetchNowPlaying);
   }
-
-  // ---------- Clin d'œil : visite entre minuit et 5 h du matin ----------
   (function () {
     if (new Date().getHours() >= 5) return;
     try {
@@ -599,31 +621,8 @@
       }
       owl.querySelector(".owl-close").addEventListener("click", hide);
       setTimeout(hide, 10000);
-      secret("owl", 10800);
     }, 2500);
   })();
-
-  // ---------- Halo qui suit la souris ----------
-  var glow = document.querySelector(".glow");
-  if (glow && finePointer && !reduced) {
-    var gx = 0,
-      gy = 0,
-      tx = 0,
-      ty = 0;
-    window.addEventListener("pointermove", function (e) {
-      tx = e.clientX;
-      ty = e.clientY;
-      glow.classList.add("on");
-    });
-    (function loop() {
-      gx += (tx - gx) * 0.08;
-      gy += (ty - gy) * 0.08;
-      glow.style.transform = "translate(" + gx + "px," + gy + "px)";
-      requestAnimationFrame(loop);
-    })();
-  }
-
-  // ---------- Nav : fond au scroll + menu mobile ----------
   var nav = document.querySelector(".nav");
   var menuBtn = document.querySelector(".menu-btn");
   if (menuBtn) {
@@ -639,7 +638,7 @@
     });
   }
 
-  // ---------- Horloge : 00:00 en haut, l'aube en bas ----------
+  // l'horloge suit le scroll : 00:00 en haut, 06:00 en bas
   var clock = document.querySelector(".clock");
   var clockText = clock && clock.querySelector(".clock-time");
   var timed = Array.prototype.slice.call(document.querySelectorAll("[data-time]"));
@@ -659,7 +658,6 @@
     if (nav) nav.classList.toggle("scrolled", y > 30);
     if (!timed.length) return;
 
-    // Interpolation entre les sections (chacune porte son heure)
     var probe = y + window.innerHeight * 0.45;
     var max = document.documentElement.scrollHeight - window.innerHeight;
     var points = timed.map(function (el) {
@@ -691,7 +689,6 @@
       secret("dawn");
     }
 
-    // Lien actif
     var current = null;
     timed.forEach(function (el) {
       if (el.id && el.getBoundingClientRect().top < window.innerHeight * 0.5) current = el.id;
@@ -703,8 +700,6 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
   onScroll();
-
-  // ---------- Titres : mots qui montent ----------
   document.querySelectorAll(".split").forEach(function (el) {
     var i = 0;
     (function wrap(node) {
@@ -739,8 +734,6 @@
       });
     })(el);
   });
-
-  // ---------- Apparitions au scroll ----------
   var observed = document.querySelectorAll(".reveal, .split");
   if ("IntersectionObserver" in window && !reduced) {
     var io = new IntersectionObserver(
@@ -762,37 +755,6 @@
       el.classList.add("in");
     });
   }
-
-  // ---------- Carte de code : légère inclinaison 3D ----------
-  var card = document.querySelector(".code-card");
-  if (card && finePointer && !reduced) {
-    card.addEventListener("pointermove", function (e) {
-      var r = card.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width - 0.5;
-      var y = (e.clientY - r.top) / r.height - 0.5;
-      card.style.transform = "perspective(900px) rotateY(" + x * 6 + "deg) rotateX(" + -y * 6 + "deg)";
-    });
-    card.addEventListener("pointerleave", function () {
-      card.style.transform = "";
-    });
-  }
-
-  // ---------- Boutons aimantés ----------
-  if (finePointer && !reduced) {
-    document.querySelectorAll(".btn").forEach(function (b) {
-      b.addEventListener("pointermove", function (e) {
-        var r = b.getBoundingClientRect();
-        var x = e.clientX - r.left - r.width / 2;
-        var y = e.clientY - r.top - r.height / 2;
-        b.style.transform = "translate(" + x * 0.15 + "px," + y * 0.25 + "px)";
-      });
-      b.addEventListener("pointerleave", function () {
-        b.style.transform = "";
-      });
-    });
-  }
-
-  // ---------- Parallaxe de la photo ----------
   var portrait = document.querySelector(".portrait-img img");
   if (portrait && !reduced) {
     var frame = portrait.parentNode;
@@ -806,8 +768,6 @@
       { passive: true }
     );
   }
-
-  // ---------- Galerie : glisser pour défiler ----------
   document.querySelectorAll(".gallery").forEach(function (g) {
     var down = false,
       startX = 0,
@@ -828,9 +788,8 @@
     });
   });
 
-  // ---------- Bracelet d'amitié ----------
-  // Comme à l'Eras Tour : des perles lettres sur un fil, entourées de perles rondes.
-  // Le même mot donne toujours le même bracelet (couleurs tirées depuis le mot).
+  // bracelet d'amitié
+  // couleurs tirées du mot : même mot, même bracelet
   var BEADS = [
     ["#fff4cf", "#d9b45f", "#8a6a22"], // or
     ["#6670d6", "#2a3180", "#10133a"], // nuit
@@ -863,7 +822,7 @@
   }
   // compact : moins de perles autour du mot, pour les petits écrans
   function beadsFor(word, compact) {
-    var rand = seeded(word || "✦");
+    var rand = seeded(word || "*");
     var side = compact ? 1 : 2;
     var seq = [];
     function rounds(n) {
@@ -921,7 +880,6 @@
       return Math.atan((-2 * sag * (px - cx)) / (W * W * 0.25));
     }
 
-    // Le fil, avec un nœud et deux brins à chaque bout
     g.save();
     g.strokeStyle = "rgba(236, 211, 148, 0.6)";
     g.lineWidth = Math.max(1, unit * 0.05);
@@ -983,7 +941,7 @@
         roundRect(g, -s * 0.38, -s * 0.42, s * 0.5, s * 0.14, s * 0.07);
         g.fill();
         g.fillStyle = b.gold ? "#2b1f06" : "#14163a";
-        g.font = "500 " + Math.round(s * 0.56) + "px Inter, system-ui, sans-serif";
+        g.font = "500 " + Math.round(s * 0.56) + "px 'IBM Plex Sans', system-ui, sans-serif";
         g.textAlign = "center";
         g.textBaseline = "middle";
         g.fillText(b.ch, 0, s * 0.04);
@@ -1019,7 +977,7 @@
     var bShown = false;
     var fontsReady =
       document.fonts && document.fonts.load
-        ? Promise.all([document.fonts.load("500 20px Inter"), document.fonts.load("italic 300 20px Fraunces")]).catch(function () {})
+        ? Promise.all([document.fonts.load("500 20px 'IBM Plex Sans'"), document.fonts.load("italic 300 20px Fraunces")]).catch(function () {})
         : Promise.resolve();
     var bWord = function () {
       return cleanWord(bInput.value);
@@ -1079,7 +1037,7 @@
       labelBracelet();
       if (bWord()) secret("bracelet", 1200);
     });
-    // Téléchargement : le bracelet sur un ciel de nuit, au format des réseaux sociaux
+    // export en 1200x630 pour les réseaux
     bForm.addEventListener("submit", function (e) {
       e.preventDefault();
       var word = bWord();
@@ -1129,54 +1087,227 @@
       if (word) secret("bracelet", 1200);
     });
   }
+  var vinyl = document.querySelector(".vinyl");
+  if (vinyl) {
+    vinyl.addEventListener("click", function () {
+      vinyl.classList.remove("scratch");
+      void vinyl.offsetWidth;
+      vinyl.classList.add("scratch");
+      secret("vinyl", 900);
+    });
+    vinyl.addEventListener("animationend", function (e) {
+      if (e.animationName === "scratch") vinyl.classList.remove("scratch");
+    });
+  }
+  var replay = document.querySelector(".dc-replay");
+  if (replay) {
+    var streak = 8;
+    replay.addEventListener("click", function () {
+      streak++;
+      document.querySelectorAll(".dc-streak").forEach(function (el) {
+        el.textContent = streak;
+        el.classList.remove("bump");
+        void el.offsetWidth;
+        el.classList.add("bump");
+      });
+      secret("kitty", 700);
+    });
+  }
 
-  // ---------- Piste 13 : les secrets trouvés ----------
+  // piste 13
   var secretList = document.querySelector(".secrets");
   if (secretList) {
-    secret("track13");
     var got = foundSecrets();
     secretList.querySelectorAll("[data-secret]").forEach(function (li) {
-      var found = got.indexOf(li.getAttribute("data-secret")) >= 0;
-      li.classList.toggle("found", found);
+      li.classList.toggle("found", got.indexOf(li.getAttribute("data-secret")) >= 0);
     });
     var countEl = document.querySelector(".secrets-n");
     if (countEl) countEl.textContent = got.length;
-    var allEl = document.querySelector(".secrets-all");
-    if (allEl && got.length === SECRETS.length) {
-      allEl.hidden = false;
-      setTimeout(function () {
-        meteorShower(4000);
-      }, 1200);
+    if (got.length === SECRETS.length) {
+      document.querySelectorAll(".t13-locked").forEach(function (el) {
+        el.hidden = true;
+      });
+      document.querySelectorAll(".t13-open").forEach(function (el) {
+        el.hidden = false;
+      });
+      ticket();
     }
   }
 
-  // Crédits de la piste 13 : le morceau le plus écouté du mois, via Last.fm
-  var topEl = document.querySelector("[data-lastfm-top]");
-  if (topEl && topEl.dataset.lastfmUser && topEl.dataset.lastfmKey) {
-    fetch(
-      "https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&format=json&period=1month&limit=1" +
-        "&user=" + encodeURIComponent(topEl.dataset.lastfmUser) +
-        "&api_key=" + encodeURIComponent(topEl.dataset.lastfmKey)
-    )
-      .then(function (r) {
-        return r.ok ? r.json() : null;
-      })
-      .then(function (data) {
-        var t = data && data.toptracks && data.toptracks.track && data.toptracks.track[0];
-        if (!t) return;
-        topEl.removeAttribute("data-i18n");
-        topEl.textContent = t.name + " — " + ((t.artist && t.artist.name) || "");
-      })
-      .catch(function () {});
-  }
+  function ticket() {
+    var tc = document.querySelector(".ticket-canvas");
+    if (!tc || !tc.getContext) return;
+    var tInput = document.getElementById("ticket-name");
+    var tForm = document.querySelector(".ticket-form");
+    var when = new Date();
+    try {
+      var stamp = +localStorage.getItem("secretsDone");
+      if (stamp) when = new Date(stamp);
+    } catch (e) {}
+    var fonts =
+      document.fonts && document.fonts.load
+        ? Promise.all([
+            document.fonts.load("italic 300 40px Fraunces"),
+            document.fonts.load("400 40px Fraunces"),
+            document.fonts.load("400 14px 'IBM Plex Mono'"),
+          ]).catch(function () {})
+        : Promise.resolve();
+    function name() {
+      return (tInput.value || "").trim().slice(0, 18) || tr("js.ticketAnon", "Oiseau de nuit");
+    }
+    function body(g) {
+      g.beginPath();
+      g.moveTo(38, 10);
+      g.arcTo(1190, 10, 1190, 490, 28);
+      g.arcTo(1190, 490, 10, 490, 28);
+      g.arcTo(10, 490, 10, 10, 28);
+      g.arcTo(10, 10, 1190, 10, 28);
+      g.closePath();
+    }
+    function label(g, text, x, y, align) {
+      g.font = "400 14px 'IBM Plex Mono', monospace";
+      g.fillStyle = "#d9b45f";
+      g.textAlign = align || "left";
+      if ("letterSpacing" in g) g.letterSpacing = "3px";
+      g.fillText(text.toUpperCase(), x, y);
+      if ("letterSpacing" in g) g.letterSpacing = "0px";
+    }
+    function value(g, text, x, y, align) {
+      g.font = "400 30px Fraunces, Georgia, serif";
+      g.fillStyle = "#ece9f7";
+      g.textAlign = align || "left";
+      g.fillText(text, x, y);
+    }
+    function draw(g) {
+      var gold = g.createLinearGradient(0, 0, 1200, 500);
+      gold.addColorStop(0, "#9c7a2b");
+      gold.addColorStop(0.3, "#f5e1a0");
+      gold.addColorStop(0.5, "#c9a24a");
+      gold.addColorStop(0.7, "#fff4cf");
+      gold.addColorStop(1, "#a8862f");
 
-  // ---------- Copier l'email ----------
+      g.save();
+      body(g);
+      var bg = g.createLinearGradient(0, 0, 1200, 500);
+      bg.addColorStop(0, "#171c4a");
+      bg.addColorStop(1, "#0a0d24");
+      g.fillStyle = bg;
+      g.fill();
+      g.clip();
+      var rand = seeded("ticket" + name());
+      for (var i = 0; i < 90; i++) {
+        g.fillStyle = "rgba(236,233,247," + (rand() * 0.45 + 0.1) + ")";
+        g.beginPath();
+        g.arc(rand() * 1200, rand() * 500, rand() * 1.3 + 0.3, 0, Math.PI * 2);
+        g.fill();
+      }
+      g.restore();
+
+      g.lineWidth = 2;
+      g.strokeStyle = gold;
+      body(g);
+      g.stroke();
+      g.save();
+      g.globalCompositeOperation = "destination-out";
+      [10, 490].forEach(function (y) {
+        g.beginPath();
+        g.arc(860, y, 26, 0, Math.PI * 2);
+        g.fill();
+      });
+      g.restore();
+      g.save();
+      body(g);
+      g.clip();
+      [10, 490].forEach(function (y) {
+        g.beginPath();
+        g.arc(860, y, 26, 0, Math.PI * 2);
+        g.stroke();
+      });
+      g.restore();
+      g.save();
+      g.setLineDash([6, 9]);
+      g.strokeStyle = "rgba(217, 180, 95, 0.5)";
+      g.beginPath();
+      g.moveTo(860, 46);
+      g.lineTo(860, 454);
+      g.stroke();
+      g.restore();
+
+      label(g, "damienvaiton.fr", 70, 82);
+      g.font = "italic 300 128px Fraunces, Georgia, serif";
+      g.fillStyle = gold;
+      g.textAlign = "left";
+      g.fillText(tr("js.ticketTitle", "Piste 13"), 64, 215);
+      g.font = "italic 400 26px Fraunces, Georgia, serif";
+      g.fillStyle = "#b9acec";
+      g.fillText(tr("js.ticketSub", "Les six secrets, trouvés."), 70, 268);
+      var loc = lang === "en" ? "en-GB" : "fr-FR";
+      label(g, tr("js.ticketName", "Nom"), 70, 372);
+      value(g, name(), 70, 414);
+      label(g, tr("js.ticketDate", "Date"), 460, 372);
+      value(g, when.toLocaleDateString(loc), 460, 414);
+      label(g, tr("js.ticketTime", "Heure"), 660, 372);
+      value(g, pad(when.getHours()) + ":" + pad(when.getMinutes()), 660, 414);
+
+      [
+        [tr("js.ticketGate", "Porte"), "00:00"],
+        [tr("js.ticketRow", "Rang"), "13"],
+        [tr("js.ticketSeat", "Place"), "13"],
+      ].forEach(function (f, k) {
+        label(g, f[0], 1025, 88 + k * 92, "center");
+        value(g, f[1], 1025, 126 + k * 92, "center");
+      });
+      var bars = seeded("bars" + name());
+      g.fillStyle = "rgba(236, 233, 247, 0.85)";
+      for (var x = 915; x < 1135; ) {
+        var w = 1 + ((bars() * 4) | 0);
+        g.fillRect(x, 396, w, 56);
+        x += w + 2 + ((bars() * 4) | 0);
+      }
+    }
+    function render() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var W = tc.clientWidth;
+      var H = tc.clientHeight;
+      if (!W || !H) return;
+      tc.width = Math.round(W * dpr);
+      tc.height = Math.round(H * dpr);
+      var g = tc.getContext("2d");
+      g.setTransform((W * dpr) / 1200, 0, 0, (H * dpr) / 500, 0, 0);
+      g.clearRect(0, 0, 1200, 500);
+      draw(g);
+    }
+    fonts.then(render);
+    window.addEventListener("resize", render);
+    tInput.addEventListener("input", render);
+    tForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var out = document.createElement("canvas");
+      out.width = 1200;
+      out.height = 500;
+      fonts.then(function () {
+        draw(out.getContext("2d"));
+        out.toBlob(function (blob) {
+          if (!blob) return;
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "piste-13.png";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () {
+            URL.revokeObjectURL(a.href);
+          }, 2000);
+        }, "image/png");
+      });
+    });
+  }
   document.querySelectorAll("[data-copy]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       if (!navigator.clipboard) return;
       var initial = btn.textContent;
       navigator.clipboard.writeText(btn.dataset.copy).then(function () {
-        btn.textContent = tr("js.copied", "Copié ✦");
+        btn.textContent = tr("js.copied", "Copié");
         setTimeout(function () {
           btn.textContent = initial;
         }, 1800);

@@ -1,6 +1,5 @@
-Polices hébergées localement (sous-ensemble « latin », fichiers WOFF2 issus de Google Fonts).
+Polices hébergées localement (sous-ensemble « latin », fichiers WOFF2 issus de Google Fonts et de Fontsource).
 Toutes sont distribuées sous licence SIL Open Font License 1.1 : https://openfontlicense.org
 
-- Fraunces — © The Fraunces Project Authors — https://github.com/undercasetype/Fraunces
-- Inter — © The Inter Project Authors — https://github.com/rsms/inter
-- JetBrains Mono — © The JetBrains Mono Project Authors — https://github.com/JetBrains/JetBrainsMono
+- Fraunces, © The Fraunces Project Authors, https://github.com/undercasetype/Fraunces
+- IBM Plex Sans, IBM Plex Mono, © IBM Corp., https://github.com/IBM/plex
