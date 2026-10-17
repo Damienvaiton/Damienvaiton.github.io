@@ -6,3 +6,6 @@ Polices hébergées localement (sous-ensemble « latin », fichiers WOFF2).
   ITF Free Font License : https://www.fontshare.com/terms
 - IBM Plex Mono, © IBM Corp., https://github.com/IBM/plex
   Licence SIL Open Font License 1.1 : https://openfontlicense.org
+- « Taylor Swift Handwriting », police de fan réalisée avec MyScriptFont (2015).
+  Aucune licence précisée (« Copyright belongs to the Creator »). Utilisée uniquement
+  pour la lettre cachée au dos de la photo ; accents et parenthèses ajoutés ici.
