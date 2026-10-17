@@ -12,7 +12,7 @@ poussé sur `main` est publié tel quel.
 | --- | --- |
 | `index.html` | Page d'accueil (projets, stack, parcours, à propos, contact) |
 | `projects/*.html` | Une page par projet |
-| `piste-13.html` | Piste cachée (secrets du site et crédits), non indexée |
+| `piste-13.html` | Piste cachée, verrouillée tant que les secrets ne sont pas trouvés (non indexée) |
 | `en/` | Version anglaise, **générée** par `tools/build-en.py` (ne pas modifier à la main) |
 | `404.html` | Page « perdue dans la nuit » servie par GitHub Pages |
 | `assets/css/site.css` | Tout le style du site |
@@ -64,14 +64,18 @@ simplement « Midnights ».
 
 ## Secrets
 
-Cinq secrets, listés (et cochés) sur la piste 13 ; ceux qu'un visiteur a trouvés sont
-mémorisés dans son navigateur (`localStorage.secrets`) :
+Six secrets cachés dans le site, mémorisés dans le navigateur du visiteur
+(`localStorage.secrets`). Les indices s'affichent dans la console.
 
 1. **L'horloge de minuit** : cliquer sur l'horloge du menu, ou taper « midnights ».
-2. **L'oiseau de nuit** : visiter le site entre minuit et 5 h.
+2. **Le scratch** : cliquer sur le vinyle de la pastille Last.fm.
 3. **Jusqu'à l'aube** : descendre jusqu'à 06:00 sur l'accueil.
-4. **Le bracelet d'amitié** : dans Contact, écrire un mot (le bracelet se télécharge en PNG).
-5. **La piste 13** : trois points discrets sous la tracklist, révélés au survol.
+4. **Le bracelet d'amitié** : écrire un mot dans Contact.
+5. **La série de Kitty** : cliquer sur « Rejouer » sur la page Kitty.
+6. **Perdu dans la nuit** : tomber sur la page 404.
+
+Quand les six sont trouvés, la piste 13 apparaît dans la tracklist et `piste-13.html`
+s'ouvre (billet à télécharger). Avant ça, la page reste verrouillée.
 
 ## Lancer le site en local
 
