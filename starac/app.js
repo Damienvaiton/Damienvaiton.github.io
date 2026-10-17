@@ -25,10 +25,23 @@ const cle = (nom) => String(nom).trim().toLocaleLowerCase("fr");
 const place = (i) => (i < 3 ? MEDAILLES[i] : `${i + 1}.`);
 const rang = (i) => `${i + 1}${i === 0 ? "ʳᵉ" : "ᵉ"}`;
 
-function aujourdhui() {
-	const d = new Date();
+function iso(d) {
 	const pad = (n) => String(n).padStart(2, "0");
 	return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+const aujourdhui = () => iso(new Date());
+
+function dateLocale(texte) {
+	const [y, m, d] = String(texte).slice(0, 10).split("-").map(Number);
+	return new Date(y, (m || 1) - 1, d || 1);
+}
+
+// Un classement par prime : la semaine d'un prime va du samedi (soir du
+// prime) au vendredi suivant. On l'identifie par la date de ce samedi.
+const JOUR_DU_PRIME = 6; // samedi
+function samediDuPrime(d = new Date()) {
+	const ecartJours = (d.getDay() - JOUR_DU_PRIME + 7) % 7;
+	return iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() - ecartJours));
 }
 
 function formatDate(iso) {
@@ -55,7 +68,7 @@ function etatInitial() {
 		// Au premier passage, les élèves sont rangés par ordre alphabétique
 		ranking: [...PROMO_DEPART.eleves].sort(collator.compare),
 		potes: {},
-		historique: [], // photos du classement, une par prime
+		primes: [], // un classement par prime ; le dernier est celui en cours (= ranking)
 		promoSync: null, // empreinte du dernier promo.json appliqué
 		onglet: "classement",
 	};
@@ -91,16 +104,41 @@ function normaliser(s) {
 	s.ranking = ranking;
 
 	if (!s.potes || typeof s.potes !== "object" || Array.isArray(s.potes)) s.potes = {};
-	if (!Array.isArray(s.historique)) s.historique = [];
+	s.primes = (Array.isArray(s.primes) ? s.primes : [])
+		.filter((p) => p && typeof p.date === "string" && Array.isArray(p.ranking))
+		.map((p) => ({ date: p.date.slice(0, 10), ranking: p.ranking.filter((n) => typeof n === "string") }));
+	// Le prime en cours suit le classement qu'on modifie ; les précédents restent figés
+	const dernier = s.primes[s.primes.length - 1];
+	if (dernier && dernier.date === samediDuPrime()) dernier.ranking = [...s.ranking];
 	if (typeof s.pseudo !== "string") s.pseudo = "";
 	if (typeof s.promo !== "string" || !s.promo.trim()) s.promo = PROMO_DEPART.promo;
+	return s;
+}
+
+// L'ancienne version gardait des « photos » du classement : chacune devient
+// le classement du prime de sa semaine. Le classement actuel n'est pas touché.
+function migrer(s) {
+	if (!Array.isArray(s.primes)) {
+		const parPrime = new Map();
+		const photos = Array.isArray(s.historique) ? s.historique : [];
+		for (const h of photos) {
+			if (!h || typeof h.date !== "string" || !Array.isArray(h.ranking)) continue;
+			parPrime.set(samediDuPrime(dateLocale(h.date)), h.ranking);
+		}
+		const enCours = samediDuPrime();
+		s.primes = [...parPrime]
+			.filter(([date]) => date < enCours)
+			.sort(([a], [b]) => a.localeCompare(b))
+			.map(([date, ranking]) => ({ date, ranking: [...ranking] }));
+	}
+	delete s.historique;
 	return s;
 }
 
 function charger() {
 	try {
 		const brut = localStorage.getItem(STORAGE_KEY);
-		if (brut) return normaliser({ ...etatInitial(), ...JSON.parse(brut) });
+		if (brut) return normaliser({ ...etatInitial(), ...migrer(JSON.parse(brut)) });
 	} catch {
 		// stockage indisponible ou corrompu : on repart de zéro
 	}
@@ -118,6 +156,18 @@ function sauver() {
 
 let state = charger();
 let selection = null; // élève sélectionné·e dans le panneau de déplacement
+
+// Démarre le classement du prime de la semaine s'il n'existe pas encore,
+// en partant de celui du prime d'avant. Renvoie le prime précédent le cas échéant.
+function assurerPrimeCourant() {
+	const date = samediDuPrime();
+	const dernier = state.primes[state.primes.length - 1];
+	if (dernier && dernier.date >= date) return null;
+	state.primes.push({ date, ranking: [...state.ranking] });
+	sauver();
+	return dernier || null;
+}
+const primeDemarre = assurerPrimeCourant();
 
 const elimines = () =>
 	state.eleves
@@ -233,16 +283,11 @@ async function synchroniserPromo() {
 		else if (date) e.eliminatedOn = date;
 	}
 
-	// …on garde une photo du classement d'avant le prime…
-	if (!premiere && sortants.length)
-		prendrePhoto(sortants[0].date, `Avant le départ de ${sortants.map(({ e }) => e.name).join(" et ")}`);
-
-	// …puis on applique
+	// …puis on les applique
 	const alpha = estAlphabetique(state.ranking);
 	state.eleves.push(...nouveaux);
-	// (la photo a ré-enregistré l'état : on retrouve les élèves par leur nom)
-	sortants.forEach(({ e, date }) => (trouverEleve(e.name).eliminatedOn = date));
-	retours.forEach((e) => (trouverEleve(e.name).eliminatedOn = null));
+	sortants.forEach(({ e, date }) => (e.eliminatedOn = date));
+	retours.forEach((e) => (e.eliminatedOn = null));
 	if (typeof data.promo === "string" && data.promo.trim()) state.promo = data.promo.trim();
 	state.promoSync = version;
 	normaliser(state);
@@ -260,30 +305,14 @@ async function synchroniserPromo() {
 	if (annonces.length) toast(annonces.join(" · "));
 }
 
-/* ================= Historique des primes ================= */
-// Sans titre : photo prise à la main (« Prime du … ») ; avec titre : photo automatique
-function prendrePhoto(date = aujourdhui(), titre = null) {
-	const auto = !!titre;
-	const photo = { date, ranking: [...state.ranking], elimines: elimines().map((e) => e.name) };
-	if (titre) photo.titre = titre;
-	const i = state.historique.findIndex((h) => h.date === date);
-	if (i >= 0) {
-		if (auto) return; // on n'écrase pas une photo prise à la main
-		state.historique[i] = photo;
-	} else {
-		state.historique.push(photo);
-	}
-	state.historique.sort((a, b) => a.date.localeCompare(b.date));
-	sauver();
-}
-
-// Places gagnées depuis une photo : > 0 = monté, < 0 = descendu, "new" = absent·e.
+/* ================= Classements des primes ================= */
+// Places gagnées depuis un prime : > 0 = monté, < 0 = descendu, "new" = absent·e.
 // On ne compare que les élèves présents des deux côtés, pour qu'une élimination
 // ne fasse pas « monter » tout le monde d'une place.
-function ecart(nom, liste, photo) {
-	if (!photo) return null;
+function ecart(nom, liste, prime) {
+	if (!prime) return null;
 	const ici = new Set(liste.map(cle));
-	const avant = photo.ranking.map(cle).filter((k) => ici.has(k));
+	const avant = prime.ranking.map(cle).filter((k) => ici.has(k));
 	const j = avant.indexOf(cle(nom));
 	if (j < 0) return "new";
 	const la = new Set(avant);
@@ -296,9 +325,10 @@ function badgeEcart(d) {
 	return d > 0 ? `<span class="evo is-up">▲${d}</span>` : `<span class="evo is-down">▼${-d}</span>`;
 }
 
-const titrePhoto = (h) => (h.titre ? esc(h.titre) : `Prime du ${formatDate(h.date)}`);
-
-const dernierePhoto = () => state.historique[state.historique.length - 1] || null;
+const titrePrime = (p) => `Prime du ${formatDate(p.date)}`;
+const primeCourant = () => state.primes[state.primes.length - 1] || null;
+// Le prime d'avant celui en cours : c'est la référence des flèches ▲▼
+const primePrecedent = () => state.primes[state.primes.length - 2] || null;
 
 /* ================= Rendu ================= */
 function render() {
@@ -315,7 +345,11 @@ function renderClassement() {
 	const nbElim = elimines().length;
 	$("#rankCount").textContent = `${n} en lice${nbElim ? ` · ${nbElim} éliminé·e${nbElim > 1 ? "s" : ""}` : ""}`;
 
-	const photo = dernierePhoto();
+	const courant = primeCourant();
+	const prime = primePrecedent();
+	$("#primeLabel").textContent = courant
+		? `${titrePrime(courant)}${prime ? ` · ▲▼ depuis le prime du ${formatDate(prime.date)}` : ""}`
+		: "";
 	$("#rankList").innerHTML = n
 		? state.ranking
 				.map(
@@ -323,7 +357,7 @@ function renderClassement() {
 			<li class="rank-item${nom === selection ? " is-selected" : ""}${i < 3 ? " is-podium" : ""}" data-name="${esc(nom)}">
 				<span class="rank-pos">${place(i)}</span>
 				<span class="rank-name">${nom === selection ? "👉 " : ""}${esc(nom)}</span>
-				${badgeEcart(ecart(nom, state.ranking, photo))}
+				${badgeEcart(ecart(nom, state.ranking, prime))}
 				<button class="rank-handle" type="button" aria-label="Glisser ${esc(nom)}"><i class="bx bx-menu"></i></button>
 			</li>`,
 				)
@@ -411,16 +445,17 @@ function renderPotes() {
 }
 
 function renderHistorique() {
-	const photos = [...state.historique].reverse();
+	const courant = primeCourant();
+	const primes = [...state.primes].reverse();
 	$("#historiqueList").innerHTML = `
-		<h3 class="section-title">Primes (${photos.length})</h3>
+		<h3 class="section-title">Primes (${primes.length})</h3>
 		${
-			photos.length
-				? `<ul class="pote-list">${photos
+			primes.length
+				? `<ul class="pote-list">${primes
 						.map(
 							(h) => `
-				<li class="card pote-item" data-photo="${esc(h.date)}">
-					<p class="pote-name">${titrePhoto(h)}</p>
+				<li class="card pote-item" data-prime="${esc(h.date)}">
+					<p class="pote-name">${titrePrime(h)}${h === courant ? ` <span class="badge">en cours</span>` : ""}</p>
 					<p class="hint">${h.ranking
 						.slice(0, 3)
 						.map((n, i) => `${MEDAILLES[i]} ${esc(n)}`)
@@ -428,48 +463,52 @@ function renderHistorique() {
 				</li>`,
 						)
 						.join("")}</ul>`
-				: `<p class="empty">Aucune photo pour l'instant. Prends-en une le soir du prime !</p>`
+				: `<p class="empty">Aucun prime pour l'instant.</p>`
 		}`;
 }
 
-function vuePhoto(date) {
-	const idx = state.historique.findIndex((h) => h.date === date);
+function vuePrime(date) {
+	const idx = state.primes.findIndex((h) => h.date === date);
 	if (idx < 0) return "";
-	const photo = state.historique[idx];
-	const avant = state.historique[idx - 1] || null;
-	const lignes = photo.ranking
+	const prime = state.primes[idx];
+	const avant = state.primes[idx - 1] || null;
+	const enCours = prime === primeCourant();
+	// Élèves déjà éliminé·es à ce prime-là (absent·es de son classement)
+	const dans = new Set(prime.ranking.map(cle));
+	const sortis = elimines().filter((e) => !dans.has(cle(e.name)));
+	const lignes = prime.ranking
 		.map(
 			(nom, i) => `<li class="cmp-row">
 				<span class="cmp-pos">${place(i)}</span>
 				<span class="cmp-name">${esc(nom)}</span>
-				${badgeEcart(ecart(nom, photo.ranking, avant))}
+				${badgeEcart(ecart(nom, prime.ranking, avant))}
 			</li>`,
 		)
 		.join("");
 	return `
 		<div class="sheet-head">
 			<div>
-				<p class="sheet-kicker">Ton classement · ${formatDate(photo.date)}</p>
-				<h2>${titrePhoto(photo)}</h2>
+				<p class="sheet-kicker">Ton classement${enCours ? " · en cours" : ""}</p>
+				<h2>${titrePrime(prime)}</h2>
 			</div>
 			<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
 		</div>
-		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis la photo du ${formatDate(avant.date)}</p>` : ""}
+		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis le prime du ${formatDate(avant.date)}</p>` : ""}
 		<ol class="cmp-list">${lignes}</ol>
-		${photo.elimines.length ? `<ul class="elim-list">${photo.elimines.map((n) => `<li><span>❌ <s>${esc(n)}</s></span></li>`).join("")}</ul>` : ""}
+		${sortis.length ? `<ul class="elim-list">${sortis.map((e) => `<li><span>❌ <s>${esc(e.name)}</s></span></li>`).join("")}</ul>` : ""}
 		<div class="btn-row">
-			<button class="btn btn-danger" data-act="delete-photo">Supprimer</button>
+			${enCours ? "" : `<button class="btn btn-danger" data-act="delete-prime">Supprimer</button>`}
 			<button class="btn btn-primary" data-close>Fermer</button>
 		</div>`;
 }
 
-function ouvrirPhoto(date) {
+function ouvrirPrime(date) {
 	ouvrirSheet({
-		render: () => vuePhoto(date),
+		render: () => vuePrime(date),
 		onClick: async (e) => {
-			if (!e.target.closest('[data-act="delete-photo"]')) return;
-			if (!(await confirmer(`Supprimer la photo du ${formatDate(date)} ?`, "Les flèches d'évolution se baseront sur la photo précédente.", "Supprimer"))) return;
-			state.historique = state.historique.filter((h) => h.date !== date);
+			if (!e.target.closest('[data-act="delete-prime"]')) return;
+			if (!(await confirmer(`Supprimer le prime du ${formatDate(date)} ?`, "Son classement sera perdu.", "Supprimer"))) return;
+			state.primes = state.primes.filter((h) => h.date !== date || h === primeCourant());
 			sauver();
 			render();
 		},
@@ -506,7 +545,8 @@ async function dessinerImage() {
 	g.textBaseline = "middle";
 	g.fillStyle = "#ffc94a";
 	g.font = police(40, 500);
-	g.fillText(`⭐ STAR ACADEMY · PROMO ${state.promo}`.toUpperCase(), W / 2, 150, W - 160);
+	const courant = primeCourant();
+	g.fillText(`⭐ STAR ACADEMY · ${courant ? titrePrime(courant) : `PROMO ${state.promo}`}`.toUpperCase(), W / 2, 150, W - 160);
 	g.fillStyle = "#f7f1ff";
 	g.font = police(80);
 	g.fillText(state.pseudo ? `Le classement de ${state.pseudo}` : "Mon classement", W / 2, 250, W - 160);
@@ -517,7 +557,7 @@ async function dessinerImage() {
 	const bas = H - (el.length ? 230 : 140);
 	const h = Math.min(100, (bas - haut) / Math.max(n, 1));
 	const fs = Math.round(Math.min(46, h * 0.48));
-	const photo = dernierePhoto();
+	const prime = primePrecedent();
 	state.ranking.forEach((nom, i) => {
 		const y = haut + i * h;
 		g.fillStyle = i < 3 ? "rgba(255, 201, 74, 0.18)" : "rgba(255, 255, 255, 0.07)";
@@ -534,7 +574,7 @@ async function dessinerImage() {
 		g.font = police(fs);
 		g.fillStyle = "#f7f1ff";
 		g.fillText(nom, 230, ym, W - 480);
-		const d = ecart(nom, state.ranking, photo);
+		const d = ecart(nom, state.ranking, prime);
 		if (d !== null && d !== 0) {
 			g.textAlign = "right";
 			g.font = police(Math.round(fs * 0.75), 600);
@@ -684,7 +724,11 @@ function lienPartage() {
 }
 
 function texteClassement() {
-	const lignes = [`⭐ Classement Star Ac${state.pseudo ? ` de ${state.pseudo}` : ""} — Promo ${state.promo}`, ""];
+	const courant = primeCourant();
+	const lignes = [
+		`⭐ Classement Star Ac${state.pseudo ? ` de ${state.pseudo}` : ""} — ${courant ? titrePrime(courant) : `Promo ${state.promo}`}`,
+		"",
+	];
 	state.ranking.forEach((n, i) => lignes.push(`${place(i)} ${n}`));
 	const el = elimines();
 	if (el.length) {
@@ -844,9 +888,10 @@ function confirmer(titre, texteHtml, okLabel = "OK", positif = false) {
 }
 
 /* ---- Panneau de déplacement d'un·e élève ---- */
-// « Parcours : 9ᵉ → 5ᵉ → 3ᵉ maintenant » d'après les photos des primes
+// « Parcours : 9ᵉ → 5ᵉ → 3ᵉ maintenant » d'après les primes précédents
 function parcours(nom, i) {
-	const etapes = state.historique
+	const etapes = state.primes
+		.slice(0, -1)
 		.map((h) => h.ranking.findIndex((x) => cle(x) === cle(nom)))
 		.filter((j) => j >= 0)
 		.slice(-5);
@@ -953,6 +998,7 @@ function ouvrirReglages() {
 			} else if (act === "reset-all") {
 				if (!(await confirmer("Tout effacer ?", "Élèves, classement et potes : tout repart de zéro avec la promo de départ.", "Tout effacer"))) return;
 				state = etatInitial();
+				assurerPrimeCourant();
 				sauver();
 				render();
 				montrerOnglet("classement");
@@ -1031,16 +1077,8 @@ $("#settingsBtn").addEventListener("click", ouvrirReglages);
 $("#shareBtn").addEventListener("click", partagerImage);
 
 $("#view-historique").addEventListener("click", (e) => {
-	if (e.target.closest('[data-act="photo"]')) {
-		const remplace = state.historique.some((h) => h.date === aujourdhui());
-		prendrePhoto();
-		render();
-		vibrer(20);
-		toast(remplace ? "📸 Photo du jour mise à jour" : "📸 Classement du prime enregistré");
-		return;
-	}
-	const date = e.target.closest("[data-photo]")?.dataset.photo;
-	if (date) ouvrirPhoto(date);
+	const date = e.target.closest("[data-prime]")?.dataset.prime;
+	if (date) ouvrirPrime(date);
 });
 
 $("#rankList").addEventListener("click", (e) => {
@@ -1087,8 +1125,16 @@ $("#importForm").addEventListener("submit", async (e) => {
 window.addEventListener("hashchange", lireHash);
 // L'app peut rester ouverte en fond plusieurs jours : on revérifie la liste au retour
 document.addEventListener("visibilitychange", () => {
-	if (document.visibilityState === "visible") synchroniserPromo();
+	if (document.visibilityState !== "visible") return;
+	annoncerPrime(assurerPrimeCourant());
+	synchroniserPromo();
 });
+
+function annoncerPrime(precedent) {
+	if (!precedent) return;
+	render();
+	toast(`🌟 Nouveau prime ! Ton classement repart de celui du ${formatDate(precedent.date)}`);
+}
 
 /* ================= Glisser-déposer ================= */
 if (window.Sortable) {
@@ -1112,6 +1158,7 @@ if (window.Sortable) {
 
 /* ================= Démarrage ================= */
 render();
+annoncerPrime(primeDemarre);
 synchroniserPromo();
 montrerOnglet(state.onglet || "classement");
 lireHash();

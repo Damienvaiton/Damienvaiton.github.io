@@ -62,6 +62,7 @@
 						<h2>Ton classement</h2>
 						<p class="hint" id="rankCount"></p>
 					</div>
+					<p class="prime-label mono" id="primeLabel"></p>
 					<p class="hint">
 						Glisse avec <i class="bx bx-menu"></i> ou touche un·e élève pour
 						choisir sa place.
@@ -100,19 +101,12 @@
 				<!-- ============== Historique ============== -->
 				<section class="view" id="view-historique" data-view="historique" hidden>
 					<div class="view-head">
-						<h2>Historique</h2>
+						<h2>Primes</h2>
 					</div>
-					<div class="card">
-						<h3>📸 Photo du prime</h3>
-						<p class="hint">
-							Enregistre ton classement du soir pour voir qui monte et qui
-							descend d'un prime à l'autre. Une photo est aussi prise toute seule
-							avant chaque élimination.
-						</p>
-						<button class="btn btn-primary btn-block" data-act="photo">
-							<i class="bx bx-camera"></i> Enregistrer mon classement du jour
-						</button>
-					</div>
+					<p class="hint">
+						Un classement par prime. Chaque samedi, un nouveau commence à
+						partir de celui de la semaine d'avant, et les anciens restent ici.
+					</p>
 					<div id="historiqueList"></div>
 				</section>
 
@@ -174,7 +168,7 @@
 						<i class="bx bx-group"></i><span>Élèves</span>
 					</button>
 					<button class="tab" data-tab="historique">
-						<i class="bx bx-history"></i><span>Historique</span>
+						<i class="bx bx-history"></i><span>Primes</span>
 					</button>
 					<button class="tab" data-tab="potes">
 						<i class="bx bx-git-compare"></i><span>Comparer</span>

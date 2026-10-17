@@ -140,6 +140,22 @@ main {
 .hint i {
 	vertical-align: -2px;
 }
+.prime-label {
+	margin: 0 0 4px;
+	font-size: 13px;
+	color: var(--gold);
+}
+.badge {
+	display: inline-block;
+	margin-left: 6px;
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: var(--pink-dim);
+	color: #ffc2df;
+	font-size: 12px;
+	font-weight: 600;
+	vertical-align: 2px;
+}
 .section-title {
 	margin: 22px 0 8px;
 	font-size: 13px;
