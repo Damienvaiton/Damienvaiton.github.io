@@ -347,12 +347,52 @@ const primePrecedent = () => state.primes[state.primes.length - 2] || null;
 // Photo de l'élève, ou pastille avec son initiale si on n'en a pas
 function avatar(nom, grand = false) {
 	const classe = `avatar${grand ? " avatar-grand" : ""}`;
-	const chemin = state.photos?.[cle(nom)];
-	if (chemin) return `<img class="${classe}" src="${esc(chemin)}" alt="" loading="lazy" />`;
+	const k = cle(nom);
+	const chemin = state.photos?.[k];
+	if (chemin && !photosManquantes.has(k))
+		return `<img class="${classe}" src="${esc(photosTrouvees.get(k) || chemin)}" data-nom="${esc(nom)}" alt="" loading="lazy" />`;
+	return pastille(nom, classe);
+}
+
+function pastille(nom, classe) {
 	let teinte = 0;
 	for (const c of cle(nom)) teinte = (teinte * 31 + c.codePointAt(0)) % 360;
 	return `<span class="${classe} avatar-initiale" style="--teinte:${teinte}" aria-hidden="true">${esc([...nom.trim()][0] || "?").toUpperCase()}</span>`;
 }
+
+// Photo pas (encore) déposée, ou dans une autre extension : on essaie
+// .jpg, .jpeg, .png puis .webp, et sinon on remet la pastille.
+const EXTENSIONS = ["jpg", "jpeg", "png", "webp"];
+const photosTrouvees = new Map(); // prénom → chemin qui marche
+const photosManquantes = new Set(); // prénoms sans photo trouvée
+
+document.addEventListener(
+	"load",
+	(e) => {
+		const img = e.target;
+		if (img instanceof HTMLImageElement && img.dataset.nom) photosTrouvees.set(cle(img.dataset.nom), img.getAttribute("src"));
+	},
+	true,
+);
+
+document.addEventListener(
+	"error",
+	(e) => {
+		const img = e.target;
+		if (!(img instanceof HTMLImageElement) || !img.dataset.nom) return;
+		const [, base, ext] = img.getAttribute("src").match(/^(.*)\.(\w+)$/) || [];
+		const suivante = EXTENSIONS[EXTENSIONS.indexOf((ext || "").toLowerCase()) + 1];
+		const k = cle(img.dataset.nom);
+		const essayees = (img.dataset.essais = (Number(img.dataset.essais) || 0) + 1);
+		if (base && suivante && essayees < EXTENSIONS.length) {
+			img.src = `${base}.${suivante}`;
+			return;
+		}
+		photosManquantes.add(k);
+		img.outerHTML = pastille(img.dataset.nom, img.className);
+	},
+	true,
+);
 
 /* ================= Rendu ================= */
 function render() {
