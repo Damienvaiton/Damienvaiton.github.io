@@ -1,5 +1,8 @@
-Polices hébergées localement (sous-ensemble « latin », fichiers WOFF2 issus de Google Fonts et de Fontsource).
-Toutes sont distribuées sous licence SIL Open Font License 1.1 : https://openfontlicense.org
+Polices hébergées localement (sous-ensemble « latin », fichiers WOFF2).
 
 - IM Fell DW Pica, © Igino Marini, https://iginomarini.com/fell/
-- IBM Plex Sans, IBM Plex Mono, © IBM Corp., https://github.com/IBM/plex
+  Licence SIL Open Font License 1.1 : https://openfontlicense.org
+- Switzer, © Indian Type Foundry (dessin : Jérémie Hornus), https://www.fontshare.com/fonts/switzer
+  ITF Free Font License : https://www.fontshare.com/terms
+- IBM Plex Mono, © IBM Corp., https://github.com/IBM/plex
+  Licence SIL Open Font License 1.1 : https://openfontlicense.org

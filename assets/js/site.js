@@ -941,7 +941,7 @@
         roundRect(g, -s * 0.38, -s * 0.42, s * 0.5, s * 0.14, s * 0.07);
         g.fill();
         g.fillStyle = b.gold ? "#2b1f06" : "#14163a";
-        g.font = "500 " + Math.round(s * 0.56) + "px 'IBM Plex Sans', system-ui, sans-serif";
+        g.font = "500 " + Math.round(s * 0.56) + "px Switzer, system-ui, sans-serif";
         g.textAlign = "center";
         g.textBaseline = "middle";
         g.fillText(b.ch, 0, s * 0.04);
@@ -977,7 +977,7 @@
     var bShown = false;
     var fontsReady =
       document.fonts && document.fonts.load
-        ? Promise.all([document.fonts.load("500 20px 'IBM Plex Sans'"), document.fonts.load("italic 400 20px 'IM Fell DW Pica'")]).catch(function () {})
+        ? Promise.all([document.fonts.load("500 20px Switzer"), document.fonts.load("italic 400 20px 'IM Fell DW Pica'")]).catch(function () {})
         : Promise.resolve();
     var bWord = function () {
       return cleanWord(bInput.value);
