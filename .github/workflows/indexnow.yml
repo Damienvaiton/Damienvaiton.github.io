@@ -1,0 +1,33 @@
+# Prévient Bing (et les autres moteurs IndexNow) une fois le site publié par GitHub Pages.
+name: IndexNow
+
+on:
+  workflow_run:
+    workflows: ["pages-build-deployment", "pages build and deployment"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      HOST: damienvaiton.fr
+      KEY: 14f9dc3fd37ca1469aa4ffc3c0fa7232
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Envoyer les URL du sitemap
+        run: |
+          urls=$(grep -o '<loc>[^<]*</loc>' sitemap.xml | sed -e 's/<loc>//' -e 's/<\/loc>//' | jq -R . | jq -s .)
+          echo "$urls"
+          body=$(jq -n --arg host "$HOST" --arg key "$KEY" --argjson urls "$urls" \
+            '{host: $host, key: $key, keyLocation: "https://\($host)/\($key).txt", urlList: $urls}')
+          code=$(curl -sS -o response.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' -d "$body")
+          echo "Réponse IndexNow : HTTP $code"
+          cat response.txt
+          [ "$code" = 200 ] || [ "$code" = 202 ]
