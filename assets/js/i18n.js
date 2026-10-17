@@ -282,12 +282,10 @@ window.I18N_EN = {
   "t13.kittyH": "Kitty has won 8 in a row. Help her out.",
   "t13.lang": "Bilingual",
   "t13.langH": "Everything can be said in another language too.",
-  "js.ticketBy": "Damien Vaiton presents",
-  "js.ticketAdmit": "Admit one · Valid from 00:00 to 06:00",
-  "js.ticketSeal": "Midnight · Bourg-en-Bresse · ",
   "about.flip": "Turn the photo over",
   "about.letter": "Hi,<br /><br />Ever since I was little, I’ve always been more or less passionate about anything to do with technology.<br /><br />So I built my path around it, and I really love what I do. It lets me express my passions and help people by bringing them solutions.<br /><br />That’s why I love my job, and I’ve tried to put that into this site.<br /><br />I hope you get a feel for my world. Don’t hesitate to reach out if you need anything.",
   "js.hintPrefix": "Hint: ",
   "t13.letter": "The letter",
-  "t13.letterH": "A photo always has a back."
+  "t13.letterH": "A photo always has a back.",
+  "js.ticketGate": "Gate"
 };
