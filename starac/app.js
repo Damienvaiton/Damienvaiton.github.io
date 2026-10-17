@@ -70,6 +70,7 @@ function etatInitial() {
 		potes: {},
 		primes: [], // un classement par prime ; le dernier est celui en cours (= ranking)
 		promoSync: null, // empreinte du dernier promo.json appliqué
+		photos: {}, // prénom (en minuscules) → chemin de la photo, d'après promo.json
 		onglet: "classement",
 	};
 }
@@ -110,6 +111,7 @@ function normaliser(s) {
 	// Le prime en cours suit le classement qu'on modifie ; les précédents restent figés
 	const dernier = s.primes[s.primes.length - 1];
 	if (dernier && dernier.date === samediDuPrime()) dernier.ranking = [...s.ranking];
+	if (!s.photos || typeof s.photos !== "object" || Array.isArray(s.photos)) s.photos = {};
 	if (typeof s.pseudo !== "string") s.pseudo = "";
 	if (typeof s.promo !== "string" || !s.promo.trim()) s.promo = PROMO_DEPART.promo;
 	return s;
@@ -236,6 +238,17 @@ function empreinte(txt) {
 	return String(h);
 }
 
+// Seulement des images du dossier de l'app (ex. "photos/amel.jpg")
+function lirePhotos(photos) {
+	const res = {};
+	if (!photos || typeof photos !== "object") return res;
+	for (const [nom, chemin] of Object.entries(photos)) {
+		if (typeof chemin === "string" && /^[\w\-./]+\.(jpe?g|png|webp)$/i.test(chemin) && !chemin.includes(".."))
+			res[cle(nom)] = chemin;
+	}
+	return res;
+}
+
 const estAlphabetique = (liste) => liste.every((n, i) => i === 0 || collator.compare(liste[i - 1], n) <= 0);
 
 async function synchroniserPromo() {
@@ -289,6 +302,7 @@ async function synchroniserPromo() {
 	sortants.forEach(({ e, date }) => (e.eliminatedOn = date));
 	retours.forEach((e) => (e.eliminatedOn = null));
 	if (typeof data.promo === "string" && data.promo.trim()) state.promo = data.promo.trim();
+	state.photos = lirePhotos(data.photos);
 	state.promoSync = version;
 	normaliser(state);
 	// Tant que personne n'a été déplacé, on reste par ordre alphabétique
@@ -330,6 +344,16 @@ const primeCourant = () => state.primes[state.primes.length - 1] || null;
 // Le prime d'avant celui en cours : c'est la référence des flèches ▲▼
 const primePrecedent = () => state.primes[state.primes.length - 2] || null;
 
+// Photo de l'élève, ou pastille avec son initiale si on n'en a pas
+function avatar(nom, grand = false) {
+	const classe = `avatar${grand ? " avatar-grand" : ""}`;
+	const chemin = state.photos?.[cle(nom)];
+	if (chemin) return `<img class="${classe}" src="${esc(chemin)}" alt="" loading="lazy" />`;
+	let teinte = 0;
+	for (const c of cle(nom)) teinte = (teinte * 31 + c.codePointAt(0)) % 360;
+	return `<span class="${classe} avatar-initiale" style="--teinte:${teinte}" aria-hidden="true">${esc([...nom.trim()][0] || "?").toUpperCase()}</span>`;
+}
+
 /* ================= Rendu ================= */
 function render() {
 	$("#promoLabel").textContent = `Promo ${state.promo}`;
@@ -356,6 +380,7 @@ function renderClassement() {
 					(nom, i) => `
 			<li class="rank-item${nom === selection ? " is-selected" : ""}${i < 3 ? " is-podium" : ""}" data-name="${esc(nom)}">
 				<span class="rank-pos">${place(i)}</span>
+				${avatar(nom)}
 				<span class="rank-name">${nom === selection ? "👉 " : ""}${esc(nom)}</span>
 				${badgeEcart(ecart(nom, state.ranking, prime))}
 				<button class="rank-handle" type="button" aria-label="Glisser ${esc(nom)}"><i class="bx bx-menu"></i></button>
@@ -386,7 +411,7 @@ function renderEleves() {
 				.map(
 					(e) => `
 			<li class="eleve-item">
-				<span class="eleve-name">${esc(e.name)}</span>
+				<span class="eleve-name">${avatar(e.name)}${esc(e.name)}</span>
 				<button class="btn btn-small btn-danger" data-elim="${esc(e.name)}">💔 Éliminer</button>
 			</li>`,
 				)
@@ -909,7 +934,7 @@ function vueDeplacement() {
 		<div class="sheet-head">
 			<div>
 				<p class="sheet-kicker">${i < 3 ? `${MEDAILLES[i]} ` : ""}${rang(i)} place sur ${total}</p>
-				<h2>${esc(selection)}</h2>
+				<h2 class="titre-eleve">${avatar(selection, true)}${esc(selection)}</h2>
 			</div>
 			<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
 		</div>

@@ -314,7 +314,7 @@ textarea:focus {
 .rank-item {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 10px;
 	min-height: 54px;
 	padding: 0 0 0 14px;
 	border-radius: 14px;
@@ -347,6 +347,42 @@ textarea:focus {
 }
 .is-podium .rank-pos {
 	font-size: 22px;
+}
+.avatar {
+	flex: none;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	object-fit: cover;
+	background: var(--panel-2);
+	border: 2px solid var(--line-strong);
+}
+.is-podium .avatar {
+	border-color: var(--gold);
+}
+.avatar-initiale {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+	font-weight: 700;
+	color: #fff;
+	background: hsl(var(--teinte) 55% 40%);
+}
+.avatar-grand {
+	width: 52px;
+	height: 52px;
+	font-size: 22px;
+}
+.titre-eleve {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.eleve-name {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 .rank-name {
 	flex: 1;
