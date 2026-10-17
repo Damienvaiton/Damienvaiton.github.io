@@ -93,6 +93,10 @@ main {
 	justify-content: space-between;
 	gap: 10px;
 }
+.topbar-actions {
+	display: flex;
+	gap: 8px;
+}
 .brand {
 	display: flex;
 	align-items: center;
@@ -381,6 +385,25 @@ textarea:focus {
 s {
 	text-decoration-color: var(--red);
 	text-decoration-thickness: 2px;
+}
+
+.evo {
+	flex: none;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 13px;
+	font-weight: 500;
+}
+.rank-item .evo {
+	margin-right: -6px;
+}
+.evo.is-up {
+	color: var(--green);
+}
+.evo.is-down {
+	color: var(--red);
+}
+.evo.is-new {
+	color: var(--gold);
 }
 
 /* ---------------- Élèves ---------------- */
@@ -673,6 +696,14 @@ s {
 	margin-top: 18px;
 	padding-top: 8px;
 	border-top: 1px solid var(--line);
+}
+.share-img {
+	display: block;
+	width: 100%;
+	max-width: 320px;
+	margin: 6px auto 0;
+	border-radius: 14px;
+	border: 1px solid var(--line);
 }
 .copy-area {
 	min-height: 220px;

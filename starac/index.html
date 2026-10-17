@@ -44,9 +44,14 @@
 							<p class="brand-sub mono" id="promoLabel">Promo 2026</p>
 						</div>
 					</div>
-					<button class="icon-btn" id="settingsBtn" aria-label="Réglages">
-						<i class="bx bx-cog"></i>
-					</button>
+					<div class="topbar-actions">
+						<button class="icon-btn" id="shareBtn" aria-label="Partager mon classement en image">
+							<i class="bx bx-share-alt"></i>
+						</button>
+						<button class="icon-btn" id="settingsBtn" aria-label="Réglages">
+							<i class="bx bx-cog"></i>
+						</button>
+					</div>
 				</div>
 			</header>
 
@@ -92,6 +97,25 @@
 					<div id="elevesLists"></div>
 				</section>
 
+				<!-- ============== Historique ============== -->
+				<section class="view" id="view-historique" data-view="historique" hidden>
+					<div class="view-head">
+						<h2>Historique</h2>
+					</div>
+					<div class="card">
+						<h3>📸 Photo du prime</h3>
+						<p class="hint">
+							Enregistre ton classement du soir pour voir qui monte et qui
+							descend d'un prime à l'autre. Une photo est aussi prise toute seule
+							avant chaque élimination.
+						</p>
+						<button class="btn btn-primary btn-block" data-act="photo">
+							<i class="bx bx-camera"></i> Enregistrer mon classement du jour
+						</button>
+					</div>
+					<div id="historiqueList"></div>
+				</section>
+
 				<!-- ============== Potes ============== -->
 				<section class="view" id="view-potes" data-view="potes" hidden>
 					<div class="view-head">
@@ -103,6 +127,9 @@
 						<div class="btn-row">
 							<button class="btn btn-primary" data-act="share-link">
 								<i class="bx bx-link"></i> Lien à comparer
+							</button>
+							<button class="btn" data-act="share-image">
+								<i class="bx bx-image"></i> Image
 							</button>
 							<button class="btn" data-act="share-text">
 								<i class="bx bx-text"></i> Texte
@@ -145,6 +172,9 @@
 					</button>
 					<button class="tab" data-tab="eleves">
 						<i class="bx bx-group"></i><span>Élèves</span>
+					</button>
+					<button class="tab" data-tab="historique">
+						<i class="bx bx-history"></i><span>Historique</span>
 					</button>
 					<button class="tab" data-tab="potes">
 						<i class="bx bx-git-compare"></i><span>Comparer</span>

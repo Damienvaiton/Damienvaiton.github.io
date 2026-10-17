@@ -55,6 +55,8 @@ function etatInitial() {
 		// Au premier passage, les élèves sont rangés par ordre alphabétique
 		ranking: [...PROMO_DEPART.eleves].sort(collator.compare),
 		potes: {},
+		historique: [], // photos du classement, une par prime
+		promoSync: null, // empreinte du dernier promo.json appliqué
 		onglet: "classement",
 	};
 }
@@ -89,6 +91,7 @@ function normaliser(s) {
 	s.ranking = ranking;
 
 	if (!s.potes || typeof s.potes !== "object" || Array.isArray(s.potes)) s.potes = {};
+	if (!Array.isArray(s.historique)) s.historique = [];
 	if (typeof s.pseudo !== "string") s.pseudo = "";
 	if (typeof s.promo !== "string" || !s.promo.trim()) s.promo = PROMO_DEPART.promo;
 	return s;
@@ -172,12 +175,132 @@ function supprimerEleve(nom) {
 	render();
 }
 
+/* ================= Liste commune (promo.json) ================= */
+// promo.json est la liste officielle : quand il change, les éliminations et
+// les nouveaux élèves arrivent chez tout le monde, sans rien faire.
+const PROMO_URL = "promo.json";
+
+function empreinte(txt) {
+	let h = 0;
+	for (const c of txt) h = (h * 31 + c.codePointAt(0)) | 0;
+	return String(h);
+}
+
+const estAlphabetique = (liste) => liste.every((n, i) => i === 0 || collator.compare(liste[i - 1], n) <= 0);
+
+async function synchroniserPromo() {
+	let brut;
+	try {
+		const res = await fetch(PROMO_URL, { cache: "no-store" });
+		if (!res.ok) return;
+		brut = await res.text();
+	} catch {
+		return; // hors-ligne : on garde la liste locale
+	}
+	const version = empreinte(brut);
+	if (version === state.promoSync) return;
+	let data;
+	try {
+		data = JSON.parse(brut);
+	} catch {
+		return;
+	}
+	if (!data || !Array.isArray(data.eleves)) return;
+
+	const premiere = state.promoSync === null;
+	const elim = data.elimines && typeof data.elimines === "object" ? data.elimines : {};
+	const dates = new Map(
+		Object.entries(elim).map(([n, d]) => [cle(n), typeof d === "string" && d ? d.slice(0, 10) : aujourdhui()]),
+	);
+	const noms = [...data.eleves, ...Object.keys(elim)]
+		.filter((n) => typeof n === "string" && n.trim())
+		.map((n) => n.trim().replace(/\s+/g, " "));
+
+	// On calcule d'abord les changements…
+	const nouveaux = [];
+	const sortants = [];
+	const retours = [];
+	const vus = new Set();
+	for (const nom of noms) {
+		const k = cle(nom);
+		if (vus.has(k)) continue;
+		vus.add(k);
+		const e = trouverEleve(nom);
+		const date = dates.get(k) || null;
+		if (!e) nouveaux.push({ name: nom, eliminatedOn: date });
+		else if (date && !e.eliminatedOn) sortants.push({ e, date });
+		else if (!date && e.eliminatedOn) retours.push(e);
+		else if (date) e.eliminatedOn = date;
+	}
+
+	// …on garde une photo du classement d'avant le prime…
+	if (!premiere && sortants.length) prendrePhoto(sortants[0].date, true);
+
+	// …puis on applique
+	const alpha = estAlphabetique(state.ranking);
+	state.eleves.push(...nouveaux);
+	// (la photo a ré-enregistré l'état : on retrouve les élèves par leur nom)
+	sortants.forEach(({ e, date }) => (trouverEleve(e.name).eliminatedOn = date));
+	retours.forEach((e) => (trouverEleve(e.name).eliminatedOn = null));
+	if (typeof data.promo === "string" && data.promo.trim()) state.promo = data.promo.trim();
+	state.promoSync = version;
+	normaliser(state);
+	// Tant que personne n'a été déplacé, on reste par ordre alphabétique
+	if (alpha) state.ranking.sort(collator.compare);
+	sauver();
+	render();
+
+	if (premiere) return;
+	const annonces = [
+		...sortants.map(({ e }) => `💔 ${e.name} quitte le château`),
+		...nouveaux.filter((e) => !e.eliminatedOn).map((e) => `✨ ${e.name} arrive`),
+		...retours.map((e) => `🎉 ${e.name} revient`),
+	];
+	if (annonces.length) toast(annonces.join(" · "));
+}
+
+/* ================= Historique des primes ================= */
+function prendrePhoto(date = aujourdhui(), auto = false) {
+	const photo = { date, ranking: [...state.ranking], elimines: elimines().map((e) => e.name) };
+	const i = state.historique.findIndex((h) => h.date === date);
+	if (i >= 0) {
+		if (auto) return; // on n'écrase pas une photo prise à la main
+		state.historique[i] = photo;
+	} else {
+		state.historique.push(photo);
+	}
+	state.historique.sort((a, b) => a.date.localeCompare(b.date));
+	sauver();
+}
+
+// Places gagnées depuis une photo : > 0 = monté, < 0 = descendu, "new" = absent·e.
+// On ne compare que les élèves présents des deux côtés, pour qu'une élimination
+// ne fasse pas « monter » tout le monde d'une place.
+function ecart(nom, liste, photo) {
+	if (!photo) return null;
+	const ici = new Set(liste.map(cle));
+	const avant = photo.ranking.map(cle).filter((k) => ici.has(k));
+	const j = avant.indexOf(cle(nom));
+	if (j < 0) return "new";
+	const la = new Set(avant);
+	return j - liste.map(cle).filter((k) => la.has(k)).indexOf(cle(nom));
+}
+
+function badgeEcart(d) {
+	if (d === null || d === 0) return "";
+	if (d === "new") return `<span class="evo is-new">new</span>`;
+	return d > 0 ? `<span class="evo is-up">▲${d}</span>` : `<span class="evo is-down">▼${-d}</span>`;
+}
+
+const dernierePhoto = () => state.historique[state.historique.length - 1] || null;
+
 /* ================= Rendu ================= */
 function render() {
 	$("#promoLabel").textContent = `Promo ${state.promo}`;
 	renderClassement();
 	renderEleves();
 	renderPotes();
+	renderHistorique();
 	rafraichirSheet();
 }
 
@@ -186,6 +309,7 @@ function renderClassement() {
 	const nbElim = elimines().length;
 	$("#rankCount").textContent = `${n} en lice${nbElim ? ` · ${nbElim} éliminé·e${nbElim > 1 ? "s" : ""}` : ""}`;
 
+	const photo = dernierePhoto();
 	$("#rankList").innerHTML = n
 		? state.ranking
 				.map(
@@ -193,6 +317,7 @@ function renderClassement() {
 			<li class="rank-item${nom === selection ? " is-selected" : ""}${i < 3 ? " is-podium" : ""}" data-name="${esc(nom)}">
 				<span class="rank-pos">${place(i)}</span>
 				<span class="rank-name">${nom === selection ? "👉 " : ""}${esc(nom)}</span>
+				${badgeEcart(ecart(nom, state.ranking, photo))}
 				<button class="rank-handle" type="button" aria-label="Glisser ${esc(nom)}"><i class="bx bx-menu"></i></button>
 			</li>`,
 				)
@@ -277,6 +402,180 @@ function renderPotes() {
 						.join("")}</ul>`
 				: `<p class="empty">Aucun classement de pote pour l'instant. Demande-leur leur lien !</p>`
 		}`;
+}
+
+function renderHistorique() {
+	const photos = [...state.historique].reverse();
+	$("#historiqueList").innerHTML = `
+		<h3 class="section-title">Primes (${photos.length})</h3>
+		${
+			photos.length
+				? `<ul class="pote-list">${photos
+						.map(
+							(h) => `
+				<li class="card pote-item" data-photo="${esc(h.date)}">
+					<p class="pote-name">Prime du ${formatDate(h.date)}</p>
+					<p class="hint">${h.ranking
+						.slice(0, 3)
+						.map((n, i) => `${MEDAILLES[i]} ${esc(n)}`)
+						.join(" ")}</p>
+				</li>`,
+						)
+						.join("")}</ul>`
+				: `<p class="empty">Aucune photo pour l'instant. Prends-en une le soir du prime !</p>`
+		}`;
+}
+
+function vuePhoto(date) {
+	const idx = state.historique.findIndex((h) => h.date === date);
+	if (idx < 0) return "";
+	const photo = state.historique[idx];
+	const avant = state.historique[idx - 1] || null;
+	const lignes = photo.ranking
+		.map(
+			(nom, i) => `<li class="cmp-row">
+				<span class="cmp-pos">${place(i)}</span>
+				<span class="cmp-name">${esc(nom)}</span>
+				${badgeEcart(ecart(nom, photo.ranking, avant))}
+			</li>`,
+		)
+		.join("");
+	return `
+		<div class="sheet-head">
+			<div>
+				<p class="sheet-kicker">Ton classement</p>
+				<h2>Prime du ${formatDate(photo.date)}</h2>
+			</div>
+			<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
+		</div>
+		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis le prime du ${formatDate(avant.date)}</p>` : ""}
+		<ol class="cmp-list">${lignes}</ol>
+		${photo.elimines.length ? `<ul class="elim-list">${photo.elimines.map((n) => `<li><span>❌ <s>${esc(n)}</s></span></li>`).join("")}</ul>` : ""}
+		<div class="btn-row">
+			<button class="btn btn-danger" data-act="delete-photo">Supprimer</button>
+			<button class="btn btn-primary" data-close>Fermer</button>
+		</div>`;
+}
+
+function ouvrirPhoto(date) {
+	ouvrirSheet({
+		render: () => vuePhoto(date),
+		onClick: async (e) => {
+			if (!e.target.closest('[data-act="delete-photo"]')) return;
+			if (!(await confirmer(`Supprimer la photo du ${formatDate(date)} ?`, "Les flèches d'évolution se baseront sur la photo précédente.", "Supprimer"))) return;
+			state.historique = state.historique.filter((h) => h.date !== date);
+			sauver();
+			render();
+		},
+	});
+}
+
+/* ================= Image à partager ================= */
+async function dessinerImage() {
+	try {
+		await document.fonts?.ready;
+	} catch {
+		// tant pis, police système
+	}
+	const W = 1080;
+	const H = 1920;
+	const c = document.createElement("canvas");
+	c.width = W;
+	c.height = H;
+	const g = c.getContext("2d");
+	const police = (taille, poids = 700) => `${poids} ${taille}px "Space Grotesk", system-ui, sans-serif`;
+
+	const fond = g.createLinearGradient(0, 0, 0, H);
+	fond.addColorStop(0, "#2a1252");
+	fond.addColorStop(1, "#140b26");
+	g.fillStyle = fond;
+	g.fillRect(0, 0, W, H);
+	const halo = g.createRadialGradient(W / 2, 0, 0, W / 2, 0, 900);
+	halo.addColorStop(0, "rgba(255, 79, 163, 0.35)");
+	halo.addColorStop(1, "rgba(255, 79, 163, 0)");
+	g.fillStyle = halo;
+	g.fillRect(0, 0, W, H);
+
+	g.textAlign = "center";
+	g.textBaseline = "middle";
+	g.fillStyle = "#ffc94a";
+	g.font = police(40, 500);
+	g.fillText(`⭐ STAR ACADEMY · PROMO ${state.promo}`.toUpperCase(), W / 2, 150, W - 160);
+	g.fillStyle = "#f7f1ff";
+	g.font = police(80);
+	g.fillText(state.pseudo ? `Le classement de ${state.pseudo}` : "Mon classement", W / 2, 250, W - 160);
+
+	const el = elimines();
+	const n = state.ranking.length;
+	const haut = 340;
+	const bas = H - (el.length ? 230 : 140);
+	const h = Math.min(100, (bas - haut) / Math.max(n, 1));
+	const fs = Math.round(Math.min(46, h * 0.48));
+	const photo = dernierePhoto();
+	state.ranking.forEach((nom, i) => {
+		const y = haut + i * h;
+		g.fillStyle = i < 3 ? "rgba(255, 201, 74, 0.18)" : "rgba(255, 255, 255, 0.07)";
+		g.beginPath();
+		if (g.roundRect) g.roundRect(90, y + 4, W - 180, h - 8, 18);
+		else g.rect(90, y + 4, W - 180, h - 8);
+		g.fill();
+		const ym = y + h / 2;
+		g.textAlign = "center";
+		g.font = police(fs, 500);
+		g.fillStyle = "rgba(247, 241, 255, 0.7)";
+		g.fillText(place(i), 160, ym);
+		g.textAlign = "left";
+		g.font = police(fs);
+		g.fillStyle = "#f7f1ff";
+		g.fillText(nom, 230, ym, W - 480);
+		const d = ecart(nom, state.ranking, photo);
+		if (d !== null && d !== 0) {
+			g.textAlign = "right";
+			g.font = police(Math.round(fs * 0.75), 600);
+			g.fillStyle = d === "new" ? "#ffc94a" : d > 0 ? "#5be3a1" : "#ff6b7a";
+			g.fillText(d === "new" ? "new" : d > 0 ? `▲${d}` : `▼${-d}`, W - 120, ym);
+		}
+	});
+
+	g.textAlign = "center";
+	if (el.length) {
+		g.font = police(34, 500);
+		g.fillStyle = "rgba(247, 241, 255, 0.55)";
+		g.fillText(`❌ ${el.map((e) => e.name).join(" · ")}`, W / 2, H - 170, W - 160);
+	}
+	g.font = police(30, 500);
+	g.fillStyle = "rgba(247, 241, 255, 0.4)";
+	g.fillText(new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }), W / 2, H - 90);
+
+	return new Promise((resolve) => c.toBlob(resolve, "image/png"));
+}
+
+async function partagerImage() {
+	toast("🎨 Création de l'image…");
+	const blob = await dessinerImage();
+	if (!blob) return toast("😕 Impossible de créer l'image");
+	const fichier = new File([blob], "classement-star-ac.png", { type: "image/png" });
+	if (navigator.canShare?.({ files: [fichier] })) {
+		try {
+			await navigator.share({ files: [fichier] });
+			return;
+		} catch (err) {
+			if (err && err.name === "AbortError") return;
+		}
+	}
+	// Pas de partage natif : aperçu + téléchargement
+	const url = URL.createObjectURL(blob);
+	ouvrirSheet({
+		render: () => `
+			<div class="sheet-head">
+				<h2>Ton image</h2>
+				<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
+			</div>
+			<img class="share-img" src="${url}" alt="Mon classement Star Ac" />
+			<a class="btn btn-primary btn-block" href="${url}" download="classement-star-ac.png"><i class="bx bx-download"></i> Télécharger</a>
+			<p class="hint">Sur iPhone : appui long sur l'image, puis « Enregistrer ».</p>`,
+		onClose: () => URL.revokeObjectURL(url),
+	});
 }
 
 /* ================= Comparaison ================= */
@@ -539,6 +838,16 @@ function confirmer(titre, texteHtml, okLabel = "OK", positif = false) {
 }
 
 /* ---- Panneau de déplacement d'un·e élève ---- */
+// « Parcours : 9ᵉ → 5ᵉ → 3ᵉ maintenant » d'après les photos des primes
+function parcours(nom, i) {
+	const etapes = state.historique
+		.map((h) => h.ranking.findIndex((x) => cle(x) === cle(nom)))
+		.filter((j) => j >= 0)
+		.slice(-5);
+	if (!etapes.length) return "";
+	return `<p class="sheet-context mono">Parcours : ${[...etapes.map(rang), `<b>${rang(i)}</b> maintenant`].join(" → ")}</p>`;
+}
+
 function vueDeplacement() {
 	const i = state.ranking.indexOf(selection);
 	if (i < 0) return "";
@@ -554,6 +863,7 @@ function vueDeplacement() {
 			<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
 		</div>
 		<p class="sheet-context">${avant ? `Juste après <b>${esc(avant)}</b>` : "Tout en haut 👑"}${apres ? ` · avant <b>${esc(apres)}</b>` : " · tout en bas"}</p>
+		${parcours(selection, i)}
 		<div class="move-row">
 			<button class="move-btn" data-move="top" ${i === 0 ? "disabled" : ""} aria-label="Tout en haut">⏫</button>
 			<button class="move-btn" data-move="up" ${i === 0 ? "disabled" : ""} aria-label="Monter d'une place">⬆️</button>
@@ -712,6 +1022,20 @@ document.querySelector(".tabbar").addEventListener("click", (e) => {
 });
 
 $("#settingsBtn").addEventListener("click", ouvrirReglages);
+$("#shareBtn").addEventListener("click", partagerImage);
+
+$("#view-historique").addEventListener("click", (e) => {
+	if (e.target.closest('[data-act="photo"]')) {
+		const remplace = state.historique.some((h) => h.date === aujourdhui());
+		prendrePhoto();
+		render();
+		vibrer(20);
+		toast(remplace ? "📸 Photo du jour mise à jour" : "📸 Classement du prime enregistré");
+		return;
+	}
+	const date = e.target.closest("[data-photo]")?.dataset.photo;
+	if (date) ouvrirPhoto(date);
+});
 
 $("#rankList").addEventListener("click", (e) => {
 	if (e.target.closest(".rank-handle")) return;
@@ -742,6 +1066,7 @@ $("#view-potes").addEventListener("click", (e) => {
 	const act = e.target.closest("[data-act]")?.dataset.act;
 	if (act === "share-link") partagerLien();
 	else if (act === "share-text") partager(texteClassement());
+	else if (act === "share-image") partagerImage();
 	else if (act === "pseudo") demanderPseudo();
 	const pote = e.target.closest("[data-pote]")?.dataset.pote;
 	if (pote) ouvrirComparaison(pote);
@@ -754,6 +1079,10 @@ $("#importForm").addEventListener("submit", async (e) => {
 });
 
 window.addEventListener("hashchange", lireHash);
+// L'app peut rester ouverte en fond plusieurs jours : on revérifie la liste au retour
+document.addEventListener("visibilitychange", () => {
+	if (document.visibilityState === "visible") synchroniserPromo();
+});
 
 /* ================= Glisser-déposer ================= */
 if (window.Sortable) {
@@ -777,6 +1106,7 @@ if (window.Sortable) {
 
 /* ================= Démarrage ================= */
 render();
+synchroniserPromo();
 montrerOnglet(state.onglet || "classement");
 lireHash();
 
