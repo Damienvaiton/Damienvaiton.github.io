@@ -977,7 +977,7 @@
     var bShown = false;
     var fontsReady =
       document.fonts && document.fonts.load
-        ? Promise.all([document.fonts.load("500 20px 'IBM Plex Sans'"), document.fonts.load("italic 300 20px Fraunces")]).catch(function () {})
+        ? Promise.all([document.fonts.load("500 20px 'IBM Plex Sans'"), document.fonts.load("italic 400 20px 'IM Fell DW Pica'")]).catch(function () {})
         : Promise.resolve();
     var bWord = function () {
       return cleanWord(bInput.value);
@@ -1068,7 +1068,7 @@
         drawBracelet(g, 1080, 320, word, 1);
         g.restore();
         g.fillStyle = "#ecd394";
-        g.font = "italic 300 34px Fraunces, Georgia, serif";
+        g.font = "italic 400 34px 'IM Fell DW Pica', Georgia, serif";
         g.textAlign = "center";
         g.fillText("damienvaiton.fr", 600, 560);
         out.toBlob(function (blob) {
@@ -1147,8 +1147,8 @@
     var fonts =
       document.fonts && document.fonts.load
         ? Promise.all([
-            document.fonts.load("italic 300 40px Fraunces"),
-            document.fonts.load("400 40px Fraunces"),
+            document.fonts.load("italic 400 40px 'IM Fell DW Pica'"),
+            document.fonts.load("400 40px 'IM Fell DW Pica'"),
             document.fonts.load("400 14px 'IBM Plex Mono'"),
           ]).catch(function () {})
         : Promise.resolve();
@@ -1173,7 +1173,7 @@
       if ("letterSpacing" in g) g.letterSpacing = "0px";
     }
     function value(g, text, x, y, align) {
-      g.font = "400 30px Fraunces, Georgia, serif";
+      g.font = "400 30px 'IM Fell DW Pica', Georgia, serif";
       g.fillStyle = "#ece9f7";
       g.textAlign = align || "left";
       g.fillText(text, x, y);
@@ -1234,11 +1234,11 @@
       g.restore();
 
       label(g, "damienvaiton.fr", 70, 82);
-      g.font = "italic 300 128px Fraunces, Georgia, serif";
+      g.font = "italic 400 120px 'IM Fell DW Pica', Georgia, serif";
       g.fillStyle = gold;
       g.textAlign = "left";
       g.fillText(tr("js.ticketTitle", "Piste 13"), 64, 215);
-      g.font = "italic 400 26px Fraunces, Georgia, serif";
+      g.font = "italic 400 26px 'IM Fell DW Pica', Georgia, serif";
       g.fillStyle = "#b9acec";
       g.fillText(tr("js.ticketSub", "Les six secrets, trouvés."), 70, 268);
       var loc = lang === "en" ? "en-GB" : "fr-FR";
