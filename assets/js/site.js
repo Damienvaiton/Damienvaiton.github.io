@@ -85,7 +85,7 @@
 
   // chasse aux secrets
   // indices dans la console ; la piste 13 n'apparaît qu'une fois les 6 trouvés
-  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lang"];
+  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lang", "letter"];
   var HINTS = {
     clock: "L'heure, en haut de la page, n'est pas qu'une décoration.",
     vinyl: "Un vinyle, ça se scratche.",
@@ -93,6 +93,7 @@
     bracelet: "À l'Eras Tour, on s'échange quelque chose.",
     kitty: "Kitty en est à 8 victoires d'affilée. Aide-la.",
     lang: "Tout se dit aussi dans une autre langue.",
+    letter: "Une photo a toujours un dos.",
   };
   var PISTE_13 = (location.pathname.indexOf("/en/") === 0 ? "/en/" : "/") + "piste-13.html";
   function foundSecrets() {
@@ -126,16 +127,30 @@
         toast(tr("js.unlocked", "Piste 13 débloquée →"), PISTE_13);
         addHiddenTrack();
       } else {
-        toast(tr("js.secret", "Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length));
+        // chaque secret trouvé donne l'indice du suivant
+        var next = SECRETS.filter(function (k) {
+          return list.indexOf(k) < 0;
+        })[0];
+        toast(
+          tr("js.secret", "Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length),
+          null,
+          tr("js.hintPrefix", "Indice : ") + tr("t13." + next + "H", HINTS[next])
+        );
       }
     }, delay || 600);
   }
-  function toast(text, href) {
+  function toast(text, href, hint) {
     var t = document.createElement(href ? "a" : "div");
     t.className = "secret-toast";
     if (href) t.href = href;
     else t.setAttribute("role", "status");
     t.textContent = text;
+    if (hint) {
+      var h = document.createElement("span");
+      h.className = "toast-hint";
+      h.textContent = hint;
+      t.appendChild(h);
+    }
     document.body.appendChild(t);
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -147,7 +162,7 @@
       setTimeout(function () {
         t.remove();
       }, 700);
-    }, href ? 9000 : 3400);
+    }, href ? 9000 : hint ? 7000 : 3400);
   }
   function addHiddenTrack() {
     var list = document.querySelector(".tracklist");
@@ -158,7 +173,7 @@
       '<a href="piste-13.html"><span class="track-n">13</span><h3></h3><span class="track-desc"></span><span class="track-tech"></span>' +
       '<svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>';
     li.querySelector("h3").textContent = tr("track.ghost", "Piste cachée");
-    li.querySelector(".track-desc").textContent = tr("track.ghostDesc", "Tu as trouvé les six secrets.");
+    li.querySelector(".track-desc").textContent = tr("track.ghostDesc", "Tu as trouvé les sept secrets.");
     list.appendChild(li);
   }
   if (unlocked()) addHiddenTrack();
@@ -765,7 +780,7 @@
   }
   var portrait = document.querySelector(".portrait-img img");
   if (portrait && !reduced) {
-    var frame = portrait.parentNode;
+    var frame = portrait.closest(".portrait-img");
     window.addEventListener(
       "scroll",
       function () {
@@ -1107,6 +1122,17 @@
       if (e.animationName === "scratch") vinyl.classList.remove("scratch");
     });
   }
+  var flip = document.querySelector(".polaroid-flip");
+  if (flip) {
+    var photo = flip.closest(".portrait");
+    var back = photo.querySelector(".polaroid-back");
+    flip.addEventListener("click", function () {
+      var on = photo.classList.toggle("flipped");
+      flip.setAttribute("aria-pressed", String(on));
+      back.setAttribute("aria-hidden", String(!on));
+      if (on) secret("letter", 1400);
+    });
+  }
   var replay = document.querySelector(".dc-replay");
   if (replay) {
     var streak = 8;
@@ -1303,7 +1329,7 @@
       rule(g, 96, cx - 168, 93, 0.35);
       rule(g, cx + 168, STUB - 80, 93, 0.35);
       fell(g, tr("js.ticketTitle", "Piste 13"), cx, 212, 124, true);
-      fell(g, tr("js.ticketSub", "Les six secrets, trouvés."), cx, 258, 28, true, 0.75);
+      fell(g, tr("js.ticketSub", "Les sept secrets, trouvés."), cx, 258, 28, true, 0.75);
       rule(g, 110, STUB - 94, 296, 0.3);
 
       var loc = lang === "en" ? "en-GB" : "fr-FR";

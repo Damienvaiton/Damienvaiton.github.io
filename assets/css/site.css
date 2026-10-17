@@ -65,6 +65,8 @@
 
   --serif: "IM Fell DW Pica", Georgia, "Times New Roman", serif;
   --sans: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* écriture de la lettre au dos de la photo (provisoire, en attendant la police manuscrite) */
+  --hand: "IM Fell DW Pica", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
   --max: 1200px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -1321,6 +1323,83 @@ picture {
 .portrait figcaption {
   z-index: 2;
 }
+/* La photo se retourne : au dos, une lettre */
+.polaroid {
+  position: relative;
+  perspective: 1600px;
+}
+.polaroid-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1.1s var(--ease);
+}
+.portrait-img,
+.polaroid-back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.polaroid-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10% 9% 8%;
+  container-type: inline-size;
+  transform: rotateY(180deg);
+  background: radial-gradient(circle at 40% 35%, #f4ecda, #e0d1b0);
+  box-shadow: inset 0 0 50px rgba(120, 90, 40, 0.25);
+  color: #1d2252;
+}
+.letter {
+  margin: 0;
+  font-family: var(--hand);
+  font-style: italic;
+  font-size: 5.3cqw;
+  line-height: 1.45;
+}
+.letter-sign {
+  margin: auto 0 0;
+  text-align: right;
+  font-family: var(--hand);
+  font-style: italic;
+  font-size: 7cqw;
+  line-height: 1.1;
+}
+.letter-sign span {
+  display: block;
+  font-size: 0.6em;
+  color: #8a6a22;
+}
+.polaroid-flip {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.polaroid-flip:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 6px;
+}
+@media (hover: hover) {
+  .polaroid:hover .polaroid-inner {
+    transform: rotateY(-6deg);
+  }
+  .portrait.flipped .polaroid:hover .polaroid-inner {
+    transform: rotateY(174deg);
+  }
+}
+.portrait.flipped .polaroid-inner {
+  transform: rotateY(180deg);
+}
+.portrait figcaption {
+  transition: opacity 0.5s;
+}
+.portrait.flipped figcaption {
+  opacity: 0;
+}
 .portrait figcaption {
   position: absolute;
   left: 24px;
@@ -2144,6 +2223,24 @@ html.leaving body {
 .secret-toast.on {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+.secret-toast:has(.toast-hint) {
+  width: max-content;
+  max-width: min(440px, calc(100vw - 32px));
+  padding: 12px 20px 14px;
+  border-radius: 16px;
+  white-space: normal;
+  text-align: center;
+}
+.toast-hint {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
 }
 a.secret-toast {
   pointer-events: auto;
