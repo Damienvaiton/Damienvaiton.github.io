@@ -545,8 +545,17 @@
       <section class="section" id="moi" data-time="04:00">
         <div class="container about">
           <figure class="portrait reveal">
-            <div class="portrait-img">
-              <picture><source srcset="../assets/img/profile.webp" type="image/webp" /><img src="../assets/img/profile.jpg" alt="Portrait of Damien Vaiton" data-i18n-attr="alt:about.alt" width="800" height="800" loading="lazy" decoding="async" /></picture>
+            <div class="polaroid">
+              <div class="polaroid-inner">
+                <div class="portrait-img">
+                  <picture><source srcset="../assets/img/profile.webp" type="image/webp" /><img src="../assets/img/profile.jpg" alt="Portrait of Damien Vaiton" data-i18n-attr="alt:about.alt" width="800" height="800" loading="lazy" decoding="async" /></picture>
+                </div>
+                <div class="polaroid-back" aria-hidden="true">
+                  <p class="letter" data-i18n="about.letter">Hi,<br /><br />Ever since I was little, I’ve always been more or less passionate about anything to do with technology.<br /><br />So I built my path around it, and I really love what I do. It lets me express my passions and help people by bringing them solutions.<br /><br />That’s why I love my job, and I’ve tried to put that into this site.<br /><br />I hope you get a feel for my world. Don’t hesitate to reach out if you need anything.</p>
+                  <p class="letter-sign">Damien<span>(Damien’s Version)</span></p>
+                </div>
+              </div>
+              <button class="polaroid-flip" type="button" aria-pressed="false" aria-label="Turn the photo over" data-i18n-attr="aria-label:about.flip"></button>
             </div>
             <figcaption data-i18n="about.caption">Bourg-en-Bresse, after midnight.</figcaption>
           </figure>

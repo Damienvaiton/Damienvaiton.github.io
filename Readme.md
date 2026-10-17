@@ -65,17 +65,19 @@ simplement « Midnights ».
 
 ## Secrets
 
-Six secrets cachés dans le site, mémorisés dans le navigateur du visiteur
-(`localStorage.secrets`). Les indices s'affichent dans la console.
+Sept secrets cachés dans le site, mémorisés dans le navigateur du visiteur
+(`localStorage.secrets`). Chaque secret trouvé affiche l'indice du suivant dans la bulle ;
+la console liste aussi les indices restants.
 
 1. **L'horloge de minuit** : cliquer sur l'horloge du menu, ou taper « midnights ».
 2. **Le scratch** : cliquer sur le vinyle de la pastille Last.fm.
 3. **Jusqu'à l'aube** : descendre jusqu'à 06:00 sur l'accueil.
 4. **Le bracelet d'amitié** : écrire un mot dans Contact.
 5. **La série de Kitty** : cliquer sur « Rejouer » sur la page Kitty.
-6. **Perdu dans la nuit** : tomber sur la page 404.
+6. **Bilingue** : passer le site dans l'autre langue avec le bouton FR | EN.
+7. **La lettre** : cliquer sur la photo de « Moi », qui se retourne comme un polaroid.
 
-Quand les six sont trouvés, la piste 13 apparaît dans la tracklist et `piste-13.html`
+Quand les sept sont trouvés, la piste 13 apparaît dans la tracklist et `piste-13.html`
 s'ouvre (billet à télécharger). Avant ça, la page reste verrouillée.
 
 ## Lancer le site en local

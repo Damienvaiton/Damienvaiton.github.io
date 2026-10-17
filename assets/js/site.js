@@ -70,6 +70,8 @@
       var next = lang === "fr" ? "en" : "fr";
       try {
         localStorage.setItem("lang", next);
+        // le secret « bilingue » est compté au chargement de l'autre version
+        sessionStorage.setItem("langSecret", "1");
       } catch (e) {}
       if (staticPages) {
         location.href = altUrl(next === "en" ? altEn : altFr);
@@ -77,19 +79,21 @@
       }
       lang = next;
       applyLang();
+      secret("lang");
     });
   });
 
   // chasse aux secrets
   // indices dans la console ; la piste 13 n'apparaît qu'une fois les 6 trouvés
-  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lost"];
+  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lang", "letter"];
   var HINTS = {
     clock: "L'heure, en haut de la page, n'est pas qu'une décoration.",
     vinyl: "Un vinyle, ça se scratche.",
     dawn: "Va jusqu'au bout de la nuit.",
     bracelet: "À l'Eras Tour, on s'échange quelque chose.",
     kitty: "Kitty en est à 8 victoires d'affilée. Aide-la.",
-    lost: "Perds-toi.",
+    lang: "Tout se dit aussi dans une autre langue.",
+    letter: "Une photo a toujours un dos.",
   };
   var PISTE_13 = (location.pathname.indexOf("/en/") === 0 ? "/en/" : "/") + "piste-13.html";
   function foundSecrets() {
@@ -123,16 +127,30 @@
         toast(tr("js.unlocked", "Piste 13 débloquée →"), PISTE_13);
         addHiddenTrack();
       } else {
-        toast(tr("js.secret", "Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length));
+        // chaque secret trouvé donne l'indice du suivant
+        var next = SECRETS.filter(function (k) {
+          return list.indexOf(k) < 0;
+        })[0];
+        toast(
+          tr("js.secret", "Secret trouvé · {n}/{t}").replace("{n}", list.length).replace("{t}", SECRETS.length),
+          null,
+          tr("js.hintPrefix", "Indice : ") + tr("t13." + next + "H", HINTS[next])
+        );
       }
     }, delay || 600);
   }
-  function toast(text, href) {
+  function toast(text, href, hint) {
     var t = document.createElement(href ? "a" : "div");
     t.className = "secret-toast";
     if (href) t.href = href;
     else t.setAttribute("role", "status");
     t.textContent = text;
+    if (hint) {
+      var h = document.createElement("span");
+      h.className = "toast-hint";
+      h.textContent = hint;
+      t.appendChild(h);
+    }
     document.body.appendChild(t);
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -144,7 +162,7 @@
       setTimeout(function () {
         t.remove();
       }, 700);
-    }, href ? 9000 : 3400);
+    }, href ? 9000 : hint ? 7000 : 3400);
   }
   function addHiddenTrack() {
     var list = document.querySelector(".tracklist");
@@ -155,11 +173,16 @@
       '<a href="piste-13.html"><span class="track-n">13</span><h3></h3><span class="track-desc"></span><span class="track-tech"></span>' +
       '<svg class="track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>';
     li.querySelector("h3").textContent = tr("track.ghost", "Piste cachée");
-    li.querySelector(".track-desc").textContent = tr("track.ghostDesc", "Tu as trouvé les six secrets.");
+    li.querySelector(".track-desc").textContent = tr("track.ghostDesc", "Tu as trouvé les sept secrets.");
     list.appendChild(li);
   }
   if (unlocked()) addHiddenTrack();
-  if (document.querySelector(".hero.lost")) secret("lost", 1500);
+  try {
+    if (sessionStorage.getItem("langSecret")) {
+      sessionStorage.removeItem("langSecret");
+      secret("lang", 900);
+    }
+  } catch (e) {}
 
   // sans attendre les images ni les polices (LCP)
   requestAnimationFrame(function () {
@@ -757,7 +780,7 @@
   }
   var portrait = document.querySelector(".portrait-img img");
   if (portrait && !reduced) {
-    var frame = portrait.parentNode;
+    var frame = portrait.closest(".portrait-img");
     window.addEventListener(
       "scroll",
       function () {
@@ -1099,6 +1122,17 @@
       if (e.animationName === "scratch") vinyl.classList.remove("scratch");
     });
   }
+  var flip = document.querySelector(".polaroid-flip");
+  if (flip) {
+    var photo = flip.closest(".portrait");
+    var back = photo.querySelector(".polaroid-back");
+    flip.addEventListener("click", function () {
+      var on = photo.classList.toggle("flipped");
+      flip.setAttribute("aria-pressed", String(on));
+      back.setAttribute("aria-hidden", String(!on));
+      if (on) secret("letter", 1400);
+    });
+  }
   var replay = document.querySelector(".dc-replay");
   if (replay) {
     var streak = 8;
@@ -1240,7 +1274,7 @@
       g.fillText(tr("js.ticketTitle", "Piste 13"), 64, 215);
       g.font = "italic 400 26px 'IM Fell DW Pica', Georgia, serif";
       g.fillStyle = "#b9acec";
-      g.fillText(tr("js.ticketSub", "Les six secrets, trouvés."), 70, 268);
+      g.fillText(tr("js.ticketSub", "Les sept secrets, trouvés."), 70, 268);
       var loc = lang === "en" ? "en-GB" : "fr-FR";
       label(g, tr("js.ticketName", "Nom"), 70, 372);
       value(g, name(), 70, 414);
