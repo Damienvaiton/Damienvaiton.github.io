@@ -286,7 +286,7 @@ window.I18N_EN = {
   "js.ticketAdmit": "Admit one · Valid from 00:00 to 06:00",
   "js.ticketSeal": "Midnight · Bourg-en-Bresse · ",
   "about.flip": "Turn the photo over",
-  "about.letter": "To you, who made it this far,<br /><br />The first version of this portfolio wasn’t really mine: the design came from someone else, and I didn’t see myself in it.<br /><br />So I rebuilt it. Every page, every star, every secret. This time, everything here is mine.<br /><br />Thanks for looking.",
+  "about.letter": "Hi,<br /><br />Ever since I was little, I’ve always been more or less passionate about anything to do with technology.<br /><br />So I built my path around it, and I really love what I do. It lets me express my passions and help people by bringing them solutions.<br /><br />That’s why I love my job, and I’ve tried to put that into this site.<br /><br />I hope you get a feel for my world. Don’t hesitate to reach out if you need anything.",
   "js.hintPrefix": "Hint: ",
   "t13.letter": "The letter",
   "t13.letterH": "A photo always has a back."

@@ -1350,7 +1350,7 @@ picture {
   inset: 0;
   display: flex;
   flex-direction: column;
-  padding: 10% 9% 8%;
+  padding: 8% 8% 6%;
   container-type: inline-size;
   transform: rotateY(180deg);
   background: radial-gradient(circle at 40% 35%, #f4ecda, #e0d1b0);
@@ -1360,15 +1360,15 @@ picture {
 .letter {
   margin: 0;
   font-family: var(--hand);
-  font-size: 6.4cqw;
-  line-height: 1.3;
+  font-size: 5.1cqw;
+  line-height: 1.22;
 }
 .letter-sign {
   margin: auto 0 0;
   text-align: right;
   font-family: var(--hand);
-  font-size: 9cqw;
-  line-height: 1.1;
+  font-size: 8cqw;
+  line-height: 1.05;
 }
 .letter-sign span {
   display: block;
