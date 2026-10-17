@@ -152,4 +152,3 @@ Fonctionnalités :
 - Email : damien.vaiton01@gmail.com
 - LinkedIn : https://www.linkedin.com/in/damien-vaiton/
 - GitHub : https://github.com/Damienvaiton
-- CV : https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing

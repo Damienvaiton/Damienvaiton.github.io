@@ -69,7 +69,6 @@ window.I18N_EN = {
   "about.p2": "The rest of the time: basketball, football, travel, video games, and music in my ears pretty much all the time.",
   "contact.title": "Let's talk <em class=\"gold\">before dawn</em>?",
   "contact.lead": "Email is the easiest way.",
-  "contact.cv": "My resume",
   "contact.copy": "Copy address",
   "p.back": "The tracklist",
   "p.github": "Code on GitHub",
