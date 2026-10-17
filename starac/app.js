@@ -234,7 +234,8 @@ async function synchroniserPromo() {
 	}
 
 	// …on garde une photo du classement d'avant le prime…
-	if (!premiere && sortants.length) prendrePhoto(sortants[0].date, true);
+	if (!premiere && sortants.length)
+		prendrePhoto(sortants[0].date, `Avant le départ de ${sortants.map(({ e }) => e.name).join(" et ")}`);
 
 	// …puis on applique
 	const alpha = estAlphabetique(state.ranking);
@@ -260,8 +261,11 @@ async function synchroniserPromo() {
 }
 
 /* ================= Historique des primes ================= */
-function prendrePhoto(date = aujourdhui(), auto = false) {
+// Sans titre : photo prise à la main (« Prime du … ») ; avec titre : photo automatique
+function prendrePhoto(date = aujourdhui(), titre = null) {
+	const auto = !!titre;
 	const photo = { date, ranking: [...state.ranking], elimines: elimines().map((e) => e.name) };
+	if (titre) photo.titre = titre;
 	const i = state.historique.findIndex((h) => h.date === date);
 	if (i >= 0) {
 		if (auto) return; // on n'écrase pas une photo prise à la main
@@ -291,6 +295,8 @@ function badgeEcart(d) {
 	if (d === "new") return `<span class="evo is-new">new</span>`;
 	return d > 0 ? `<span class="evo is-up">▲${d}</span>` : `<span class="evo is-down">▼${-d}</span>`;
 }
+
+const titrePhoto = (h) => (h.titre ? esc(h.titre) : `Prime du ${formatDate(h.date)}`);
 
 const dernierePhoto = () => state.historique[state.historique.length - 1] || null;
 
@@ -414,7 +420,7 @@ function renderHistorique() {
 						.map(
 							(h) => `
 				<li class="card pote-item" data-photo="${esc(h.date)}">
-					<p class="pote-name">Prime du ${formatDate(h.date)}</p>
+					<p class="pote-name">${titrePhoto(h)}</p>
 					<p class="hint">${h.ranking
 						.slice(0, 3)
 						.map((n, i) => `${MEDAILLES[i]} ${esc(n)}`)
@@ -443,12 +449,12 @@ function vuePhoto(date) {
 	return `
 		<div class="sheet-head">
 			<div>
-				<p class="sheet-kicker">Ton classement</p>
-				<h2>Prime du ${formatDate(photo.date)}</h2>
+				<p class="sheet-kicker">Ton classement · ${formatDate(photo.date)}</p>
+				<h2>${titrePhoto(photo)}</h2>
 			</div>
 			<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
 		</div>
-		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis le prime du ${formatDate(avant.date)}</p>` : ""}
+		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis la photo du ${formatDate(avant.date)}</p>` : ""}
 		<ol class="cmp-list">${lignes}</ol>
 		${photo.elimines.length ? `<ul class="elim-list">${photo.elimines.map((n) => `<li><span>❌ <s>${esc(n)}</s></span></li>`).join("")}</ul>` : ""}
 		<div class="btn-row">
