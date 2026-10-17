@@ -254,7 +254,6 @@ window.I18N_EN = {
   "js.ticketName": "Name",
   "js.ticketDate": "Date",
   "js.ticketTime": "Time",
-  "js.ticketGate": "Gate",
   "js.ticketRow": "Row",
   "js.ticketSeat": "Seat",
   "t13.title": "Track 13 · Damien Vaiton",
@@ -281,6 +280,9 @@ window.I18N_EN = {
   "t13.braceletH": "At the Eras Tour, fans trade something.",
   "t13.kitty": "Kitty's streak",
   "t13.kittyH": "Kitty has won 8 in a row. Help her out.",
-  "t13.lost": "Lost in the night",
-  "t13.lostH": "Get lost."
+  "t13.lang": "Bilingual",
+  "t13.langH": "Everything can be said in another language too.",
+  "js.ticketBy": "Damien Vaiton presents",
+  "js.ticketAdmit": "Admit one · Valid from 00:00 to 06:00",
+  "js.ticketSeal": "Midnight · Bourg-en-Bresse · "
 };

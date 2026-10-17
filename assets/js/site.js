@@ -70,6 +70,8 @@
       var next = lang === "fr" ? "en" : "fr";
       try {
         localStorage.setItem("lang", next);
+        // le secret « bilingue » est compté au chargement de l'autre version
+        sessionStorage.setItem("langSecret", "1");
       } catch (e) {}
       if (staticPages) {
         location.href = altUrl(next === "en" ? altEn : altFr);
@@ -77,19 +79,20 @@
       }
       lang = next;
       applyLang();
+      secret("lang");
     });
   });
 
   // chasse aux secrets
   // indices dans la console ; la piste 13 n'apparaît qu'une fois les 6 trouvés
-  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lost"];
+  var SECRETS = ["clock", "vinyl", "dawn", "bracelet", "kitty", "lang"];
   var HINTS = {
     clock: "L'heure, en haut de la page, n'est pas qu'une décoration.",
     vinyl: "Un vinyle, ça se scratche.",
     dawn: "Va jusqu'au bout de la nuit.",
     bracelet: "À l'Eras Tour, on s'échange quelque chose.",
     kitty: "Kitty en est à 8 victoires d'affilée. Aide-la.",
-    lost: "Perds-toi.",
+    lang: "Tout se dit aussi dans une autre langue.",
   };
   var PISTE_13 = (location.pathname.indexOf("/en/") === 0 ? "/en/" : "/") + "piste-13.html";
   function foundSecrets() {
@@ -159,7 +162,12 @@
     list.appendChild(li);
   }
   if (unlocked()) addHiddenTrack();
-  if (document.querySelector(".hero.lost")) secret("lost", 1500);
+  try {
+    if (sessionStorage.getItem("langSecret")) {
+      sessionStorage.removeItem("langSecret");
+      secret("lang", 900);
+    }
+  } catch (e) {}
 
   // sans attendre les images ni les polices (LCP)
   requestAnimationFrame(function () {
@@ -1149,121 +1157,193 @@
         ? Promise.all([
             document.fonts.load("italic 400 40px 'IM Fell DW Pica'"),
             document.fonts.load("400 40px 'IM Fell DW Pica'"),
-            document.fonts.load("400 14px 'IBM Plex Mono'"),
+            document.fonts.load("500 14px Switzer"),
           ]).catch(function () {})
         : Promise.resolve();
     function name() {
       return (tInput.value || "").trim().slice(0, 18) || tr("js.ticketAnon", "Oiseau de nuit");
     }
-    function body(g) {
+    var INK = "#1d2252";
+    var STUB = 880;
+    function paper(g) {
       g.beginPath();
-      g.moveTo(38, 10);
-      g.arcTo(1190, 10, 1190, 490, 28);
-      g.arcTo(1190, 490, 10, 490, 28);
-      g.arcTo(10, 490, 10, 10, 28);
-      g.arcTo(10, 10, 1190, 10, 28);
+      g.moveTo(26, 20);
+      g.lineTo(1174, 20);
+      g.arcTo(1180, 20, 1180, 26, 6);
+      g.lineTo(1180, 474);
+      g.arcTo(1180, 480, 1174, 480, 6);
+      g.lineTo(26, 480);
+      g.arcTo(20, 480, 20, 474, 6);
+      g.lineTo(20, 26);
+      g.arcTo(20, 20, 26, 20, 6);
       g.closePath();
     }
-    function label(g, text, x, y, align) {
-      g.font = "400 14px 'IBM Plex Mono', monospace";
-      g.fillStyle = "#d9b45f";
-      g.textAlign = align || "left";
-      if ("letterSpacing" in g) g.letterSpacing = "3px";
+    function caps(g, text, x, y, size, alpha, align) {
+      g.font = "500 " + size + "px Switzer, system-ui, sans-serif";
+      g.fillStyle = INK;
+      g.globalAlpha = alpha;
+      g.textAlign = align || "center";
+      if ("letterSpacing" in g) g.letterSpacing = Math.round(size * 0.3) + "px";
       g.fillText(text.toUpperCase(), x, y);
       if ("letterSpacing" in g) g.letterSpacing = "0px";
+      g.globalAlpha = 1;
     }
-    function value(g, text, x, y, align) {
-      g.font = "400 30px 'IM Fell DW Pica', Georgia, serif";
-      g.fillStyle = "#ece9f7";
-      g.textAlign = align || "left";
+    function fell(g, text, x, y, size, italic, alpha) {
+      g.font = (italic ? "italic " : "") + "400 " + size + "px 'IM Fell DW Pica', Georgia, serif";
+      g.fillStyle = INK;
+      g.globalAlpha = alpha || 1;
+      g.textAlign = "center";
       g.fillText(text, x, y);
+      g.globalAlpha = 1;
     }
-    function draw(g) {
-      var gold = g.createLinearGradient(0, 0, 1200, 500);
+    function rule(g, x1, x2, y, alpha) {
+      g.globalAlpha = alpha;
+      g.strokeStyle = INK;
+      g.lineWidth = 1;
+      g.beginPath();
+      g.moveTo(x1, y);
+      g.lineTo(x2, y);
+      g.stroke();
+      g.globalAlpha = 1;
+    }
+    // texte posé sur un cercle, pour le tampon
+    function ring(g, text, cx, cy, r) {
+      g.font = "500 13px Switzer, system-ui, sans-serif";
+      var widths = text.split("").map(function (ch) {
+        return g.measureText(ch).width + 2.2;
+      });
+      var total = widths.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      var k = (Math.PI * 2 * r) / total;
+      var angle = -Math.PI / 2;
+      text.split("").forEach(function (ch, i) {
+        var step = (widths[i] * k) / r;
+        g.save();
+        g.translate(cx + Math.cos(angle + step / 2) * r, cy + Math.sin(angle + step / 2) * r);
+        g.rotate(angle + step / 2 + Math.PI / 2);
+        g.textAlign = "center";
+        g.fillText(ch, 0, 0);
+        g.restore();
+        angle += step;
+      });
+    }
+    function draw(g, withSky) {
+      if (withSky) {
+        // le billet est dessiné à part : la perforation ne doit pas trouer le ciel
+        var off = document.createElement("canvas");
+        off.width = 1200;
+        off.height = 500;
+        draw(off.getContext("2d"));
+        var sky = g.createLinearGradient(0, 0, 0, 500);
+        sky.addColorStop(0, "#151a45");
+        sky.addColorStop(1, "#080b1d");
+        g.fillStyle = sky;
+        g.fillRect(0, 0, 1200, 500);
+        g.drawImage(off, 0, 0);
+        return;
+      }
+      var gold = g.createLinearGradient(940, 170, 1120, 330);
       gold.addColorStop(0, "#9c7a2b");
-      gold.addColorStop(0.3, "#f5e1a0");
-      gold.addColorStop(0.5, "#c9a24a");
-      gold.addColorStop(0.7, "#fff4cf");
-      gold.addColorStop(1, "#a8862f");
+      gold.addColorStop(0.35, "#f0d78e");
+      gold.addColorStop(0.55, "#b48c36");
+      gold.addColorStop(0.8, "#e8c873");
+      gold.addColorStop(1, "#8a6a22");
 
+      // papier, ombre portée
       g.save();
-      body(g);
-      var bg = g.createLinearGradient(0, 0, 1200, 500);
-      bg.addColorStop(0, "#171c4a");
-      bg.addColorStop(1, "#0a0d24");
-      g.fillStyle = bg;
+      g.shadowColor = "rgba(0, 0, 0, 0.45)";
+      g.shadowBlur = 22;
+      g.shadowOffsetY = 8;
+      paper(g);
+      var base = g.createRadialGradient(600, 250, 80, 600, 250, 700);
+      base.addColorStop(0, "#f3ead6");
+      base.addColorStop(1, "#e2d4b4");
+      g.fillStyle = base;
       g.fill();
+      g.restore();
+
+      // grain du papier
+      g.save();
+      paper(g);
       g.clip();
-      var rand = seeded("ticket" + name());
-      for (var i = 0; i < 90; i++) {
-        g.fillStyle = "rgba(236,233,247," + (rand() * 0.45 + 0.1) + ")";
-        g.beginPath();
-        g.arc(rand() * 1200, rand() * 500, rand() * 1.3 + 0.3, 0, Math.PI * 2);
-        g.fill();
+      var grain = seeded("paper");
+      for (var i = 0; i < 5000; i++) {
+        g.fillStyle = (grain() < 0.5 ? "rgba(60,40,10," : "rgba(255,255,255,") + (grain() * 0.07) + ")";
+        g.fillRect(grain() * 1200, grain() * 500, 1.4, 1.4);
       }
       g.restore();
 
-      g.lineWidth = 2;
-      g.strokeStyle = gold;
-      body(g);
-      g.stroke();
+      // perforation de la souche
       g.save();
       g.globalCompositeOperation = "destination-out";
-      [10, 490].forEach(function (y) {
+      [20, 480].forEach(function (y) {
         g.beginPath();
-        g.arc(860, y, 26, 0, Math.PI * 2);
+        g.arc(STUB, y, 16, 0, Math.PI * 2);
         g.fill();
       });
-      g.restore();
-      g.save();
-      body(g);
-      g.clip();
-      [10, 490].forEach(function (y) {
+      for (var py = 46; py <= 454; py += 13) {
         g.beginPath();
-        g.arc(860, y, 26, 0, Math.PI * 2);
-        g.stroke();
-      });
-      g.restore();
-      g.save();
-      g.setLineDash([6, 9]);
-      g.strokeStyle = "rgba(217, 180, 95, 0.5)";
-      g.beginPath();
-      g.moveTo(860, 46);
-      g.lineTo(860, 454);
-      g.stroke();
-      g.restore();
-
-      label(g, "damienvaiton.fr", 70, 82);
-      g.font = "italic 400 120px 'IM Fell DW Pica', Georgia, serif";
-      g.fillStyle = gold;
-      g.textAlign = "left";
-      g.fillText(tr("js.ticketTitle", "Piste 13"), 64, 215);
-      g.font = "italic 400 26px 'IM Fell DW Pica', Georgia, serif";
-      g.fillStyle = "#b9acec";
-      g.fillText(tr("js.ticketSub", "Les six secrets, trouvés."), 70, 268);
-      var loc = lang === "en" ? "en-GB" : "fr-FR";
-      label(g, tr("js.ticketName", "Nom"), 70, 372);
-      value(g, name(), 70, 414);
-      label(g, tr("js.ticketDate", "Date"), 460, 372);
-      value(g, when.toLocaleDateString(loc), 460, 414);
-      label(g, tr("js.ticketTime", "Heure"), 660, 372);
-      value(g, pad(when.getHours()) + ":" + pad(when.getMinutes()), 660, 414);
-
-      [
-        [tr("js.ticketGate", "Porte"), "00:00"],
-        [tr("js.ticketRow", "Rang"), "13"],
-        [tr("js.ticketSeat", "Place"), "13"],
-      ].forEach(function (f, k) {
-        label(g, f[0], 1025, 88 + k * 92, "center");
-        value(g, f[1], 1025, 126 + k * 92, "center");
-      });
-      var bars = seeded("bars" + name());
-      g.fillStyle = "rgba(236, 233, 247, 0.85)";
-      for (var x = 915; x < 1135; ) {
-        var w = 1 + ((bars() * 4) | 0);
-        g.fillRect(x, 396, w, 56);
-        x += w + 2 + ((bars() * 4) | 0);
+        g.arc(STUB, py, 2.6, 0, Math.PI * 2);
+        g.fill();
       }
+      g.restore();
+
+      // double filet
+      g.strokeStyle = INK;
+      g.lineWidth = 1.6;
+      g.strokeRect(40, 40, STUB - 64, 420);
+      g.strokeRect(STUB + 24, 40, 1160 - STUB - 24, 420);
+      g.lineWidth = 0.7;
+      g.strokeRect(47, 47, STUB - 78, 406);
+      g.strokeRect(STUB + 31, 47, 1160 - STUB - 38, 406);
+
+      var cx = (40 + STUB - 24) / 2;
+      caps(g, tr("js.ticketBy", "Damien Vaiton présente"), cx, 98, 14, 0.85);
+      rule(g, 96, cx - 168, 93, 0.35);
+      rule(g, cx + 168, STUB - 80, 93, 0.35);
+      fell(g, tr("js.ticketTitle", "Piste 13"), cx, 212, 124, true);
+      fell(g, tr("js.ticketSub", "Les six secrets, trouvés."), cx, 258, 28, true, 0.75);
+      rule(g, 110, STUB - 94, 296, 0.3);
+
+      var loc = lang === "en" ? "en-GB" : "fr-FR";
+      [
+        [tr("js.ticketName", "Nom"), name()],
+        [tr("js.ticketDate", "Date"), when.toLocaleDateString(loc)],
+        [tr("js.ticketTime", "Heure"), pad(when.getHours()) + ":" + pad(when.getMinutes())],
+      ].forEach(function (f, k) {
+        var x = 110 + ((STUB - 204) / 6) * (1 + k * 2);
+        caps(g, f[0], x, 340, 12, 0.6);
+        fell(g, f[1], x, 382, 32);
+      });
+      caps(g, tr("js.ticketAdmit", "Admet une personne · Valable de 00:00 à 06:00"), cx, 430, 11, 0.55);
+
+      // souche : numéro, tampon doré, place
+      var sx = (STUB + 24 + 1160) / 2;
+      caps(g, "N°", sx, 92, 12, 0.6);
+      fell(g, "0013", sx, 132, 40);
+      g.save();
+      g.translate(sx, 262);
+      g.rotate(-0.21);
+      g.strokeStyle = gold;
+      g.fillStyle = gold;
+      g.lineWidth = 3;
+      g.beginPath();
+      g.arc(0, 0, 84, 0, Math.PI * 2);
+      g.stroke();
+      g.lineWidth = 1;
+      g.beginPath();
+      g.arc(0, 0, 76, 0, Math.PI * 2);
+      g.stroke();
+      g.beginPath();
+      g.arc(0, 0, 50, 0, Math.PI * 2);
+      g.stroke();
+      ring(g, tr("js.ticketSeal", "Minuit · Bourg-en-Bresse · ").toUpperCase(), 0, 0, 59);
+      g.font = "italic 400 34px 'IM Fell DW Pica', Georgia, serif";
+      g.textAlign = "center";
+      g.fillText("00:00", 0, 11);
+      g.restore();
+      caps(g, tr("js.ticketRow", "Rang") + " 13 · " + tr("js.ticketSeat", "Place") + " 13", sx, 420, 11, 0.6);
     }
     function render() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1286,7 +1366,7 @@
       out.width = 1200;
       out.height = 500;
       fonts.then(function () {
-        draw(out.getContext("2d"));
+        draw(out.getContext("2d"), true);
         out.toBlob(function (blob) {
           if (!blob) return;
           var a = document.createElement("a");

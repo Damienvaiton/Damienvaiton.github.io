@@ -141,6 +141,11 @@ p {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  /* le fond doré doit couvrir les accents et le débord de l'italique */
+  padding: 0.15em 0.08em 0.05em;
+  margin: -0.15em -0.08em -0.05em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   animation: shimmer 7s ease-in-out infinite;
 }
 @keyframes shimmer {
@@ -461,8 +466,9 @@ picture {
 .line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.18em;
-  margin-bottom: -0.18em;
+  /* marge pour les accents et le débord de l'italique */
+  padding: 0.14em 0.1em 0.18em 0;
+  margin: -0.14em -0.1em -0.18em 0;
 }
 .js .line > span {
   display: inline-block;

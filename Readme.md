@@ -73,7 +73,7 @@ Six secrets cachés dans le site, mémorisés dans le navigateur du visiteur
 3. **Jusqu'à l'aube** : descendre jusqu'à 06:00 sur l'accueil.
 4. **Le bracelet d'amitié** : écrire un mot dans Contact.
 5. **La série de Kitty** : cliquer sur « Rejouer » sur la page Kitty.
-6. **Perdu dans la nuit** : tomber sur la page 404.
+6. **Bilingue** : passer le site dans l'autre langue avec le bouton FR | EN.
 
 Quand les six sont trouvés, la piste 13 apparaît dans la tracklist et `piste-13.html`
 s'ouvre (billet à télécharger). Avant ça, la page reste verrouillée.
