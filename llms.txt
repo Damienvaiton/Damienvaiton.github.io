@@ -38,4 +38,3 @@ Damien Vaiton développe des applications web, de la logique métier en PHP avec
 
 - [Version complète pour les IA](https://damienvaiton.fr/llms-full.txt): tout le contenu du site en texte brut
 - [Version anglaise du site](https://damienvaiton.fr/?lang=en)
-- [CV (PDF)](https://drive.google.com/file/d/1oQQImvNaINcvPa9uhTm0RZm3cPc3FSOs/view?usp=sharing)
