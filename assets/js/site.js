@@ -1168,6 +1168,11 @@
     }
   }
 
+  var QR = [
+    0x1fd8b7f, 0x104d941, 0x174135d, 0x175fd5d, 0x175f75d, 0x105c141, 0x1fd557f, 0x13700, 0x11780f9,
+    0x71971a, 0x77af8c, 0x830026, 0xc495ef, 0x143c712, 0x7e4f7c, 0x319036, 0x1f423fc, 0x19d10, 0x1fdfd50,
+    0x104e11d, 0x17591ff, 0x1744ae7, 0x17489ca, 0x10492fe, 0x1fd7ec7,
+  ];
   function ticket() {
     var tc = document.querySelector(".ticket-canvas");
     if (!tc || !tc.getContext) return;
@@ -1267,7 +1272,33 @@
       g.stroke();
       g.restore();
 
+      // horloge en filigrane, arrêtée à minuit
+      g.save();
+      g.translate(650, 205);
+      g.strokeStyle = "rgba(217, 180, 95, 0.13)";
+      g.fillStyle = "rgba(217, 180, 95, 0.13)";
+      g.lineWidth = 2;
+      g.beginPath();
+      g.arc(0, 0, 150, 0, Math.PI * 2);
+      g.stroke();
+      g.beginPath();
+      g.arc(0, 0, 138, 0, Math.PI * 2);
+      g.stroke();
+      for (var h = 0; h < 12; h++) {
+        g.save();
+        g.rotate((h * Math.PI) / 6);
+        g.fillRect(-2, -134, 4, h % 3 ? 10 : 18);
+        g.restore();
+      }
+      g.fillRect(-3, -105, 6, 105);
+      g.fillRect(-2, -125, 4, 125);
+      g.beginPath();
+      g.arc(0, 0, 7, 0, Math.PI * 2);
+      g.fill();
+      g.restore();
+
       label(g, "damienvaiton.fr", 70, 82);
+      label(g, "N° 0013", 790, 82, "right");
       g.font = "italic 400 120px 'IM Fell DW Pica', Georgia, serif";
       g.fillStyle = gold;
       g.textAlign = "left";
@@ -1275,6 +1306,18 @@
       g.font = "italic 400 26px 'IM Fell DW Pica', Georgia, serif";
       g.fillStyle = "#b9acec";
       g.fillText(tr("js.ticketSub", "Les sept secrets, trouvés."), 70, 268);
+      // une étoile par secret
+      g.save();
+      g.fillStyle = gold;
+      for (var st = 0; st < 7; st++) {
+        g.save();
+        g.translate(80 + st * 30, 304);
+        starPath(g, 9);
+        g.fill();
+        g.restore();
+      }
+      g.restore();
+      label(g, "7 / 7", 300, 309);
       var loc = lang === "en" ? "en-GB" : "fr-FR";
       label(g, tr("js.ticketName", "Nom"), 70, 372);
       value(g, name(), 70, 414);
@@ -1282,22 +1325,35 @@
       value(g, when.toLocaleDateString(loc), 460, 414);
       label(g, tr("js.ticketTime", "Heure"), 660, 372);
       value(g, pad(when.getHours()) + ":" + pad(when.getMinutes()), 660, 414);
+      g.globalAlpha = 0.7;
+      label(g, tr("js.ticketAdmit", "Admet une personne · Valable de 00:00 à 06:00"), 70, 462);
+      g.globalAlpha = 1;
 
       [
-        [tr("js.ticketGate", "Porte"), "00:00"],
-        [tr("js.ticketRow", "Rang"), "13"],
-        [tr("js.ticketSeat", "Place"), "13"],
-      ].forEach(function (f, k) {
-        label(g, f[0], 1025, 88 + k * 92, "center");
-        value(g, f[1], 1025, 126 + k * 92, "center");
+        [tr("js.ticketGate", "Porte"), "00:00", 935],
+        [tr("js.ticketRow", "Rang"), "13", 1025],
+        [tr("js.ticketSeat", "Place"), "13", 1115],
+      ].forEach(function (f) {
+        label(g, f[0], f[2], 82, "center");
+        value(g, f[1], f[2], 120, "center");
       });
-      var bars = seeded("bars" + name());
-      g.fillStyle = "rgba(236, 233, 247, 0.85)";
-      for (var x = 915; x < 1135; ) {
-        var w = 1 + ((bars() * 4) | 0);
-        g.fillRect(x, 396, w, 56);
-        x += w + 2 + ((bars() * 4) | 0);
-      }
+      // QR code vers le site, sur une plaque claire pour rester lisible par tous les téléphones
+      var cell = 7;
+      var qx = Math.round(1025 - (QR.length * cell) / 2);
+      var qy = 166;
+      g.fillStyle = "#ece9f7";
+      roundRect(g, qx - 14, qy - 14, QR.length * cell + 28, QR.length * cell + 28, 10);
+      g.fill();
+      // un seul tracé : pas de liseré entre les modules
+      g.beginPath();
+      QR.forEach(function (row, y) {
+        for (var x = 0; x < QR.length; x++) {
+          if ((row >> (QR.length - 1 - x)) & 1) g.rect(qx + x * cell, qy + y * cell, cell, cell);
+        }
+      });
+      g.fillStyle = "#151a45";
+      g.fill();
+      label(g, tr("js.ticketScan", "Scanne-moi"), 1025, 400, "center");
     }
     function render() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
