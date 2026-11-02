@@ -1,4 +1,4 @@
-const CACHE_NAME = "starac-pwa-v4";
+const CACHE_NAME = "starac-pwa-v5";
 const ASSETS = [
 	"./",
 	"./index.html",
