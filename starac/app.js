@@ -36,11 +36,12 @@ function dateLocale(texte) {
 	return new Date(y, (m || 1) - 1, d || 1);
 }
 
-// Un classement par prime : la semaine d'un prime va du samedi (soir du
-// prime) au vendredi suivant. On l'identifie par la date de ce samedi.
-const JOUR_DU_PRIME = 6; // samedi
-function samediDuPrime(d = new Date()) {
-	const ecartJours = (d.getDay() - JOUR_DU_PRIME + 7) % 7;
+// Un classement par prime : les primes tombent le vendredi ou le samedi,
+// donc la semaine d'un prime va du jeudi au mercredi suivant. On
+// l'identifie par la date de ce jeudi.
+const JOUR_DU_RESET = 4; // jeudi
+function semaineDuPrime(d = new Date()) {
+	const ecartJours = (d.getDay() - JOUR_DU_RESET + 7) % 7;
 	return iso(new Date(d.getFullYear(), d.getMonth(), d.getDate() - ecartJours));
 }
 
@@ -107,10 +108,12 @@ function normaliser(s) {
 	if (!s.potes || typeof s.potes !== "object" || Array.isArray(s.potes)) s.potes = {};
 	s.primes = (Array.isArray(s.primes) ? s.primes : [])
 		.filter((p) => p && typeof p.date === "string" && Array.isArray(p.ranking))
-		.map((p) => ({ date: p.date.slice(0, 10), ranking: p.ranking.filter((n) => typeof n === "string") }));
+		// Les anciennes semaines commençaient le samedi : on les ramène à leur jeudi
+		.map((p) => ({ date: semaineDuPrime(dateLocale(p.date)), ranking: p.ranking.filter((n) => typeof n === "string") }))
+		.filter((p, i, liste) => liste.findIndex((q) => q.date === p.date) === i);
 	// Le prime en cours suit le classement qu'on modifie ; les précédents restent figés
 	const dernier = s.primes[s.primes.length - 1];
-	if (dernier && dernier.date === samediDuPrime()) dernier.ranking = [...s.ranking];
+	if (dernier && dernier.date === semaineDuPrime()) dernier.ranking = [...s.ranking];
 	if (!s.photos || typeof s.photos !== "object" || Array.isArray(s.photos)) s.photos = {};
 	if (typeof s.pseudo !== "string") s.pseudo = "";
 	if (typeof s.promo !== "string" || !s.promo.trim()) s.promo = PROMO_DEPART.promo;
@@ -125,9 +128,9 @@ function migrer(s) {
 		const photos = Array.isArray(s.historique) ? s.historique : [];
 		for (const h of photos) {
 			if (!h || typeof h.date !== "string" || !Array.isArray(h.ranking)) continue;
-			parPrime.set(samediDuPrime(dateLocale(h.date)), h.ranking);
+			parPrime.set(semaineDuPrime(dateLocale(h.date)), h.ranking);
 		}
-		const enCours = samediDuPrime();
+		const enCours = semaineDuPrime();
 		s.primes = [...parPrime]
 			.filter(([date]) => date < enCours)
 			.sort(([a], [b]) => a.localeCompare(b))
@@ -162,7 +165,7 @@ let selection = null; // élève sélectionné·e dans le panneau de déplacemen
 // Démarre le classement du prime de la semaine s'il n'existe pas encore,
 // en partant de celui du prime d'avant. Renvoie le prime précédent le cas échéant.
 function assurerPrimeCourant() {
-	const date = samediDuPrime();
+	const date = semaineDuPrime();
 	const dernier = state.primes[state.primes.length - 1];
 	if (dernier && dernier.date >= date) return null;
 	state.primes.push({ date, ranking: [...state.ranking] });
@@ -339,7 +342,7 @@ function badgeEcart(d) {
 	return d > 0 ? `<span class="evo is-up">▲${d}</span>` : `<span class="evo is-down">▼${-d}</span>`;
 }
 
-const titrePrime = (p) => `Prime du ${formatDate(p.date)}`;
+const titrePrime = (p) => `Prime de la semaine du ${formatDate(p.date)}`;
 const primeCourant = () => state.primes[state.primes.length - 1] || null;
 // Le prime d'avant celui en cours : c'est la référence des flèches ▲▼
 const primePrecedent = () => state.primes[state.primes.length - 2] || null;
@@ -412,7 +415,7 @@ function renderClassement() {
 	const courant = primeCourant();
 	const prime = primePrecedent();
 	$("#primeLabel").textContent = courant
-		? `${titrePrime(courant)}${prime ? ` · ▲▼ depuis le prime du ${formatDate(prime.date)}` : ""}`
+		? `${titrePrime(courant)}${prime ? ` · ▲▼ depuis la semaine du ${formatDate(prime.date)}` : ""}`
 		: "";
 	$("#rankList").innerHTML = n
 		? state.ranking
@@ -558,7 +561,7 @@ function vuePrime(date) {
 			</div>
 			<button class="icon-btn" data-close aria-label="Fermer"><i class="bx bx-x"></i></button>
 		</div>
-		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis le prime du ${formatDate(avant.date)}</p>` : ""}
+		${avant ? `<p class="hint">▲▼ = places gagnées ou perdues depuis la semaine du ${formatDate(avant.date)}</p>` : ""}
 		<ol class="cmp-list">${lignes}</ol>
 		${sortis.length ? `<ul class="elim-list">${sortis.map((e) => `<li><span>❌ <s>${esc(e.name)}</s></span></li>`).join("")}</ul>` : ""}
 		<div class="btn-row">
@@ -572,7 +575,7 @@ function ouvrirPrime(date) {
 		render: () => vuePrime(date),
 		onClick: async (e) => {
 			if (!e.target.closest('[data-act="delete-prime"]')) return;
-			if (!(await confirmer(`Supprimer le prime du ${formatDate(date)} ?`, "Son classement sera perdu.", "Supprimer"))) return;
+			if (!(await confirmer(`Supprimer le prime de la semaine du ${formatDate(date)} ?`, "Son classement sera perdu.", "Supprimer"))) return;
 			state.primes = state.primes.filter((h) => h.date !== date || h === primeCourant());
 			sauver();
 			render();
@@ -1198,7 +1201,7 @@ document.addEventListener("visibilitychange", () => {
 function annoncerPrime(precedent) {
 	if (!precedent) return;
 	render();
-	toast(`🌟 Nouveau prime ! Ton classement repart de celui du ${formatDate(precedent.date)}`);
+	toast(`🌟 Nouveau prime ! Ton classement repart de celui de la semaine du ${formatDate(precedent.date)}`);
 }
 
 /* ================= Glisser-déposer ================= */
