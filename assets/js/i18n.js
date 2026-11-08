@@ -287,5 +287,7 @@ window.I18N_EN = {
   "js.hintPrefix": "Hint: ",
   "t13.letter": "The letter",
   "t13.letterH": "A photo always has a back.",
-  "js.ticketGate": "Gate"
+  "js.ticketGate": "Gate",
+  "js.ticketAdmit": "Admit one · Valid from 00:00 to 06:00",
+  "js.ticketScan": "Scan me"
 };
