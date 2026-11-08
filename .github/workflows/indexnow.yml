@@ -1,4 +1,5 @@
-# Prévient Bing (et les autres moteurs IndexNow) une fois le site publié par GitHub Pages.
+# Prévient Bing (et les autres moteurs IndexNow) une fois le site publié par GitHub Pages,
+# seulement pour les pages du portfolio qui ont changé.
 name: IndexNow
 
 on:
@@ -9,25 +10,28 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   ping:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    env:
-      HOST: damienvaiton.fr
-      KEY: 14f9dc3fd37ca1469aa4ffc3c0fa7232
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
 
-      - name: Envoyer les URL du sitemap
+      - name: Trouver la publication précédente
+        if: github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUNS: repos/${{ github.repository }}/actions/workflows/${{ github.event.workflow_run.workflow_id }}/runs?status=success&per_page=20
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          urls=$(grep -o '<loc>[^<]*</loc>' sitemap.xml | sed -e 's/<loc>//' -e 's/<\/loc>//' | jq -R . | jq -s .)
-          echo "$urls"
-          body=$(jq -n --arg host "$HOST" --arg key "$KEY" --argjson urls "$urls" \
-            '{host: $host, key: $key, keyLocation: "https://\($host)/\($key).txt", urlList: $urls}')
-          code=$(curl -sS -o response.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow \
-            -H 'Content-Type: application/json; charset=utf-8' -d "$body")
-          echo "Réponse IndexNow : HTTP $code"
-          cat response.txt
-          [ "$code" = 200 ] || [ "$code" = 202 ]
+          prev=$(gh api "$RUNS" --jq "[.workflow_runs[] | select(.head_sha != \"$HEAD_SHA\")][0].head_sha // empty" || true)
+          echo "Publication précédente : ${prev:-inconnue}"
+          echo "PREV=$prev" >> "$GITHUB_ENV"
+
+      - name: Envoyer les pages modifiées
+        run: bash .github/indexnow.sh
