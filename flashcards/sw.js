@@ -1,4 +1,4 @@
-const CACHE_NAME = "flashcards-pwa-v3";
+const CACHE_NAME = "flashcards-pwa-v4";
 const ASSETS = [
 	"./",
 	"./index.html",
@@ -13,7 +13,17 @@ const ASSETS = [
 ];
 
 self.addEventListener("install", (e) => {
-	e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+	// « reload » : on ignore le cache HTTP du navigateur (GitHub Pages garde
+	// les fichiers 10 min), sinon on mettrait en cache l'ancienne version.
+	// Fichier par fichier : une police ou des icônes injoignables ne doivent
+	// pas empêcher l'appli de s'installer.
+	e.waitUntil(
+		caches
+			.open(CACHE_NAME)
+			.then((cache) =>
+				Promise.all(ASSETS.map((url) => cache.add(new Request(url, { cache: "reload" })).catch(() => {}))),
+			),
+	);
 	self.skipWaiting();
 });
 
@@ -34,8 +44,13 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
 	if (e.request.method !== "GET") return;
 
+	// Fichiers de l'appli : toujours revérifiés auprès du serveur (« no-cache »),
+	// pour qu'une mise à jour arrive dès la réouverture, pas 10 min plus tard.
+	const memeSite = new URL(e.request.url).origin === self.location.origin;
+	const requete = memeSite ? new Request(e.request.url, { cache: "no-cache", credentials: "same-origin" }) : e.request;
+
 	e.respondWith(
-		fetch(e.request)
+		fetch(requete)
 			.then((res) => {
 				if (res.ok) {
 					const copie = res.clone();

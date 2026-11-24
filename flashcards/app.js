@@ -2204,6 +2204,16 @@ render();
 navigator.storage?.persist?.().catch(() => {});
 
 if ("serviceWorker" in navigator) {
+	// Une nouvelle version vient de s'installer : on recharge pour l'afficher
+	// (sauf au tout premier lancement, où il n'y avait pas d'ancienne version)
+	if (navigator.serviceWorker.controller) {
+		let recharge = false;
+		navigator.serviceWorker.addEventListener("controllerchange", () => {
+			if (recharge) return;
+			recharge = true;
+			location.reload();
+		});
+	}
 	window.addEventListener("load", () => {
 		navigator.serviceWorker
 			.register("./sw.js", { scope: "./" })
