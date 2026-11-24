@@ -29,7 +29,16 @@ const FACILITE_DEPART = 2.5;
 const FACILITE_MIN = 1.3;
 const SEUIL_MAITRISE = 21; // jours d'intervalle à partir desquels une carte est « maîtrisée »
 
-const COULEURS = ["#5b5bd6", "#0090ff", "#12a594", "#30a46c", "#f76b15", "#e5484d", "#d6409f", "#8e4ec6"];
+const COULEURS = [
+	"#5b5bd6",
+	"#0090ff",
+	"#12a594",
+	"#30a46c",
+	"#f76b15",
+	"#e5484d",
+	"#d6409f",
+	"#8e4ec6",
+];
 
 const NOTES = [
 	{ note: 1, label: "À revoir", cls: "n1" },
@@ -61,10 +70,17 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) =>
 	String(s ?? "").replace(
 		/[&<>"']/g,
-		(c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+		(c) =>
+			({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+				c
+			],
 	);
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-const collator = new Intl.Collator("fr", { sensitivity: "base", numeric: true });
+const uid = () =>
+	Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const collator = new Intl.Collator("fr", {
+	sensitivity: "base",
+	numeric: true,
+});
 
 function melanger(liste) {
 	const a = [...liste];
@@ -115,10 +131,13 @@ function formatDelai(ms) {
 
 function formatChrono(ms) {
 	const s = ms / 1000;
-	return s < 60 ? `${s.toFixed(1).replace(".", ",")} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`;
+	return s < 60
+		? `${s.toFixed(1).replace(".", ",")} s`
+		: `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`;
 }
 
-const pluriel = (n, mot, motPluriel = mot + "s") => `${n} ${n > 1 ? motPluriel : mot}`;
+const pluriel = (n, mot, motPluriel = mot + "s") =>
+	`${n} ${n > 1 ? motPluriel : mot}`;
 
 // Taille du texte d'une carte selon sa longueur
 function tailleTexte(t) {
@@ -147,7 +166,15 @@ function toast(msg) {
 }
 
 /* ================= État & stockage ================= */
-const srsNeuf = () => ({ etat: "nouvelle", due: 0, iv: 0, fac: FACILITE_DEPART, etape: 0, reps: 0, oublis: 0 });
+const srsNeuf = () => ({
+	etat: "nouvelle",
+	due: 0,
+	iv: 0,
+	fac: FACILITE_DEPART,
+	etape: 0,
+	reps: 0,
+	oublis: 0,
+});
 
 // source : d'où vient la carte (« Lecture 3 (part 2) · diapo 11 »), facultatif
 const nouvelleCarte = (recto, verso, source) => ({
@@ -162,13 +189,16 @@ const nouvelleCarte = (recto, verso, source) => ({
 // Pastille d'un paquet : le numéro du cours (« Lecture 3 (part 2) » → 3b),
 // sinon la première lettre du nom
 function initiale(nom) {
-	const m = String(nom).match(/^(?:lecture|cours)\s+(\d+)(?:\s*\(part(?:ie)?\s*(\d+)\))?/i);
+	const m = String(nom).match(
+		/^(?:lecture|cours)\s+(\d+)(?:\s*\(part(?:ie)?\s*(\d+)\))?/i,
+	);
 	if (m) return m[1] + (m[2] ? "abcdefgh"[Number(m[2]) - 1] || "" : "");
 	return (String(nom).trim()[0] || "?").toUpperCase();
 }
 
 // Petite étiquette « Lecture 1 · diapo 15 » en haut de la carte
-const sourceHtml = (carte) => (carte?.source ? `<span class="ce-source">${esc(carte.source)}</span>` : "");
+const sourceHtml = (carte) =>
+	carte?.source ? `<span class="ce-source">${esc(carte.source)}</span>` : "";
 
 function nouveauPaquet(nom, couleur = COULEURS[0]) {
 	return {
@@ -186,7 +216,13 @@ function nouveauPaquet(nom, couleur = COULEURS[0]) {
 function etatInitial() {
 	// apprendre : progression du mode Apprendre, par paquet
 	// mix : paquets exclus de « Tout mélanger » (les nouveaux paquets sont inclus d'office)
-	return { paquets: [], reglages: { nouvellesParJour: 200 }, journal: {}, apprendre: {}, mix: { exclus: [], meilleurAssocier: null } };
+	return {
+		paquets: [],
+		reglages: { nouvellesParJour: 200 },
+		journal: {},
+		apprendre: {},
+		mix: { exclus: [], meilleurAssocier: null },
+	};
 }
 
 // Remet d'aplomb un état chargé (ancienne version, sauvegarde importée…)
@@ -194,12 +230,19 @@ function reparer(e) {
 	const base = etatInitial();
 	const etat = { ...base, ...(e && typeof e === "object" ? e : {}) };
 	etat.reglages = { ...base.reglages, ...(etat.reglages || {}) };
-	etat.journal = etat.journal && typeof etat.journal === "object" ? etat.journal : {};
-	etat.apprendre = etat.apprendre && typeof etat.apprendre === "object" ? etat.apprendre : {};
+	etat.journal =
+		etat.journal && typeof etat.journal === "object" ? etat.journal : {};
+	etat.apprendre =
+		etat.apprendre && typeof etat.apprendre === "object" ? etat.apprendre : {};
 	etat.mix = { ...base.mix, ...(etat.mix || {}) };
 	etat.paquets = (Array.isArray(etat.paquets) ? etat.paquets : []).map((p) => {
 		const paquet = { ...nouveauPaquet(p.nom || "Sans titre"), ...p };
-		paquet.nouvellesDuJour = { jour: "", n: 0, bonus: 0, ...(p.nouvellesDuJour || {}) };
+		paquet.nouvellesDuJour = {
+			jour: "",
+			n: 0,
+			bonus: 0,
+			...(p.nouvellesDuJour || {}),
+		};
 		paquet.cartes = (Array.isArray(p.cartes) ? p.cartes : [])
 			.filter((c) => c && (c.recto || c.verso))
 			.map((c) => ({
@@ -256,7 +299,11 @@ function paquetTout() {
 }
 
 const trouverPaquet = (id) =>
-	id === ID_TOUT ? (state.paquets.length ? paquetTout() : null) : state.paquets.find((p) => p.id === id);
+	id === ID_TOUT
+		? state.paquets.length
+			? paquetTout()
+			: null
+		: state.paquets.find((p) => p.id === id);
 const trouverCarte = (paquet, id) => paquet.cartes.find((c) => c.id === id);
 
 /* ================= Répétition espacée ================= */
@@ -281,17 +328,22 @@ function planifier(srs, note, maintenant = Date.now(), { flou = true } = {}) {
 
 	if (s.etat === "nouvelle" || s.etat === "apprentissage") {
 		const etapes = ETAPES_APPRENTISSAGE;
-		const etape = s.etat === "nouvelle" ? 0 : Math.min(s.etape, etapes.length - 1);
+		const etape =
+			s.etat === "nouvelle" ? 0 : Math.min(s.etape, etapes.length - 1);
 		s.etat = "apprentissage";
 		if (note === 1) {
 			s.etape = 0;
 			s.due = maintenant + etapes[0] * MIN;
 		} else if (note === 2) {
 			s.etape = etape;
-			const delai = etape === 0 && etapes.length > 1 ? (etapes[0] + etapes[1]) / 2 : etapes[etape];
+			const delai =
+				etape === 0 && etapes.length > 1
+					? (etapes[0] + etapes[1]) / 2
+					: etapes[etape];
 			s.due = maintenant + delai * MIN;
 		} else if (note === 3) {
-			if (etape + 1 >= etapes.length) graduer(s, INTERVALLE_DIPLOME, maintenant);
+			if (etape + 1 >= etapes.length)
+				graduer(s, INTERVALLE_DIPLOME, maintenant);
 			else {
 				s.etape = etape + 1;
 				s.due = maintenant + etapes[s.etape] * MIN;
@@ -349,7 +401,8 @@ function planifier(srs, note, maintenant = Date.now(), { flou = true } = {}) {
 	return s;
 }
 
-const enApprentissage = (c) => c.srs.etat === "apprentissage" || c.srs.etat === "reapprentissage";
+const enApprentissage = (c) =>
+	c.srs.etat === "apprentissage" || c.srs.etat === "reapprentissage";
 
 function nouvellesRestantes(paquet) {
 	const nd = paquet.nouvellesDuJour;
@@ -372,17 +425,29 @@ function statsPaquet(paquet, maintenant = Date.now()) {
 		if (s.etat !== "nouvelle" && s.due <= fin) aRevoir++;
 	}
 	const nouvellesDispo = Math.min(nouvelles, nouvellesRestantes(paquet));
-	return { total: paquet.cartes.length, nouvelles, nouvellesDispo, aRevoir, enCours, maitrisees };
+	return {
+		total: paquet.cartes.length,
+		nouvelles,
+		nouvellesDispo,
+		aRevoir,
+		enCours,
+		maitrisees,
+	};
 }
 
 // Prochaine échéance après aujourd'hui (pour « Prochaine révision : … »)
 function prochaineEcheance(paquet) {
 	const fin = finDeJournee();
-	const futures = paquet.cartes.filter((c) => c.srs.etat !== "nouvelle" && c.srs.due > fin);
+	const futures = paquet.cartes.filter(
+		(c) => c.srs.etat !== "nouvelle" && c.srs.due > fin,
+	);
 	if (!futures.length) return null;
 	const quand = Math.min(...futures.map((c) => c.srs.due));
 	const jour = jourCle(quand);
-	return { quand, n: futures.filter((c) => jourCle(c.srs.due) === jour).length };
+	return {
+		quand,
+		n: futures.filter((c) => jourCle(c.srs.due) === jour).length,
+	};
 }
 
 function noterJournal(champ) {
@@ -412,7 +477,11 @@ function faces(carte, sens) {
 		: { question: carte.recto, reponse: carte.verso };
 }
 
-const LIBELLES_SENS = { recto: "Terme → Définition", verso: "Définition → Terme", mixte: "Les deux, au hasard" };
+const LIBELLES_SENS = {
+	recto: "Terme → Définition",
+	verso: "Définition → Terme",
+	mixte: "Les deux, au hasard",
+};
 
 /* ================= Lexique des abréviations ================= */
 // Affiché sous la carte quand une abréviation apparaît dans la question
@@ -426,15 +495,51 @@ const LEXIQUE = [
 	{ abr: "UK", re: /\bUK\b/, sens: "United Kingdom : Royaume-Uni" },
 	{ abr: "US", re: /\bUS\b/, sens: "United States : États-Unis" },
 	{ abr: "EU", re: /\bEU\b/, sens: "European Union : Union européenne" },
-	{ abr: "A10", re: /\bA10\b/, sens: "les 10 pays entrés dans l'UE en 2004 (surtout d'Europe de l'Est)" },
-	{ abr: "IRA", re: /\bIRA\b/, sens: "Irish Republican Army : armée républicaine irlandaise (indépendantistes)" },
-	{ abr: "SNP", re: /\bSNP\b/, sens: "Scottish National Party : parti indépendantiste écossais" },
-	{ abr: "DUP", re: /\bDUP\b/, sens: "Democratic Unionist Party : parti unioniste nord-irlandais (pour le maintien dans le Royaume-Uni)" },
-	{ abr: "NICRA", re: /\bNICRA\b/, sens: "Northern Ireland Civil Rights Association : association pour les droits civiques en Irlande du Nord" },
-	{ abr: "RUC", re: /\bRUC\b/, sens: "Royal Ulster Constabulary : la police d'Irlande du Nord" },
-	{ abr: "UVF", re: /\bUVF\b/, sens: "Ulster Volunteer Force : groupe paramilitaire loyaliste (pro-Royaume-Uni)" },
-	{ abr: "CRE", re: /\bCRE\b/, sens: "Commission for Racial Equality : commission pour l'égalité raciale" },
-	{ abr: "BAME", re: /\bBAME\b/, sens: "Black, Asian and Minority Ethnic : Noirs, Asiatiques et minorités ethniques" },
+	{
+		abr: "A10",
+		re: /\bA10\b/,
+		sens: "les 10 pays entrés dans l'UE en 2004 (surtout d'Europe de l'Est)",
+	},
+	{
+		abr: "IRA",
+		re: /\bIRA\b/,
+		sens: "Irish Republican Army : armée républicaine irlandaise (indépendantistes)",
+	},
+	{
+		abr: "SNP",
+		re: /\bSNP\b/,
+		sens: "Scottish National Party : parti indépendantiste écossais",
+	},
+	{
+		abr: "DUP",
+		re: /\bDUP\b/,
+		sens: "Democratic Unionist Party : parti unioniste nord-irlandais (pour le maintien dans le Royaume-Uni)",
+	},
+	{
+		abr: "NICRA",
+		re: /\bNICRA\b/,
+		sens: "Northern Ireland Civil Rights Association : association pour les droits civiques en Irlande du Nord",
+	},
+	{
+		abr: "RUC",
+		re: /\bRUC\b/,
+		sens: "Royal Ulster Constabulary : la police d'Irlande du Nord",
+	},
+	{
+		abr: "UVF",
+		re: /\bUVF\b/,
+		sens: "Ulster Volunteer Force : groupe paramilitaire loyaliste (pro-Royaume-Uni)",
+	},
+	{
+		abr: "CRE",
+		re: /\bCRE\b/,
+		sens: "Commission for Racial Equality : commission pour l'égalité raciale",
+	},
+	{
+		abr: "BAME",
+		re: /\bBAME\b/,
+		sens: "Black, Asian and Minority Ethnic : Noirs, Asiatiques et minorités ethniques",
+	},
 ];
 
 function lexiqueHtml(...textes) {
@@ -512,7 +617,12 @@ function analyserImport(texte, sepCle = "auto", sepCartes = "ligne") {
 }
 
 const exporterTexte = (paquet) =>
-	paquet.cartes.map((c) => `${c.recto.replace(/\s*\n\s*/g, " ")}\t${c.verso.replace(/\s*\n\s*/g, " ")}`).join("\n");
+	paquet.cartes
+		.map(
+			(c) =>
+				`${c.recto.replace(/\s*\n\s*/g, " ")}\t${c.verso.replace(/\s*\n\s*/g, " ")}`,
+		)
+		.join("\n");
 
 /* ================= Routeur ================= */
 // #/                      accueil
@@ -527,7 +637,12 @@ function route() {
 	if (parts[0] === "reglages") return { vue: "reglages", cle: "reglages" };
 	if (parts[0] === "p" && parts[1]) {
 		const mode = parts[2] || "paquet";
-		return { vue: mode, id: parts[1], etoiles: params.get("e") === "1", cle: location.hash };
+		return {
+			vue: mode,
+			id: parts[1],
+			etoiles: params.get("e") === "1",
+			cle: location.hash,
+		};
 	}
 	return { vue: "accueil", cle: "accueil" };
 }
@@ -568,7 +683,8 @@ function render() {
 		quiz: renderQuiz,
 		associer: renderAssocier,
 	};
-	if (paquet.virtuel && (r.vue === "paquet" || r.vue === "reviser")) return renderTout(app, paquet);
+	if (paquet.virtuel && (r.vue === "paquet" || r.vue === "reviser"))
+		return renderTout(app, paquet);
 	(vues[r.vue] || renderPaquet)(app, paquet, r);
 }
 
@@ -661,7 +777,9 @@ function renderPaquet(app, paquet) {
 
 	const q = normaliser(recherche);
 	const cartes = q
-		? paquet.cartes.filter((c) => normaliser(c.recto + " " + c.verso).includes(q))
+		? paquet.cartes.filter((c) =>
+				normaliser(c.recto + " " + c.verso).includes(q),
+			)
 		: paquet.cartes;
 
 	app.innerHTML = `
@@ -746,7 +864,11 @@ function renderPaquet(app, paquet) {
 			recherche = champ.value;
 			const q2 = normaliser(recherche);
 			$("#listeCartes").innerHTML = listeCartesHtml(
-				q2 ? paquet.cartes.filter((c) => normaliser(c.recto + " " + c.verso).includes(q2)) : paquet.cartes,
+				q2
+					? paquet.cartes.filter((c) =>
+							normaliser(c.recto + " " + c.verso).includes(q2),
+						)
+					: paquet.cartes,
 			);
 		});
 	}
@@ -754,15 +876,33 @@ function renderPaquet(app, paquet) {
 
 function grilleModes(paquet, suffixe = "") {
 	const modes = [
-		{ mode: "apprendre", ic: "bx-bulb", nom: "Apprendre", desc: descApprendre(paquet), fort: true },
+		{
+			mode: "apprendre",
+			ic: "bx-bulb",
+			nom: "Apprendre",
+			desc: descApprendre(paquet),
+			fort: true,
+		},
 		{ mode: "quiz", ic: "bx-list-check", nom: "Quiz", desc: "20 questions" },
-		{ mode: "cartes", ic: "bx-copy", nom: "Cartes", desc: "Retourner et trier" },
-		{ mode: "associer", ic: "bx-extension", nom: "Associer", desc: "Le jeu des paires" },
+		{
+			mode: "cartes",
+			ic: "bx-copy",
+			nom: "Cartes",
+			desc: "Retourner et trier",
+		},
+		{
+			mode: "associer",
+			ic: "bx-extension",
+			nom: "Associer",
+			desc: "Le jeu des paires",
+		},
 	];
 	return `<div class="grille-modes">
 		${modes
 			.map(
-				(m) => `<a class="mode${m.fort ? " fort" : ""}" href="#/p/${paquet.id}/${m.mode}${suffixe}">
+				(
+					m,
+				) => `<a class="mode${m.fort ? " fort" : ""}" href="#/p/${paquet.id}/${m.mode}${suffixe}">
 			<i class="bx ${m.ic}"></i><b>${m.nom}</b><span>${m.desc}</span></a>`,
 			)
 			.join("")}
@@ -807,7 +947,9 @@ function renderTout(app, paquet) {
 	app.querySelectorAll("[data-mix]").forEach((cb) =>
 		cb.addEventListener("change", () => {
 			const id = cb.dataset.mix;
-			state.mix.exclus = cb.checked ? state.mix.exclus.filter((x) => x !== id) : [...state.mix.exclus, id];
+			state.mix.exclus = cb.checked
+				? state.mix.exclus.filter((x) => x !== id)
+				: [...state.mix.exclus, id];
 			changerMelange();
 		}),
 	);
@@ -816,7 +958,11 @@ function renderTout(app, paquet) {
 function descMix() {
 	const p = paquetTout();
 	const b = state.apprendre[ID_TOUT];
-	const prog = !b ? "" : b.file.length ? ` · Apprendre : ${b.sues} / ${b.total}` : " · Apprendre bouclé ✓";
+	const prog = !b
+		? ""
+		: b.file.length
+			? ` · Apprendre : ${b.sues} / ${b.total}`
+			: " · Apprendre bouclé ✓";
 	return `${pluriel(p.cartes.length, "carte")} de ${pluriel(p.inclus.length, "paquet")}${prog}`;
 }
 
@@ -838,10 +984,13 @@ function descApprendre(paquet) {
 }
 
 function listeCartesHtml(cartes) {
-	if (!cartes.length) return recherche ? `<p class="aucun">Aucune carte ne correspond.</p>` : "";
+	if (!cartes.length)
+		return recherche ? `<p class="aucun">Aucune carte ne correspond.</p>` : "";
 	return cartes
 		.map(
-			(c) => `<button class="ligne-carte" data-action="editer-carte" data-id="${c.id}">
+			(
+				c,
+			) => `<button class="ligne-carte" data-action="editer-carte" data-id="${c.id}">
 			<span class="lc-recto">${esc(c.recto)}</span>
 			<span class="lc-verso">${esc(c.verso)}${c.source ? `<small>${esc(c.source)}</small>` : ""}</span>
 			<span class="lc-etat ${etatVisuel(c)}" title="${titreEtat(c)}"></span>
@@ -852,9 +1001,17 @@ function listeCartesHtml(cartes) {
 }
 
 const etatVisuel = (c) =>
-	c.srs.etat === "nouvelle" ? "m-new" : c.srs.etat === "revision" && c.srs.iv >= SEUIL_MAITRISE ? "m-ok" : "m-cours";
+	c.srs.etat === "nouvelle"
+		? "m-new"
+		: c.srs.etat === "revision" && c.srs.iv >= SEUIL_MAITRISE
+			? "m-ok"
+			: "m-cours";
 const titreEtat = (c) =>
-	c.srs.etat === "nouvelle" ? "Jamais vue" : c.srs.etat === "revision" && c.srs.iv >= SEUIL_MAITRISE ? "Maîtrisée" : "En cours";
+	c.srs.etat === "nouvelle"
+		? "Jamais vue"
+		: c.srs.etat === "revision" && c.srs.iv >= SEUIL_MAITRISE
+			? "Maîtrisée"
+			: "En cours";
 
 function quandLisible(t) {
 	const jours = Math.round((new Date(jourCle(t)) - new Date(jourCle())) / JOUR);
@@ -871,7 +1028,8 @@ function demarrerRevision(paquet) {
 	const nouvelles = [];
 	for (const c of paquet.cartes) {
 		if (c.srs.etat === "nouvelle") nouvelles.push(c.id);
-		else if (c.srs.due <= fin) (enApprentissage(c) ? apprentissage : revisions).push(c.id);
+		else if (c.srs.due <= fin)
+			(enApprentissage(c) ? apprentissage : revisions).push(c.id);
 	}
 	return {
 		type: "reviser",
@@ -897,7 +1055,8 @@ function choisirSuivante(paquet, s) {
 	// 1. une carte en apprentissage dont l'heure est venue
 	if (appr.length && appr[0].srs.due <= maintenant) return appr[0].id;
 	// 2. révisions et nouvelles, avec une nouvelle toutes les 3 cartes
-	const prendreNouvelle = s.nouvelles.length && (!s.revisions.length || s.faites % 3 === 2);
+	const prendreNouvelle =
+		s.nouvelles.length && (!s.revisions.length || s.faites % 3 === 2);
 	if (prendreNouvelle) return s.nouvelles[0];
 	if (s.revisions.length) return s.revisions[0];
 	if (s.nouvelles.length) return s.nouvelles[0];
@@ -927,7 +1086,11 @@ function renderReviser(app, paquet) {
 	if (!carte) return renderFinRevision(app, paquet, s);
 
 	const nbAppr = s.apprentissage.length;
-	const type = s.nouvelles.includes(carte.id) ? "bleu" : enApprentissage(carte) ? "rouge" : "vert";
+	const type = s.nouvelles.includes(carte.id)
+		? "bleu"
+		: enApprentissage(carte)
+			? "rouge"
+			: "vert";
 	const maintenant = Date.now();
 
 	app.innerHTML = `
@@ -955,21 +1118,29 @@ function renderReviser(app, paquet) {
 		<div class="zone-notes">
 			${
 				s.retournee
-					? `<p class="notes-aide">Tu t'en souvenais ?</p><div class="notes">${NOTES.map((n) => {
-							const apres = planifier(carte.srs, n.note, maintenant, { flou: false });
-							return `<button class="note ${n.cls}" data-action="noter" data-note="${n.note}">
+					? `<p class="notes-aide">Tu t'en souvenais ?</p><div class="notes">${NOTES.map(
+							(n) => {
+								const apres = planifier(carte.srs, n.note, maintenant, {
+									flou: false,
+								});
+								return `<button class="note ${n.cls}" data-action="noter" data-note="${n.note}">
 							<b>${n.label}</b><span>${formatDelai(apres.due - maintenant)}</span></button>`;
-						}).join("")}</div>`
+							},
+						).join("")}</div>`
 					: `<button class="btn large" data-action="retourner"><i class="bx bx-show"></i>Voir la réponse</button>`
 			}
 		</div>
 	</main>`;
 
 	clavier = (e) => {
-		if (!s.retournee && (e.key === " " || e.key === "Enter")) return actions.retourner(), true;
-		if (s.retournee && ["1", "2", "3", "4"].includes(e.key)) return noter(paquet, +e.key), true;
-		if (s.retournee && (e.key === " " || e.key === "Enter")) return noter(paquet, 3), true;
-		if (e.key === "z" || e.key === "Backspace") return actions["annuler-note"](), true;
+		if (!s.retournee && (e.key === " " || e.key === "Enter"))
+			return (actions.retourner(), true);
+		if (s.retournee && ["1", "2", "3", "4"].includes(e.key))
+			return (noter(paquet, +e.key), true);
+		if (s.retournee && (e.key === " " || e.key === "Enter"))
+			return (noter(paquet, 3), true);
+		if (e.key === "z" || e.key === "Backspace")
+			return (actions["annuler-note"](), true);
 		return false;
 	};
 }
@@ -996,13 +1167,15 @@ function noter(paquet, note) {
 	carte.srs = planifier(carte.srs, note);
 	if (etaitNouvelle) {
 		const nd = paquet.nouvellesDuJour;
-		if (nd.jour !== jourCle()) Object.assign(nd, { jour: jourCle(), n: 0, bonus: 0 });
+		if (nd.jour !== jourCle())
+			Object.assign(nd, { jour: jourCle(), n: 0, bonus: 0 });
 		nd.n++;
 		s.nouvelles = s.nouvelles.filter((id) => id !== carte.id);
 	}
 	s.revisions = s.revisions.filter((id) => id !== carte.id);
 	s.apprentissage = s.apprentissage.filter((id) => id !== carte.id);
-	if (enApprentissage(carte) && carte.srs.due <= finDeJournee()) s.apprentissage.push(carte.id);
+	if (enApprentissage(carte) && carte.srs.due <= finDeJournee())
+		s.apprentissage.push(carte.id);
 
 	s.faites++;
 	noterJournal("revues");
@@ -1040,7 +1213,9 @@ function renderFinRevision(app, paquet, s) {
 
 /* ================= Entraînement : choix des cartes ================= */
 function cartesEntrainement(paquet, r) {
-	const cartes = r.etoiles ? paquet.cartes.filter((c) => c.etoile) : paquet.cartes;
+	const cartes = r.etoiles
+		? paquet.cartes.filter((c) => c.etoile)
+		: paquet.cartes;
 	return cartes.length ? cartes : paquet.cartes;
 }
 
@@ -1053,7 +1228,10 @@ function enteteEntrainement(titre, progres) {
 	${progres !== undefined ? `<div class="progres wrap"><span style="width:${Math.round(progres * 100)}%"></span></div>` : ""}`;
 }
 
-function finEntrainement(app, { titre, texte, liste = [], titreListe = "À retravailler", boutons }) {
+function finEntrainement(
+	app,
+	{ titre, texte, liste = [], titreListe = "À retravailler", boutons },
+) {
 	app.innerHTML = `
 	<header class="barre-haut wrap">
 		<button class="rond" data-action="retour-paquet" aria-label="Retour"><i class="bx bx-x"></i></button>
@@ -1065,7 +1243,10 @@ function finEntrainement(app, { titre, texte, liste = [], titreListe = "À retra
 		${
 			liste.length
 				? `<div class="fin-liste"><p class="fin-liste-k">${titreListe}</p>${liste
-						.map((c) => `<div class="fin-ligne"><b>${esc(c.recto)}</b><span>${esc(c.verso)}${c.source ? `<small>${esc(c.source)}</small>` : ""}</span></div>`)
+						.map(
+							(c) =>
+								`<div class="fin-ligne"><b>${esc(c.recto)}</b><span>${esc(c.verso)}${c.source ? `<small>${esc(c.source)}</small>` : ""}</span></div>`,
+						)
 						.join("")}</div>`
 				: ""
 		}
@@ -1076,15 +1257,28 @@ function finEntrainement(app, { titre, texte, liste = [], titreListe = "À retra
 /* ================= Mode Cartes (retourner et trier) ================= */
 function renderCartes(app, paquet, r) {
 	if (!session || session.type !== "cartes") {
-		const ids = (session?.ids || cartesEntrainement(paquet, r).map((c) => c.id));
-		session = { type: "cartes", ids, index: 0, retournee: false, sais: [], revoir: [], faces: {}, melange: !!session?.melange };
+		const ids = session?.ids || cartesEntrainement(paquet, r).map((c) => c.id);
+		session = {
+			type: "cartes",
+			ids,
+			index: 0,
+			retournee: false,
+			sais: [],
+			revoir: [],
+			faces: {},
+			melange: !!session?.melange,
+		};
 	}
 	const s = session;
 
 	if (s.index >= s.ids.length) {
-		const revoir = s.revoir.map((id) => trouverCarte(paquet, id)).filter(Boolean);
+		const revoir = s.revoir
+			.map((id) => trouverCarte(paquet, id))
+			.filter(Boolean);
 		return finEntrainement(app, {
-			titre: revoir.length ? { ic: "💪", texte: "Tour terminé" } : { ic: "🎉", texte: "Tu sais tout !" },
+			titre: revoir.length
+				? { ic: "💪", texte: "Tour terminé" }
+				: { ic: "🎉", texte: "Tu sais tout !" },
 			texte: `${s.sais.length} sues · ${revoir.length} à revoir`,
 			liste: revoir,
 			boutons: `${revoir.length ? `<button class="btn large" data-action="cartes-revoir"><i class="bx bx-revision"></i>Revoir les ${pluriel(revoir.length, "carte")}</button>` : ""}
@@ -1128,10 +1322,17 @@ function renderCartes(app, paquet, r) {
 	activerGlisser($("#flip"), (sens) => trier(sens > 0));
 
 	clavier = (e) => {
-		if (e.key === " " || e.key === "Enter" || e.key === "ArrowUp" || e.key === "ArrowDown") return actions["retourner-flip"](), true;
-		if (e.key === "ArrowRight") return trier(true), true;
-		if (e.key === "ArrowLeft") return trier(false), true;
-		if (e.key === "z" || e.key === "Backspace") return actions["tri-annuler"](), true;
+		if (
+			e.key === " " ||
+			e.key === "Enter" ||
+			e.key === "ArrowUp" ||
+			e.key === "ArrowDown"
+		)
+			return (actions["retourner-flip"](), true);
+		if (e.key === "ArrowRight") return (trier(true), true);
+		if (e.key === "ArrowLeft") return (trier(false), true);
+		if (e.key === "z" || e.key === "Backspace")
+			return (actions["tri-annuler"](), true);
 		return false;
 	};
 }
@@ -1191,7 +1392,8 @@ function activerGlisser(el, surGlisse) {
 }
 
 /* ================= Questions à choix (Quiz et Apprendre) ================= */
-const MOIS_RE = /\b(january|february|march|april|may|june|july|august|september|october|november|december|janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|d[ée]cembre)\b/i;
+const MOIS_RE =
+	/\b(january|february|march|april|may|june|july|august|september|october|november|december|janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|d[ée]cembre)\b/i;
 
 // Année approximative d'une réponse (« 1536 », « c. 1000 BC », « 17th century »,
 // « 1850s », « 4 July 1776 »…), ou null si ce n'est pas une date avec année.
@@ -1201,7 +1403,11 @@ function anneeDe(texte) {
 	const siecle = t.match(/(\d{1,2})(st|nd|rd|th|e|ème)\s+(century|siècle)/i);
 	if (siecle) {
 		const base = (Number(siecle[1]) - 1) * 100;
-		const decalage = /early|début/i.test(t) ? 15 : /late|fin/i.test(t) ? 85 : 50;
+		const decalage = /early|début/i.test(t)
+			? 15
+			: /late|fin/i.test(t)
+				? 85
+				: 50;
 		return avJC ? -(base + decalage) : base + decalage;
 	}
 	const longue = t.match(/\b(\d{3,4})\b/);
@@ -1235,20 +1441,32 @@ function questionQCM(paquet, carte) {
 		const proches = candidats
 			.filter((c) => c.annee !== null && c.annee !== annee)
 			.sort((a, b) => Math.abs(a.annee - annee) - Math.abs(b.annee - annee));
-		tries = [...melanger(proches.slice(0, 6)), ...candidats.filter((c) => !proches.slice(0, 6).includes(c))];
+		tries = [
+			...melanger(proches.slice(0, 6)),
+			...candidats.filter((c) => !proches.slice(0, 6).includes(c)),
+		];
 	} else if (!inverse) {
 		// réponse sans année (« 23 April ») : d'autres réponses du même genre d'abord
-		tries = [...candidats.filter((c) => c.annee === null), ...candidats.filter((c) => c.annee !== null)];
+		tries = [
+			...candidats.filter((c) => c.annee === null),
+			...candidats.filter((c) => c.annee !== null),
+		];
 	} else {
 		tries = candidats;
 	}
 	const leurres = tries.slice(0, 3).map((c) => c.t);
 	const choix = melanger([bonne, ...leurres]);
-	return { carteId: carte.id, question: f.question, choix, bonne: choix.indexOf(bonne) };
+	return {
+		carteId: carte.id,
+		question: f.question,
+		choix,
+		bonne: choix.indexOf(bonne),
+	};
 }
 
 const assezPourQCM = (paquet) =>
-	paquet.cartes.length >= 2 && new Set(paquet.cartes.map((c) => normaliser(c.verso))).size >= 2;
+	paquet.cartes.length >= 2 &&
+	new Set(paquet.cartes.map((c) => normaliser(c.verso))).size >= 2;
 
 function choixHtml(q, choisi) {
 	const repondu = choisi !== null;
@@ -1271,12 +1489,20 @@ function preparerQuiz(paquet, cartes) {
 	const questions = melanger(cartes)
 		.slice(0, 20)
 		.map((carte) => questionQCM(paquet, carte));
-	return { type: "quiz", questions, i: 0, choisi: null, erreurs: [], cartesIds: cartes.map((c) => c.id) };
+	return {
+		type: "quiz",
+		questions,
+		i: 0,
+		choisi: null,
+		erreurs: [],
+		cartesIds: cartes.map((c) => c.id),
+	};
 }
 
 const PAS_ASSEZ = {
 	titre: { ic: "🤏", texte: "Pas assez de cartes" },
-	texte: "Il faut au moins 2 cartes avec des réponses différentes pour faire un QCM (4 c'est mieux).",
+	texte:
+		"Il faut au moins 2 cartes avec des réponses différentes pour faire un QCM (4 c'est mieux).",
 	boutons: `<button class="btn large" data-action="retour-paquet">Retour au paquet</button>`,
 };
 
@@ -1291,11 +1517,16 @@ function renderQuiz(app, paquet, r) {
 	const s = session;
 
 	if (s.i >= s.questions.length) {
-		const erreurs = s.erreurs.map((id) => trouverCarte(paquet, id)).filter(Boolean);
+		const erreurs = s.erreurs
+			.map((id) => trouverCarte(paquet, id))
+			.filter(Boolean);
 		const score = s.questions.length - erreurs.length;
 		const pct = Math.round((score / s.questions.length) * 100);
 		return finEntrainement(app, {
-			titre: { ic: pct === 100 ? "🏆" : pct >= 70 ? "👏" : "📚", texte: `${score} / ${s.questions.length}` },
+			titre: {
+				ic: pct === 100 ? "🏆" : pct >= 70 ? "👏" : "📚",
+				texte: `${score} / ${s.questions.length}`,
+			},
 			texte: `${pct} % de bonnes réponses`,
 			liste: erreurs,
 			boutons: `${erreurs.length ? `<button class="btn large" data-action="quiz-erreurs"><i class="bx bx-revision"></i>Retravailler les erreurs</button>` : ""}
@@ -1323,8 +1554,9 @@ function renderQuiz(app, paquet, r) {
 
 function clavierQCM(q, repondu) {
 	return (e) => {
-		if (!repondu && /^[1-4]$/.test(e.key) && +e.key <= q.choix.length) return choisir(+e.key - 1), true;
-		if (repondu && e.key === "Enter") return actions.suivante(), true;
+		if (!repondu && /^[1-4]$/.test(e.key) && +e.key <= q.choix.length)
+			return (choisir(+e.key - 1), true);
+		if (repondu && e.key === "Enter") return (actions.suivante(), true);
 		return false;
 	};
 }
@@ -1347,7 +1579,12 @@ function choisir(i) {
 	render();
 	if (juste) {
 		setTimeout(() => {
-			if (session === s && s.choisi === i && (s.type !== "quiz" || s.questions[s.i] === q)) actions.suivante();
+			if (
+				session === s &&
+				s.choisi === i &&
+				(s.type !== "quiz" || s.questions[s.i] === q)
+			)
+				actions.suivante();
 		}, 650);
 	}
 }
@@ -1368,13 +1605,23 @@ function progressionApprendre(paquet, r) {
 		return b;
 	}
 	const ids = melanger(cartesEntrainement(paquet, r).map((c) => c.id));
-	b = { file: ids, total: ids.length, sues: 0, serie: {}, erreurs: {}, faites: 0, debut: Date.now(), duree: 0 };
+	b = {
+		file: ids,
+		total: ids.length,
+		sues: 0,
+		serie: {},
+		erreurs: {},
+		faites: 0,
+		debut: Date.now(),
+		duree: 0,
+	};
 	state.apprendre[paquet.id] = b;
 	sauver();
 	return b;
 }
 
-const hasard = ([min, max]) => min + Math.floor(Math.random() * (max - min + 1));
+const hasard = ([min, max]) =>
+	min + Math.floor(Math.random() * (max - min + 1));
 
 function noterApprendre(carteId, juste) {
 	const s = session;
@@ -1385,11 +1632,20 @@ function noterApprendre(carteId, juste) {
 		b.serie[carteId] = (b.serie[carteId] || 0) + 1;
 		const sue = b.erreurs[carteId] ? b.serie[carteId] >= 2 : true;
 		if (sue) b.sues++;
-		else b.file.splice(Math.min(b.file.length, hasard(RETOUR_APRES_REUSSITE)), 0, carteId);
+		else
+			b.file.splice(
+				Math.min(b.file.length, hasard(RETOUR_APRES_REUSSITE)),
+				0,
+				carteId,
+			);
 	} else {
 		b.serie[carteId] = 0;
 		b.erreurs[carteId] = (b.erreurs[carteId] || 0) + 1;
-		b.file.splice(Math.min(b.file.length, hasard(RETOUR_APRES_ERREUR)), 0, carteId);
+		b.file.splice(
+			Math.min(b.file.length, hasard(RETOUR_APRES_ERREUR)),
+			0,
+			carteId,
+		);
 	}
 	// temps passé, sans compter les pauses de plus de 2 minutes
 	const maintenant = Date.now();
@@ -1401,7 +1657,13 @@ function noterApprendre(carteId, juste) {
 function renderApprendre(app, paquet, r) {
 	if (!assezPourQCM(paquet)) return finEntrainement(app, PAS_ASSEZ);
 	if (!session || session.type !== "apprendre") {
-		session = { type: "apprendre", b: progressionApprendre(paquet, r), q: null, choisi: null, derniere: Date.now() };
+		session = {
+			type: "apprendre",
+			b: progressionApprendre(paquet, r),
+			q: null,
+			choisi: null,
+			derniere: Date.now(),
+		};
 	}
 	const s = session;
 	const b = s.b;
@@ -1471,7 +1733,16 @@ function renderAssocier(app, paquet, r) {
 				{ cle: c.id + ":v", carte: c.id, texte: c.verso },
 			]),
 		);
-		session = { type: "associer", tuiles, trouvees: new Set(), selection: null, erreur: null, debut: Date.now(), penalite: 0, fin: null };
+		session = {
+			type: "associer",
+			tuiles,
+			trouvees: new Set(),
+			selection: null,
+			erreur: null,
+			debut: Date.now(),
+			penalite: 0,
+			fin: null,
+		};
 	}
 	const s = session;
 
@@ -1487,7 +1758,9 @@ function renderAssocier(app, paquet, r) {
 		}
 		return finEntrainement(app, {
 			titre: { ic: nouveauRecord ? "🏆" : "⏱️", texte: formatChrono(temps) },
-			texte: nouveauRecord ? "Nouveau record !" : `Record : ${formatChrono(record)}`,
+			texte: nouveauRecord
+				? "Nouveau record !"
+				: `Record : ${formatChrono(record)}`,
 			boutons: `<button class="btn large" data-action="recommencer"><i class="bx bx-revision"></i>Rejouer</button>
 				<button class="btn large secondaire" data-action="retour-paquet">Retour au paquet</button>`,
 		});
@@ -1615,7 +1888,9 @@ function renderReglages(app) {
 			const donnees = reparer(JSON.parse(await fichier.text()));
 			if (!donnees.paquets.length) throw new Error("vide");
 			const existants = new Set(state.paquets.map((p) => p.id));
-			const remplaces = donnees.paquets.filter((p) => existants.has(p.id)).length;
+			const remplaces = donnees.paquets.filter((p) =>
+				existants.has(p.id),
+			).length;
 			confirmer({
 				titre: "Importer la sauvegarde ?",
 				texte: `${pluriel(donnees.paquets.length, "paquet")} trouvés.${remplaces ? ` ${pluriel(remplaces, "paquet")} déjà présent${remplaces > 1 ? "s" : ""} sera remplacé${remplaces > 1 ? "s" : ""}.` : ""} Tes autres paquets sont conservés.`,
@@ -1627,7 +1902,9 @@ function renderReglages(app) {
 						else state.paquets.push(p);
 					}
 					for (const [j, v] of Object.entries(donnees.journal)) {
-						state.journal[j] = { revues: Math.max(state.journal[j]?.revues || 0, v.revues || 0) };
+						state.journal[j] = {
+							revues: Math.max(state.journal[j]?.revues || 0, v.revues || 0),
+						};
 					}
 					sauver();
 					toast("Sauvegarde importée");
@@ -1705,7 +1982,10 @@ function feuilleNouveauPaquet() {
 				$("#nomPaquet").focus();
 				$("#formPaquet").addEventListener("submit", (e) => {
 					e.preventDefault();
-					const p = nouveauPaquet($("#nomPaquet").value, new FormData(e.target).get("couleur"));
+					const p = nouveauPaquet(
+						$("#nomPaquet").value,
+						new FormData(e.target).get("couleur"),
+					);
 					state.paquets.push(p);
 					sauver();
 					fermerFeuille();
@@ -1776,7 +2056,8 @@ function feuilleAjouter(paquet) {
 					paquet.cartes.push(nouvelleCarte(recto.value, verso.value));
 					sauver();
 					ajoutees++;
-					$("#ajoutInfo").textContent = `✓ ${pluriel(ajoutees, "carte ajoutée", "cartes ajoutées")}`;
+					$("#ajoutInfo").textContent =
+						`✓ ${pluriel(ajoutees, "carte ajoutée", "cartes ajoutées")}`;
 					recto.value = "";
 					verso.value = "";
 					recto.focus();
@@ -1877,16 +2158,27 @@ function feuilleImporter(paquet) {
 			surOuvrir: () => {
 				const zone = $("#texteImport");
 				const maj = () => {
-					const { cartes, sep } = analyserImport(zone.value, $("#sepImport").value, $("#sepCartes").value);
+					const { cartes, sep } = analyserImport(
+						zone.value,
+						$("#sepImport").value,
+						$("#sepCartes").value,
+					);
 					const btn = $("#btnImport");
 					btn.disabled = !cartes.length;
-					btn.textContent = cartes.length ? `Importer ${pluriel(cartes.length, "carte")}` : "Importer";
+					btn.textContent = cartes.length
+						? `Importer ${pluriel(cartes.length, "carte")}`
+						: "Importer";
 					$("#apercu").innerHTML = cartes.length
 						? `<p class="apercu-k">${pluriel(cartes.length, "carte détectée", "cartes détectées")}${$("#sepImport").value === "auto" ? ` · séparateur : ${SEPARATEURS[sep].label.toLowerCase()}` : ""}</p>
 						${cartes
 							.slice(0, 3)
-							.map(([r, v]) => `<div class="apercu-ligne"><b>${esc(r)}</b><span>${esc(v)}</span></div>`)
-							.join("")}${cartes.length > 3 ? `<p class="apercu-plus">… et ${cartes.length - 3} autres</p>` : ""}`
+							.map(
+								([r, v]) =>
+									`<div class="apercu-ligne"><b>${esc(r)}</b><span>${esc(v)}</span></div>`,
+							)
+							.join(
+								"",
+							)}${cartes.length > 3 ? `<p class="apercu-plus">… et ${cartes.length - 3} autres</p>` : ""}`
 						: zone.value.trim()
 							? `<p class="apercu-k">Aucune carte reconnue : essaie un autre séparateur.</p>`
 							: "";
@@ -1897,12 +2189,18 @@ function feuilleImporter(paquet) {
 				zone.focus();
 				$("#formImport").addEventListener("submit", (e) => {
 					e.preventDefault();
-					const { cartes } = analyserImport(zone.value, $("#sepImport").value, $("#sepCartes").value);
+					const { cartes } = analyserImport(
+						zone.value,
+						$("#sepImport").value,
+						$("#sepCartes").value,
+					);
 					if (!cartes.length) return;
 					paquet.cartes.push(...cartes.map(([r, v]) => nouvelleCarte(r, v)));
 					sauver();
 					fermerFeuille();
-					toast(`${pluriel(cartes.length, "carte importée", "cartes importées")}`);
+					toast(
+						`${pluriel(cartes.length, "carte importée", "cartes importées")}`,
+					);
 					render();
 				});
 			},
@@ -1945,7 +2243,8 @@ async function chargerCatalogue() {
 	return catalogue;
 }
 
-const dejaAjoute = (entree) => state.paquets.some((p) => p.source === entree.id);
+const dejaAjoute = (entree) =>
+	state.paquets.some((p) => p.source === entree.id);
 
 async function ajouterPaquetPret(entree) {
 	const res = await fetch(`paquets/${entree.fichier}`, { cache: "no-cache" });
@@ -1954,13 +2253,17 @@ async function ajouterPaquetPret(entree) {
 	const p = nouveauPaquet(d.nom || entree.nom, d.couleur || entree.couleur);
 	p.sens = d.sens || "recto";
 	p.source = entree.id;
-	p.cartes = (d.cartes || []).map(([r, v, source]) => nouvelleCarte(r, v, source));
+	p.cartes = (d.cartes || []).map(([r, v, source]) =>
+		nouvelleCarte(r, v, source),
+	);
 	state.paquets.push(p);
 	return p;
 }
 
 async function feuillePaquetsPrets() {
-	ouvrirFeuille(`<h2>Paquets prêts</h2><p class="feuille-texte">Chargement…</p>`);
+	ouvrirFeuille(
+		`<h2>Paquets prêts</h2><p class="feuille-texte">Chargement…</p>`,
+	);
 	let cat;
 	try {
 		cat = await chargerCatalogue();
@@ -1972,7 +2275,8 @@ async function feuillePaquetsPrets() {
 		return;
 	}
 	const dessiner = () => {
-		$("#feuille").innerHTML = `<div class="feuille-poignee"></div><h2>Paquets prêts</h2>
+		$("#feuille").innerHTML =
+			`<div class="feuille-poignee"></div><h2>Paquets prêts</h2>
 		${cat.groupes
 			.map((g, gi) => {
 				const restants = g.paquets.filter((e) => !dejaAjoute(e));
@@ -2007,14 +2311,20 @@ async function feuillePaquetsPrets() {
 // remplacés par un paquet par cours) : on propose de les supprimer, sinon
 // « Tout mélanger » aurait chaque carte en double.
 async function ajouterPrets(entrees) {
-	const remplaces = new Set(entrees.filter((e) => !dejaAjoute(e)).flatMap((e) => e.remplace || []));
-	const anciens = state.paquets.filter((p) => p.source && remplaces.has(p.source));
+	const remplaces = new Set(
+		entrees.filter((e) => !dejaAjoute(e)).flatMap((e) => e.remplace || []),
+	);
+	const anciens = state.paquets.filter(
+		(p) => p.source && remplaces.has(p.source),
+	);
 	if (!anciens.length) return ajouterEtRemplacer(entrees, []);
 	confirmer({
 		titre: "Remplacer les anciens paquets\u00a0?",
 		texte: `Ces paquets par cours remplacent ${pluriel(anciens.length, "ancien paquet", "anciens paquets")} par thème (${anciens
 			.map((p) => esc(p.nom))
-			.join(", ")}). Ils seront supprimés, avec leur progression, pour ne pas avoir les mêmes cartes en double.`,
+			.join(
+				", ",
+			)}). Ils seront supprimés, avec leur progression, pour ne pas avoir les mêmes cartes en double.`,
 		bouton: "Remplacer",
 		surOk: () => ajouterEtRemplacer(entrees, anciens),
 	});
@@ -2032,17 +2342,23 @@ async function ajouterEtRemplacer(entrees, anciens) {
 		// le mélange a changé : sa progression « Apprendre » repart de zéro
 		delete state.apprendre[ID_TOUT];
 		sauver();
-		toast(entrees.length > 1 ? `${pluriel(entrees.length, "paquet ajouté", "paquets ajoutés")}` : "Paquet ajouté");
+		toast(
+			entrees.length > 1
+				? `${pluriel(entrees.length, "paquet ajouté", "paquets ajoutés")}`
+				: "Paquet ajouté",
+		);
 	} catch {
 		sauver();
 		toast("Erreur de chargement, réessaie");
 	}
-	if ($("#feuilleFond").classList.contains("ouvert")) feuillePaquetsPrets.dessiner?.();
+	if ($("#feuilleFond").classList.contains("ouvert"))
+		feuillePaquetsPrets.dessiner?.();
 	render();
 }
 
 /* ================= Actions (clics) ================= */
-const paquetCourant = () => routeCourante?.id && trouverPaquet(routeCourante.id);
+const paquetCourant = () =>
+	routeCourante?.id && trouverPaquet(routeCourante.id);
 
 const actions = {
 	accueil: () => aller("#/"),
@@ -2062,8 +2378,12 @@ const actions = {
 		state.mix.exclus = [];
 		changerMelange();
 	},
-	"pret-un": (el) => ajouterPrets([feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets[el.dataset.p]]),
-	"pret-tout": (el) => ajouterPrets(feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets),
+	"pret-un": (el) =>
+		ajouterPrets([
+			feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets[el.dataset.p],
+		]),
+	"pret-tout": (el) =>
+		ajouterPrets(feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets),
 	exemple: () => {
 		const p = nouveauPaquet(PAQUET_EXEMPLE.nom, COULEURS[1]);
 		p.cartes = PAQUET_EXEMPLE.cartes.map(([r, v]) => nouvelleCarte(r, v));
@@ -2084,7 +2404,8 @@ const actions = {
 		const p = paquetCourant();
 		confirmer({
 			titre: "Remettre à zéro ?",
-			texte: "Toutes les cartes redeviennent « jamais vues ». Les cartes elles-mêmes sont conservées.",
+			texte:
+				"Toutes les cartes redeviennent « jamais vues ». Les cartes elles-mêmes sont conservées.",
 			bouton: "Remettre à zéro",
 			danger: true,
 			surOk: () => {
@@ -2116,7 +2437,8 @@ const actions = {
 	"plus-de-nouvelles": () => {
 		const p = paquetCourant();
 		const nd = p.nouvellesDuJour;
-		if (nd.jour !== jourCle()) Object.assign(nd, { jour: jourCle(), n: 0, bonus: 0 });
+		if (nd.jour !== jourCle())
+			Object.assign(nd, { jour: jourCle(), n: 0, bonus: 0 });
 		nd.bonus = (nd.bonus || 0) + 10;
 		sauver();
 		session = null;
@@ -2208,7 +2530,16 @@ const actions = {
 				surOk: reset,
 			});
 		}
-		session = type === "cartes" ? { ids: melanger(cartesEntrainement(paquetCourant(), routeCourante).map((c) => c.id)) } : null;
+		session =
+			type === "cartes"
+				? {
+						ids: melanger(
+							cartesEntrainement(paquetCourant(), routeCourante).map(
+								(c) => c.id,
+							),
+						),
+					}
+				: null;
 		render();
 	},
 	choisir: (el) => choisir(+el.dataset.i),
@@ -2226,17 +2557,25 @@ const actions = {
 	},
 	associer: (el) => associer(el.dataset.cle),
 	"nouvelles-moins": () => {
-		state.reglages.nouvellesParJour = Math.max(0, state.reglages.nouvellesParJour - 5);
+		state.reglages.nouvellesParJour = Math.max(
+			0,
+			state.reglages.nouvellesParJour - 5,
+		);
 		sauver();
 		render();
 	},
 	"nouvelles-plus": () => {
-		state.reglages.nouvellesParJour = Math.min(200, state.reglages.nouvellesParJour + 5);
+		state.reglages.nouvellesParJour = Math.min(
+			200,
+			state.reglages.nouvellesParJour + 5,
+		);
 		sauver();
 		render();
 	},
 	"sauvegarde-exporter": () => {
-		const blob = new Blob([JSON.stringify(state, null, 1)], { type: "application/json" });
+		const blob = new Blob([JSON.stringify(state, null, 1)], {
+			type: "application/json",
+		});
 		const a = document.createElement("a");
 		a.href = URL.createObjectURL(blob);
 		a.download = `flashcards-sauvegarde-${iso(new Date())}.json`;
@@ -2248,7 +2587,8 @@ const actions = {
 	"tout-effacer": () =>
 		confirmer({
 			titre: "Tout effacer ?",
-			texte: "Tous les paquets, toutes les cartes et toute la progression seront supprimés de cet appareil.",
+			texte:
+				"Tous les paquets, toutes les cartes et toute la progression seront supprimés de cet appareil.",
 			bouton: "Tout effacer",
 			danger: true,
 			surOk: () => {
@@ -2273,7 +2613,8 @@ $("#feuilleFond").addEventListener("click", (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-	if (e.key === "Escape" && $("#feuilleFond").classList.contains("ouvert")) return fermerFeuille();
+	if (e.key === "Escape" && $("#feuilleFond").classList.contains("ouvert"))
+		return fermerFeuille();
 	if ($("#feuilleFond").classList.contains("ouvert")) return;
 	const t = e.target;
 	if (t.matches?.("input, textarea, select")) return;
