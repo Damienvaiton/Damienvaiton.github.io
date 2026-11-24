@@ -1657,9 +1657,14 @@ function noterApprendre(carteId, juste) {
 function renderApprendre(app, paquet, r) {
 	if (!assezPourQCM(paquet)) return finEntrainement(app, PAS_ASSEZ);
 	if (!session || session.type !== "apprendre") {
+		const b = progressionApprendre(paquet, r);
+		// À chaque ouverture, les cartes restantes sont remélangées : sinon on
+		// retrouve exactement la même suite en revenant (la progression, elle, est gardée)
+		b.file = melanger(b.file);
+		sauver();
 		session = {
 			type: "apprendre",
-			b: progressionApprendre(paquet, r),
+			b,
 			q: null,
 			choisi: null,
 			derniere: Date.now(),
