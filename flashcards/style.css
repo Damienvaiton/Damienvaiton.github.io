@@ -926,6 +926,9 @@ a {
 .tc.vert {
 	color: var(--vert);
 }
+.tc.orange {
+	color: var(--orange);
+}
 .flip {
 	position: relative;
 	min-height: 50vh;
@@ -1029,92 +1032,6 @@ a {
 }
 .astuce.haut {
 	margin-bottom: -4px;
-}
-
-/* ---------------- Mode Écrire ---------------- */
-.ecrire-form {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-}
-.ecrire-form textarea {
-	width: 100%;
-	resize: none;
-	border: 2px solid transparent;
-	border-radius: 18px;
-	padding: 16px;
-	background: var(--panneau);
-	box-shadow: var(--ombre);
-	font-size: 17px;
-	outline: none;
-}
-.ecrire-form textarea:focus {
-	border-color: var(--paquet);
-}
-.ecrire-actions {
-	display: flex;
-	gap: 10px;
-}
-.ecrire-actions .btn.large {
-	flex: 1;
-}
-.ecrire-actions .btn.secondaire:not(.large) {
-	flex-shrink: 0;
-	padding: 15px 16px;
-	border-radius: 16px;
-}
-.retour {
-	border-radius: 18px;
-	padding: 16px;
-	background: var(--panneau);
-	box-shadow: var(--ombre);
-	border-left: 5px solid;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-	white-space: pre-wrap;
-	overflow-wrap: anywhere;
-}
-.retour.ok {
-	border-color: var(--vert);
-}
-.retour.ko {
-	border-color: var(--rouge);
-}
-.retour-titre {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-	font-weight: 800;
-}
-.retour.ok .retour-titre {
-	color: var(--vert);
-}
-.retour.ko .retour-titre {
-	color: var(--rouge);
-}
-.retour-titre i {
-	font-size: 1.3rem;
-}
-.retour-note {
-	font-size: 0.85rem;
-	color: var(--encre-2);
-}
-.retour-k {
-	font-size: 0.72rem;
-	font-weight: 700;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--encre-3);
-	margin-top: 4px;
-}
-.retour-tape {
-	text-decoration: line-through;
-	color: var(--encre-2);
-}
-.retour-bonne {
-	font-weight: 700;
-	font-size: 1.05rem;
 }
 
 /* ---------------- Mode Quiz ---------------- */
@@ -1607,4 +1524,79 @@ body.feuille-ouverte {
 	.tuiles {
 		grid-template-columns: repeat(4, 1fr);
 	}
+}
+
+/* ---------------- Apprendre & paquets prêts ---------------- */
+.mode.fort {
+	background: var(--encre);
+	color: #fff;
+}
+.mode.fort span {
+	color: rgba(255, 255, 255, 0.7);
+}
+.mode.fort i {
+	background: color-mix(in srgb, var(--paquet) 70%, white);
+	color: var(--encre);
+}
+.groupe-prets {
+	background: var(--panneau);
+	border-radius: 18px;
+	box-shadow: var(--ombre);
+	padding: 6px 0;
+	margin-bottom: 14px;
+}
+.groupe-tete {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 10px 14px 8px;
+	font-size: 0.9rem;
+}
+.groupe-tete .puce {
+	box-shadow: none;
+	background: color-mix(in srgb, var(--paquet) 12%, white);
+	white-space: nowrap;
+}
+.groupe-tete .puce i {
+	color: inherit;
+}
+.pret {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 14px;
+	border-top: 1px solid var(--ligne);
+}
+.paquet-pastille.petite {
+	width: 36px;
+	height: 36px;
+	border-radius: 11px;
+	font-size: 1rem;
+}
+.pret-corps {
+	flex: 1;
+	min-width: 0;
+}
+.pret-corps b {
+	display: block;
+	font-size: 0.9rem;
+}
+.pret-corps span {
+	display: block;
+	font-size: 0.76rem;
+	color: var(--encre-2);
+	margin-top: 2px;
+}
+.pret .rond {
+	background: rgba(23, 23, 28, 0.06);
+	box-shadow: none;
+}
+.pret-ok {
+	width: 34px;
+	height: 34px;
+	display: grid;
+	place-items: center;
+	color: var(--vert);
+	font-size: 1.4rem;
 }

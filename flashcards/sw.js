@@ -1,4 +1,4 @@
-const CACHE_NAME = "flashcards-pwa-v1";
+const CACHE_NAME = "flashcards-pwa-v2";
 const ASSETS = [
 	"./",
 	"./index.html",
@@ -7,6 +7,7 @@ const ASSETS = [
 	"./manifest.webmanifest",
 	"./icon-192.png",
 	"./icon-512.png",
+	"./paquets/catalogue.json",
 	"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
 	"https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css",
 ];

@@ -6,7 +6,9 @@
    - Paquets de cartes (recto / verso), import depuis Quizlet
    - « Réviser » : répétition espacée façon Anki (SM-2 simplifié),
      chaque carte revient juste avant d'être oubliée
-   - Entraînement libre façon Quizlet : Cartes, Écrire, Quiz, Associer
+   - « Apprendre » : QCM sur tout le paquet, chaque carte revient
+     jusqu'à être sue (idéal avant un examen)
+   - Entraînement libre façon Quizlet : Cartes, Quiz, Associer
    Tout est stocké sur l'appareil (localStorage), rien n'est envoyé.
    ========================================================= */
 
@@ -100,21 +102,6 @@ function normaliser(s) {
 		.trim();
 }
 
-function levenshtein(a, b) {
-	if (a === b) return 0;
-	if (!a.length) return b.length;
-	if (!b.length) return a.length;
-	let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
-	for (let i = 1; i <= a.length; i++) {
-		const cur = [i];
-		for (let j = 1; j <= b.length; j++) {
-			cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
-		}
-		prev = cur;
-	}
-	return prev[b.length];
-}
-
 function formatDelai(ms) {
 	if (ms < MIN) return "<1 min";
 	if (ms < HEURE) return `${Math.round(ms / MIN)} min`;
@@ -184,7 +171,8 @@ function nouveauPaquet(nom, couleur = COULEURS[0]) {
 }
 
 function etatInitial() {
-	return { paquets: [], reglages: { nouvellesParJour: 20 }, journal: {} };
+	// apprendre : progression du mode Apprendre, par paquet
+	return { paquets: [], reglages: { nouvellesParJour: 20 }, journal: {}, apprendre: {} };
 }
 
 // Remet d'aplomb un état chargé (ancienne version, sauvegarde importée…)
@@ -193,6 +181,7 @@ function reparer(e) {
 	const etat = { ...base, ...(e && typeof e === "object" ? e : {}) };
 	etat.reglages = { ...base.reglages, ...(etat.reglages || {}) };
 	etat.journal = etat.journal && typeof etat.journal === "object" ? etat.journal : {};
+	etat.apprendre = etat.apprendre && typeof etat.apprendre === "object" ? etat.apprendre : {};
 	etat.paquets = (Array.isArray(etat.paquets) ? etat.paquets : []).map((p) => {
 		const paquet = { ...nouveauPaquet(p.nom || "Sans titre"), ...p };
 		paquet.nouvellesDuJour = { jour: "", n: 0, bonus: 0, ...(p.nouvellesDuJour || {}) };
@@ -223,7 +212,7 @@ function sauver() {
 	try {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 	} catch {
-		toast("Impossible d'enregistrer : stockage plein ?");
+		toast("Impossible d'enregistrer : stockage plein ?");
 	}
 }
 
@@ -391,18 +380,45 @@ const LIBELLES_SENS = { recto: "Terme → Définition", verso: "Définition → 
 const SEPARATEURS = {
 	auto: { label: "Automatique", re: null },
 	tab: { label: "Tabulation (Quizlet)", re: /\t/ },
+	derniereVirgule: { label: "Dernière virgule  (événement, date)", re: null },
 	pv: { label: "Point-virgule  ;", re: /\s*;\s*/ },
 	virgule: { label: "Virgule  ,", re: /\s*,\s*/ },
 	tiret: { label: "Tiret  -", re: /\s+[-–—]\s+/ },
 	dp: { label: "Deux-points  :", re: /\s*:\s*/ },
 };
 
+// Position du séparateur dans une ligne : { index, longueur } ou null
+function trouverSeparateur(ligne, cle) {
+	if (cle === "derniereVirgule") {
+		// la dernière virgule hors parenthèses : « Act of Union (England, Wales), 1536 »
+		let prof = 0;
+		let pos = -1;
+		for (let i = 0; i < ligne.length; i++) {
+			if (ligne[i] === "(") prof++;
+			else if (ligne[i] === ")") prof = Math.max(0, prof - 1);
+			else if (ligne[i] === "," && prof === 0) pos = i;
+		}
+		return pos < 0 ? null : { index: pos, longueur: 1 };
+	}
+	const m = ligne.match(SEPARATEURS[cle].re);
+	return m ? { index: m.index, longueur: m[0].length } : null;
+}
+
 function detecterSeparateur(lignes) {
 	const candidats = ["tab", "tiret", "pv", "dp", "virgule"];
 	for (const cle of candidats) {
-		const re = SEPARATEURS[cle].re;
-		const ok = lignes.filter((l) => re.test(l)).length;
-		if (ok && ok >= lignes.length * 0.6) return cle;
+		const ok = lignes.filter((l) => trouverSeparateur(l, cle)).length;
+		if (!ok || ok < lignes.length * 0.6) continue;
+		if (cle === "virgule") {
+			// « événement, date » : si ce qui suit la dernière virgule est une date,
+			// on coupe là, même si l'événement contient d'autres virgules
+			const dates = lignes.filter((l) => {
+				const sep = trouverSeparateur(l, "derniereVirgule");
+				return sep && anneeDe(l.slice(sep.index + 1)) !== null;
+			}).length;
+			if (dates >= lignes.length * 0.6) return "derniereVirgule";
+		}
+		return cle;
 	}
 	return "tab";
 }
@@ -414,13 +430,12 @@ function analyserImport(texte, sepCle = "auto", sepCartes = "ligne") {
 		.filter(Boolean);
 	if (!lignes.length) return { cartes: [], sep: sepCle };
 	const cle = sepCle === "auto" ? detecterSeparateur(lignes) : sepCle;
-	const re = SEPARATEURS[cle].re;
 	const cartes = [];
 	for (const l of lignes) {
-		const m = l.match(re);
-		if (!m) continue;
-		const recto = l.slice(0, m.index).trim();
-		const verso = l.slice(m.index + m[0].length).trim();
+		const sep = trouverSeparateur(l, cle);
+		if (!sep) continue;
+		const recto = l.slice(0, sep.index).trim();
+		const verso = l.slice(sep.index + sep.longueur).trim();
 		if (recto && verso) cartes.push([recto, verso]);
 	}
 	return { cartes, sep: cle };
@@ -433,7 +448,7 @@ const exporterTexte = (paquet) =>
 // #/                      accueil
 // #/p/ID                  paquet
 // #/p/ID/reviser          répétition espacée
-// #/p/ID/cartes|ecrire|quiz|associer[?e=1]   entraînement (e=1 : étoilées seulement)
+// #/p/ID/apprendre|cartes|quiz|associer[?e=1]   entraînement (e=1 : étoilées seulement)
 // #/reglages
 function route() {
 	const [chemin, requete = ""] = location.hash.replace(/^#/, "").split("?");
@@ -479,7 +494,7 @@ function render() {
 		paquet: renderPaquet,
 		reviser: renderReviser,
 		cartes: renderCartes,
-		ecrire: renderEcrire,
+		apprendre: renderApprendre,
 		quiz: renderQuiz,
 		associer: renderAssocier,
 	};
@@ -535,12 +550,16 @@ function renderAccueil(app) {
 			</section>
 			<div class="titre-section"><h2>Mes paquets</h2></div>
 			<div class="liste-paquets">${listePaquets}</div>
-			<button class="btn large secondaire" data-action="nouveau-paquet"><i class="bx bx-plus"></i>Nouveau paquet</button>`
+			<div class="actions-cartes">
+				<button class="btn secondaire" data-action="nouveau-paquet"><i class="bx bx-plus"></i>Nouveau paquet</button>
+				<button class="btn secondaire" data-action="paquets-prets"><i class="bx bx-library"></i>Paquets prêts</button>
+			</div>`
 				: `<section class="vide">
 				<div class="vide-ill"><span></span><span></span><span></span></div>
 				<h2>Crée ton premier paquet</h2>
 				<p>Ajoute tes cartes à la main ou colle un export Quizlet. L'appli te fait ensuite réviser chaque carte au bon moment, juste avant que tu l'oublies.</p>
-				<button class="btn large" data-action="nouveau-paquet"><i class="bx bx-plus"></i>Nouveau paquet</button>
+				<button class="btn large" data-action="paquets-prets"><i class="bx bx-library"></i>Paquets prêts (civi britannique…)</button>
+				<button class="btn large secondaire" data-action="nouveau-paquet"><i class="bx bx-plus"></i>Nouveau paquet</button>
 				<button class="btn large secondaire" data-action="exemple"><i class="bx bx-play"></i>Essayer avec un paquet d'exemple</button>
 			</section>`
 		}
@@ -566,9 +585,9 @@ function renderPaquet(app, paquet) {
 		: paquet.cartes;
 
 	const modes = [
+		{ mode: "apprendre", ic: "bx-bulb", nom: "Apprendre", desc: descApprendre(paquet), fort: true },
+		{ mode: "quiz", ic: "bx-list-check", nom: "Quiz", desc: "20 questions" },
 		{ mode: "cartes", ic: "bx-copy", nom: "Cartes", desc: "Retourner et trier" },
-		{ mode: "ecrire", ic: "bx-pencil", nom: "Écrire", desc: "Taper la réponse" },
-		{ mode: "quiz", ic: "bx-list-check", nom: "Quiz", desc: "Questions à choix" },
 		{ mode: "associer", ic: "bx-extension", nom: "Associer", desc: "Le jeu des paires" },
 	];
 
@@ -618,7 +637,7 @@ function renderPaquet(app, paquet) {
 		<div class="grille-modes">
 			${modes
 				.map(
-					(m) => `<a class="mode" href="#/p/${paquet.id}/${m.mode}${suffixe}">
+					(m) => `<a class="mode${m.fort ? " fort" : ""}" href="#/p/${paquet.id}/${m.mode}${suffixe}">
 				<i class="bx ${m.ic}"></i><b>${m.nom}</b><span>${m.desc}</span></a>`,
 				)
 				.join("")}
@@ -665,6 +684,13 @@ function renderPaquet(app, paquet) {
 			);
 		});
 	}
+}
+
+function descApprendre(paquet) {
+	const b = state.apprendre[paquet.id];
+	if (!b) return "Tout le paquet, vite";
+	if (!b.file.length) return "Bouclé ✓";
+	return `En cours : ${b.sues} / ${b.total}`;
 }
 
 function listeCartesHtml(cartes) {
@@ -783,7 +809,7 @@ function renderReviser(app, paquet) {
 		<div class="zone-notes">
 			${
 				s.retournee
-					? `<p class="notes-aide">Tu t'en souvenais ?</p><div class="notes">${NOTES.map((n) => {
+					? `<p class="notes-aide">Tu t'en souvenais ?</p><div class="notes">${NOTES.map((n) => {
 							const apres = planifier(carte.srs, n.note, maintenant, { flou: false });
 							return `<button class="note ${n.cls}" data-action="noter" data-note="${n.note}">
 							<b>${n.label}</b><span>${formatDelai(apres.due - maintenant)}</span></button>`;
@@ -850,7 +876,7 @@ function renderFinRevision(app, paquet, s) {
 	</header>
 	<main class="wrap fin">
 		<div class="fin-ic">🎉</div>
-		<h1>${s.faites ? "Séance terminée !" : "Rien à réviser"}</h1>
+		<h1>${s.faites ? "Séance terminée !" : "Rien à réviser"}</h1>
 		<p>${
 			s.faites
 				? `${pluriel(s.faites, "réponse")} en ${duree} min. ${serie() > 1 ? `Ça fait ${serie()} jours d'affilée 🔥` : ""}`
@@ -881,7 +907,7 @@ function enteteEntrainement(titre, progres) {
 	${progres !== undefined ? `<div class="progres wrap"><span style="width:${Math.round(progres * 100)}%"></span></div>` : ""}`;
 }
 
-function finEntrainement(app, { titre, texte, liste = [], boutons }) {
+function finEntrainement(app, { titre, texte, liste = [], titreListe = "À retravailler", boutons }) {
 	app.innerHTML = `
 	<header class="barre-haut wrap">
 		<button class="rond" data-action="retour-paquet" aria-label="Retour"><i class="bx bx-x"></i></button>
@@ -892,7 +918,7 @@ function finEntrainement(app, { titre, texte, liste = [], boutons }) {
 		<p>${texte}</p>
 		${
 			liste.length
-				? `<div class="fin-liste"><p class="fin-liste-k">À retravailler</p>${liste
+				? `<div class="fin-liste"><p class="fin-liste-k">${titreListe}</p>${liste
 						.map((c) => `<div class="fin-ligne"><b>${esc(c.recto)}</b><span>${esc(c.verso)}</span></div>`)
 						.join("")}</div>`
 				: ""
@@ -912,7 +938,7 @@ function renderCartes(app, paquet, r) {
 	if (s.index >= s.ids.length) {
 		const revoir = s.revoir.map((id) => trouverCarte(paquet, id)).filter(Boolean);
 		return finEntrainement(app, {
-			titre: revoir.length ? { ic: "💪", texte: "Tour terminé" } : { ic: "🎉", texte: "Tu sais tout !" },
+			titre: revoir.length ? { ic: "💪", texte: "Tour terminé" } : { ic: "🎉", texte: "Tu sais tout !" },
 			texte: `${s.sais.length} sues · ${revoir.length} à revoir`,
 			liste: revoir,
 			boutons: `${revoir.length ? `<button class="btn large" data-action="cartes-revoir"><i class="bx bx-revision"></i>Revoir les ${pluriel(revoir.length, "carte")}</button>` : ""}
@@ -1016,146 +1042,98 @@ function activerGlisser(el, surGlisse) {
 	});
 }
 
-/* ================= Mode Écrire ================= */
-function verifierReponse(tape, attendu) {
-	const a = normaliser(tape);
-	const b = normaliser(attendu);
-	if (!a) return { ok: false };
-	if (a === b) {
-		const exact = tape.trim().toLowerCase() === attendu.trim().toLowerCase();
-		return { ok: true, note: exact ? "" : "Attention aux accents ou à la ponctuation." };
+/* ================= Questions à choix (Quiz et Apprendre) ================= */
+const MOIS_RE = /\b(january|february|march|april|may|june|july|august|september|october|november|december|janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|d[ée]cembre)\b/i;
+
+// Année approximative d'une réponse (« 1536 », « c. 1000 BC », « 17th century »,
+// « 1850s », « 4 July 1776 »…), ou null si ce n'est pas une date avec année.
+function anneeDe(texte) {
+	const t = String(texte || "");
+	const avJC = /\b(BC|av\.? ?J\.?-?C)\b/i.test(t);
+	const siecle = t.match(/(\d{1,2})(st|nd|rd|th|e|ème)\s+(century|siècle)/i);
+	if (siecle) {
+		const base = (Number(siecle[1]) - 1) * 100;
+		const decalage = /early|début/i.test(t) ? 15 : /late|fin/i.test(t) ? 85 : 50;
+		return avJC ? -(base + decalage) : base + decalage;
 	}
-	// Plusieurs réponses acceptées : « chat / matou »
-	const variantes = String(attendu).split(/\s*[/|]\s*/).map(normaliser).filter(Boolean);
-	if (variantes.length > 1 && variantes.includes(a)) return { ok: true, note: "" };
-	const tolerance = b.length >= 10 ? 2 : b.length >= 4 ? 1 : 0;
-	if (tolerance && levenshtein(a, b) <= tolerance) return { ok: true, note: "Presque : petite faute de frappe." };
-	return { ok: false };
+	const longue = t.match(/\b(\d{3,4})\b/);
+	if (longue) return avJC ? -Number(longue[1]) : Number(longue[1]);
+	if (MOIS_RE.test(t)) return null; // « 23 April » : un jour, pas une année
+	const courte = t.match(/\b(\d{1,2})\b/);
+	if (courte) return avJC ? -Number(courte[1]) : Number(courte[1]);
+	return null;
 }
 
-function renderEcrire(app, paquet, r) {
-	if (!session || session.type !== "ecrire") {
-		const ids = melanger(session?.ids || cartesEntrainement(paquet, r).map((c) => c.id));
-		session = { type: "ecrire", file: ids, total: ids.length, justes: 0, ratees: new Set(), resultat: null, faces: {}, tape: "" };
+// Fabrique une question à 4 choix. Pour une date, les mauvaises réponses sont
+// des dates proches (1534 / 1536 / 1537 plutôt que 1066 / 2026), sinon c'est trop facile.
+function questionQCM(paquet, carte) {
+	const f = faces(carte, paquet.sens);
+	const inverse = f.question === carte.verso && f.question !== carte.recto;
+	const bonne = f.reponse;
+	const vus = new Set([normaliser(bonne)]);
+	const candidats = [];
+	for (const autre of melanger(paquet.cartes)) {
+		if (autre.id === carte.id) continue;
+		const t = inverse ? autre.recto : autre.verso;
+		const n = normaliser(t);
+		if (!n || vus.has(n)) continue;
+		vus.add(n);
+		candidats.push({ t, annee: anneeDe(t) });
 	}
-	const s = session;
-
-	if (!s.file.length) {
-		const ratees = [...s.ratees].map((id) => trouverCarte(paquet, id)).filter(Boolean);
-		const premierCoup = s.total - ratees.length;
-		return finEntrainement(app, {
-			titre: { ic: ratees.length ? "✍️" : "🎉", texte: ratees.length ? "Terminé !" : "Sans faute !" },
-			texte: `${premierCoup} / ${s.total} du premier coup`,
-			liste: ratees,
-			boutons: `${ratees.length ? `<button class="btn large" data-action="ecrire-ratees"><i class="bx bx-revision"></i>Refaire les ${pluriel(ratees.length, "erreur")}</button>` : ""}
-				<button class="btn large secondaire" data-action="recommencer"><i class="bx bx-shuffle"></i>Tout recommencer</button>
-				<button class="btn large secondaire" data-action="retour-paquet">Retour au paquet</button>`,
-		});
-	}
-
-	const carte = trouverCarte(paquet, s.file[0]);
-	if (!carte) {
-		s.file.shift();
-		return render();
-	}
-	if (!s.faces[carte.id]) s.faces[carte.id] = faces(carte, paquet.sens);
-	const f = s.faces[carte.id];
-	const res = s.resultat;
-
-	app.innerHTML = `
-	${enteteEntrainement(`Écrire <span>${s.justes} / ${s.total}</span>`, s.justes / s.total)}
-	<main class="wrap etude">
-		<div class="carte-etude statique">
-			<button class="etoile-btn" data-action="etoile" data-id="${carte.id}" aria-label="Étoile"><i class="bx ${carte.etoile ? "bxs-star" : "bx-star"}"></i></button>
-			<div class="ce-question ${tailleTexte(f.question)}">${esc(f.question)}</div>
-		</div>
-		${
-			res
-				? `<div class="retour ${res.ok ? "ok" : "ko"}">
-				<p class="retour-titre"><i class="bx ${res.ok ? "bx-check-circle" : "bx-x-circle"}"></i>${res.ok ? "Correct !" : res.passe ? "La réponse était" : "Pas tout à fait"}</p>
-				${res.note ? `<p class="retour-note">${esc(res.note)}</p>` : ""}
-				${!res.ok && !res.passe ? `<p class="retour-k">Ta réponse</p><p class="retour-tape">${esc(res.tape)}</p><p class="retour-k">Bonne réponse</p>` : ""}
-				${!res.ok || res.note ? `<p class="retour-bonne">${esc(f.reponse)}</p>` : ""}
-			</div>
-			<div class="ecrire-actions">
-				${!res.ok && !res.passe ? `<button class="btn secondaire" data-action="ecrire-javais-bon">J'avais bon</button>` : ""}
-				<button class="btn large" data-action="ecrire-suivante" id="btnSuivante">Continuer<i class="bx bx-right-arrow-alt"></i></button>
-			</div>`
-				: `<form class="ecrire-form" id="formEcrire" autocomplete="off">
-				<textarea id="champReponse" rows="2" placeholder="Ta réponse" autocapitalize="off" autocorrect="off" spellcheck="false">${esc(s.tape)}</textarea>
-				<div class="ecrire-actions">
-					<button type="button" class="btn secondaire" data-action="ecrire-passer">Je ne sais pas</button>
-					<button type="submit" class="btn large">Valider</button>
-				</div>
-			</form>`
-		}
-	</main>`;
-
-	const champ = $("#champReponse");
-	if (champ) {
-		champ.focus();
-		champ.addEventListener("input", () => (s.tape = champ.value));
-		champ.addEventListener("keydown", (e) => {
-			if (e.key === "Enter" && !e.shiftKey) {
-				e.preventDefault();
-				$("#formEcrire").requestSubmit();
-			}
-		});
-		$("#formEcrire").addEventListener("submit", (e) => {
-			e.preventDefault();
-			const tape = champ.value;
-			if (!tape.trim()) return champ.focus();
-			const v = verifierReponse(tape, f.reponse);
-			s.resultat = { ...v, tape };
-			if (!v.ok) s.ratees.add(carte.id);
-			vibrer(v.ok ? 8 : 25);
-			render();
-		});
+	const annee = inverse ? null : anneeDe(bonne);
+	let tries;
+	if (annee !== null) {
+		// les plus proches d'abord, sans la même année (« 1958 » contre « since 1958 »)
+		const proches = candidats
+			.filter((c) => c.annee !== null && c.annee !== annee)
+			.sort((a, b) => Math.abs(a.annee - annee) - Math.abs(b.annee - annee));
+		tries = [...melanger(proches.slice(0, 6)), ...candidats.filter((c) => !proches.slice(0, 6).includes(c))];
+	} else if (!inverse) {
+		// réponse sans année (« 23 April ») : d'autres réponses du même genre d'abord
+		tries = [...candidats.filter((c) => c.annee === null), ...candidats.filter((c) => c.annee !== null)];
 	} else {
-		$("#btnSuivante")?.focus();
+		tries = candidats;
 	}
+	const leurres = tries.slice(0, 3).map((c) => c.t);
+	const choix = melanger([bonne, ...leurres]);
+	return { carteId: carte.id, question: f.question, choix, bonne: choix.indexOf(bonne) };
+}
 
-	clavier = (e) => {
-		if (s.resultat && e.key === "Enter") return actions["ecrire-suivante"](), true;
-		return false;
-	};
+const assezPourQCM = (paquet) =>
+	paquet.cartes.length >= 2 && new Set(paquet.cartes.map((c) => normaliser(c.verso))).size >= 2;
+
+function choixHtml(q, choisi) {
+	const repondu = choisi !== null;
+	return `<div class="choix">
+		${q.choix
+			.map((c, i) => {
+				let cls = "";
+				if (repondu && i === q.bonne) cls = "bon";
+				else if (repondu && i === choisi) cls = "faux";
+				else if (repondu) cls = "eteint";
+				return `<button class="choix-btn ${cls}" data-action="choisir" data-i="${i}" ${repondu ? "disabled" : ""}>
+				<span class="choix-n">${i + 1}</span><span>${esc(c)}</span></button>`;
+			})
+			.join("")}
+	</div>`;
 }
 
 /* ================= Mode Quiz (QCM) ================= */
 function preparerQuiz(paquet, cartes) {
-	const toutes = paquet.cartes;
 	const questions = melanger(cartes)
 		.slice(0, 20)
-		.map((carte) => {
-			const f = faces(carte, paquet.sens);
-			const inverse = f.question === carte.verso && f.question !== carte.recto;
-			const bonne = f.reponse;
-			const vus = new Set([normaliser(bonne)]);
-			const leurres = [];
-			for (const autre of melanger(toutes)) {
-				if (autre.id === carte.id) continue;
-				const t = inverse ? autre.recto : autre.verso;
-				const n = normaliser(t);
-				if (!n || vus.has(n)) continue;
-				vus.add(n);
-				leurres.push(t);
-				if (leurres.length === 3) break;
-			}
-			const choix = melanger([bonne, ...leurres]);
-			return { carteId: carte.id, question: f.question, choix, bonne: choix.indexOf(bonne) };
-		});
+		.map((carte) => questionQCM(paquet, carte));
 	return { type: "quiz", questions, i: 0, choisi: null, erreurs: [], cartesIds: cartes.map((c) => c.id) };
 }
 
+const PAS_ASSEZ = {
+	titre: { ic: "🤏", texte: "Pas assez de cartes" },
+	texte: "Il faut au moins 2 cartes avec des réponses différentes pour faire un QCM (4 c'est mieux).",
+	boutons: `<button class="btn large" data-action="retour-paquet">Retour au paquet</button>`,
+};
+
 function renderQuiz(app, paquet, r) {
-	const distinctes = new Set(paquet.cartes.map((c) => normaliser(c.verso))).size;
-	if (paquet.cartes.length < 2 || distinctes < 2) {
-		return finEntrainement(app, {
-			titre: { ic: "🤏", texte: "Pas assez de cartes" },
-			texte: "Il faut au moins 2 cartes avec des réponses différentes pour faire un quiz (4 c'est mieux).",
-			boutons: `<button class="btn large" data-action="retour-paquet">Retour au paquet</button>`,
-		});
-	}
+	if (!assezPourQCM(paquet)) return finEntrainement(app, PAS_ASSEZ);
 	if (!session || session.type !== "quiz") {
 		const cartes = session?.ids
 			? session.ids.map((id) => trouverCarte(paquet, id)).filter(Boolean)
@@ -1186,44 +1164,139 @@ function renderQuiz(app, paquet, r) {
 		<div class="carte-etude statique">
 			<div class="ce-question ${tailleTexte(q.question)}">${esc(q.question)}</div>
 		</div>
-		<div class="choix">
-			${q.choix
-				.map((c, i) => {
-					let cls = "";
-					if (repondu && i === q.bonne) cls = "bon";
-					else if (repondu && i === s.choisi) cls = "faux";
-					else if (repondu) cls = "eteint";
-					return `<button class="choix-btn ${cls}" data-action="quiz-choisir" data-i="${i}" ${repondu ? "disabled" : ""}>
-					<span class="choix-n">${i + 1}</span><span>${esc(c)}</span></button>`;
-				})
-				.join("")}
-		</div>
-		${repondu && s.choisi !== q.bonne ? `<button class="btn large" data-action="quiz-suivante" id="btnSuivante">Continuer<i class="bx bx-right-arrow-alt"></i></button>` : ""}
+		${choixHtml(q, s.choisi)}
+		${repondu && s.choisi !== q.bonne ? `<button class="btn large" data-action="suivante" id="btnSuivante">Continuer<i class="bx bx-right-arrow-alt"></i></button>` : ""}
 	</main>`;
 	$("#btnSuivante")?.focus();
+	clavier = clavierQCM(q, repondu);
+}
 
-	clavier = (e) => {
-		if (!repondu && /^[1-4]$/.test(e.key) && +e.key <= q.choix.length) return choisirQuiz(+e.key - 1), true;
-		if (repondu && e.key === "Enter") return actions["quiz-suivante"](), true;
+function clavierQCM(q, repondu) {
+	return (e) => {
+		if (!repondu && /^[1-4]$/.test(e.key) && +e.key <= q.choix.length) return choisir(+e.key - 1), true;
+		if (repondu && e.key === "Enter") return actions.suivante(), true;
 		return false;
 	};
 }
 
-function choisirQuiz(i) {
+// Réponse à un QCM (Quiz ou Apprendre). Une bonne réponse passe toute seule
+// à la suivante ; une erreur attend « Continuer » pour laisser lire la bonne.
+function choisir(i) {
 	const s = session;
-	const q = s.questions[s.i];
-	if (s.choisi !== null) return;
+	if (!s || s.choisi !== null) return;
+	const q = s.type === "quiz" ? s.questions[s.i] : s.q;
+	if (!q) return;
 	s.choisi = i;
 	const juste = i === q.bonne;
-	if (!juste) s.erreurs.push(q.carteId);
+	if (s.type === "quiz") {
+		if (!juste) s.erreurs.push(q.carteId);
+	} else {
+		noterApprendre(q.carteId, juste);
+	}
 	vibrer(juste ? 8 : 25);
 	render();
 	if (juste) {
-		const iAttendu = s.i;
 		setTimeout(() => {
-			if (session === s && s.i === iAttendu) actions["quiz-suivante"]();
+			if (session === s && s.choisi === i && (s.type !== "quiz" || s.questions[s.i] === q)) actions.suivante();
 		}, 650);
 	}
+}
+
+/* ================= Mode Apprendre (avant un examen) ================= */
+// Toutes les cartes passent en QCM. Juste du premier coup : la carte est sue.
+// Sinon elle revient quelques questions plus tard, jusqu'à être juste
+// 2 fois d'affilée. La progression est enregistrée (on peut fermer l'appli).
+const RETOUR_APRES_ERREUR = [3, 5]; // la carte ratée revient entre 3 et 5 questions plus tard
+const RETOUR_APRES_REUSSITE = [7, 11];
+
+function progressionApprendre(paquet, r) {
+	state.apprendre = state.apprendre || {};
+	let b = state.apprendre[paquet.id];
+	if (b) {
+		// cartes supprimées entre-temps
+		b.file = b.file.filter((id) => trouverCarte(paquet, id));
+		return b;
+	}
+	const ids = melanger(cartesEntrainement(paquet, r).map((c) => c.id));
+	b = { file: ids, total: ids.length, sues: 0, serie: {}, erreurs: {}, faites: 0, debut: Date.now(), duree: 0 };
+	state.apprendre[paquet.id] = b;
+	sauver();
+	return b;
+}
+
+const hasard = ([min, max]) => min + Math.floor(Math.random() * (max - min + 1));
+
+function noterApprendre(carteId, juste) {
+	const s = session;
+	const b = s.b;
+	b.faites++;
+	b.file.shift();
+	if (juste) {
+		b.serie[carteId] = (b.serie[carteId] || 0) + 1;
+		const sue = b.erreurs[carteId] ? b.serie[carteId] >= 2 : true;
+		if (sue) b.sues++;
+		else b.file.splice(Math.min(b.file.length, hasard(RETOUR_APRES_REUSSITE)), 0, carteId);
+	} else {
+		b.serie[carteId] = 0;
+		b.erreurs[carteId] = (b.erreurs[carteId] || 0) + 1;
+		b.file.splice(Math.min(b.file.length, hasard(RETOUR_APRES_ERREUR)), 0, carteId);
+	}
+	// temps passé, sans compter les pauses de plus de 2 minutes
+	const maintenant = Date.now();
+	b.duree += Math.min(maintenant - (s.derniere || maintenant), 2 * MIN);
+	s.derniere = maintenant;
+	sauver();
+}
+
+function renderApprendre(app, paquet, r) {
+	if (!assezPourQCM(paquet)) return finEntrainement(app, PAS_ASSEZ);
+	if (!session || session.type !== "apprendre") {
+		session = { type: "apprendre", b: progressionApprendre(paquet, r), q: null, choisi: null, derniere: Date.now() };
+	}
+	const s = session;
+	const b = s.b;
+
+	if (!b.file.length && s.choisi === null) {
+		const ratees = Object.entries(b.erreurs)
+			.sort((x, y) => y[1] - x[1])
+			.slice(0, 12)
+			.map(([id]) => trouverCarte(paquet, id))
+			.filter(Boolean);
+		const nbErreurs = Object.values(b.erreurs).reduce((n, x) => n + x, 0);
+		return finEntrainement(app, {
+			titre: { ic: "🎓", texte: "Tu connais tout le paquet !" },
+			texte: `${pluriel(b.total, "carte")} sues en ${Math.max(1, Math.round(b.duree / MIN))} min${nbErreurs ? ` · ${pluriel(nbErreurs, "erreur corrigée", "erreurs corrigées")} en route` : " · sans une erreur"}.${ratees.length ? " Relis celles qui t'ont donné du fil à retordre :" : ""}`,
+			liste: ratees,
+			titreListe: "Un dernier coup d'œil",
+			boutons: `<button class="btn large" data-action="recommencer"><i class="bx bx-revision"></i>Recommencer le paquet</button>
+				<button class="btn large secondaire" data-action="retour-paquet">Retour au paquet</button>`,
+		});
+	}
+
+	// après une réponse, la question reste affichée (avec la correction) jusqu'à « Continuer »
+	if (s.choisi === null && (!s.q || s.q.carteId !== b.file[0])) {
+		s.q = questionQCM(paquet, trouverCarte(paquet, b.file[0]));
+		s.choisi = null;
+	}
+	const q = s.q;
+	const repondu = s.choisi !== null;
+	const dejaRatee = b.erreurs[q.carteId];
+
+	app.innerHTML = `
+	${enteteEntrainement(`Apprendre <span>${b.sues} / ${b.total}</span>`, b.sues / b.total)}
+	<main class="wrap etude">
+		<div class="tri-compteurs">
+			<span class="tc">${pluriel(b.file.length, "carte restante", "cartes restantes")}</span>
+			${dejaRatee ? `<span class="tc orange">À revoir · ${b.serie[q.carteId] ? "plus qu'une fois" : "2 fois juste"}</span>` : ""}
+		</div>
+		<div class="carte-etude statique">
+			<div class="ce-question ${tailleTexte(q.question)}">${esc(q.question)}</div>
+		</div>
+		${choixHtml(q, s.choisi)}
+		${repondu && s.choisi !== q.bonne ? `<button class="btn large" data-action="suivante" id="btnSuivante">Continuer<i class="bx bx-right-arrow-alt"></i></button>` : ""}
+	</main>`;
+	$("#btnSuivante")?.focus();
+	clavier = clavierQCM(q, repondu);
 }
 
 /* ================= Mode Associer ================= */
@@ -1261,7 +1334,7 @@ function renderAssocier(app, paquet, r) {
 		}
 		return finEntrainement(app, {
 			titre: { ic: nouveauRecord ? "🏆" : "⏱️", texte: formatChrono(temps) },
-			texte: nouveauRecord ? "Nouveau record !" : `Record : ${formatChrono(record)}`,
+			texte: nouveauRecord ? "Nouveau record !" : `Record : ${formatChrono(record)}`,
 			boutons: `<button class="btn large" data-action="recommencer"><i class="bx bx-revision"></i>Rejouer</button>
 				<button class="btn large secondaire" data-action="retour-paquet">Retour au paquet</button>`,
 		});
@@ -1363,11 +1436,12 @@ function renderReglages(app) {
 		</section>
 
 		<section class="bloc">
-			<h2>Comment ça marche ?</h2>
+			<h2>Comment ça marche ?</h2>
 			<div class="bloc-texte explications">
 				<p><b>Réviser</b> utilise la répétition espacée. Après chaque carte, dis si tu t'en souvenais. Une carte bien sue revient de plus en plus tard (1 jour, 3 jours, 1 semaine, 1 mois…). Une carte oubliée revient tout de suite. Tu révises donc surtout ce que tu es en train d'oublier.</p>
 				<p><b>Conseil :</b> fais tes révisions tous les jours, même 5 minutes. C'est la régularité qui fait tout.</p>
-				<p><b>Cartes, Écrire, Quiz et Associer</b> sont des entraînements libres pour la veille d'un examen. Ils ne changent pas le planning des révisions.</p>
+				<p><b>Examen bientôt ?</b> Utilise <b>Apprendre</b> : un QCM sur tout le paquet. Une carte que tu ne sais pas encore revient quelques questions plus tard, jusqu'à ce que tu l'aies juste 2 fois d'affilée. Ta progression est gardée si tu fermes l'appli.</p>
+				<p><b>Apprendre, Quiz, Cartes et Associer</b> sont des entraînements libres : ils ne changent pas le planning des révisions.</p>
 				<p><b>Raccourcis clavier :</b> espace pour retourner, 1 à 4 pour noter, flèches pour trier, Z pour annuler.</p>
 			</div>
 		</section>
@@ -1383,7 +1457,7 @@ function renderReglages(app) {
 			const existants = new Set(state.paquets.map((p) => p.id));
 			const remplaces = donnees.paquets.filter((p) => existants.has(p.id)).length;
 			confirmer({
-				titre: "Importer la sauvegarde ?",
+				titre: "Importer la sauvegarde ?",
 				texte: `${pluriel(donnees.paquets.length, "paquet")} trouvés.${remplaces ? ` ${pluriel(remplaces, "paquet")} déjà présent${remplaces > 1 ? "s" : ""} sera remplacé${remplaces > 1 ? "s" : ""}.` : ""} Tes autres paquets sont conservés.`,
 				bouton: "Importer",
 				surOk: () => {
@@ -1690,7 +1764,7 @@ function feuilleExporter(paquet) {
 				$("#btnCopier").addEventListener("click", async () => {
 					try {
 						await navigator.clipboard.writeText($("#texteExport").value);
-						toast("Copié !");
+						toast("Copié !");
 					} catch {
 						$("#texteExport").select();
 						toast("Sélectionne le texte et copie-le");
@@ -1698,6 +1772,88 @@ function feuilleExporter(paquet) {
 				}),
 		},
 	);
+}
+
+/* ================= Paquets prêts (dossier paquets/) ================= */
+let catalogue = null;
+
+async function chargerCatalogue() {
+	if (catalogue) return catalogue;
+	const res = await fetch("paquets/catalogue.json", { cache: "no-cache" });
+	if (!res.ok) throw new Error("HTTP " + res.status);
+	catalogue = await res.json();
+	return catalogue;
+}
+
+const dejaAjoute = (entree) => state.paquets.some((p) => p.source === entree.id);
+
+async function ajouterPaquetPret(entree) {
+	const res = await fetch(`paquets/${entree.fichier}`, { cache: "no-cache" });
+	if (!res.ok) throw new Error("HTTP " + res.status);
+	const d = await res.json();
+	const p = nouveauPaquet(d.nom || entree.nom, d.couleur || entree.couleur);
+	p.sens = d.sens || "recto";
+	p.source = entree.id;
+	p.cartes = (d.cartes || []).map(([r, v]) => nouvelleCarte(r, v));
+	state.paquets.push(p);
+	return p;
+}
+
+async function feuillePaquetsPrets() {
+	ouvrirFeuille(`<h2>Paquets prêts</h2><p class="feuille-texte">Chargement…</p>`);
+	let cat;
+	try {
+		cat = await chargerCatalogue();
+	} catch {
+		ouvrirFeuille(
+			`<h2>Paquets prêts</h2><p class="feuille-texte">Impossible de charger la liste. Vérifie ta connexion et réessaie.</p>
+			<button class="btn large secondaire" data-action="fermer">Fermer</button>`,
+		);
+		return;
+	}
+	const dessiner = () => {
+		$("#feuille").innerHTML = `<div class="feuille-poignee"></div><h2>Paquets prêts</h2>
+		${cat.groupes
+			.map((g, gi) => {
+				const restants = g.paquets.filter((e) => !dejaAjoute(e));
+				return `<div class="groupe-prets">
+				<div class="groupe-tete"><b>${esc(g.nom)}</b>
+					${restants.length ? `<button class="puce" data-action="pret-tout" data-g="${gi}"><i class="bx bx-plus"></i>Tout ajouter (${restants.length})</button>` : ""}
+				</div>
+				${g.paquets
+					.map(
+						(e, pi) => `<div class="pret" style="--c:${e.couleur}">
+					<span class="paquet-pastille petite">${esc((e.nom.trim()[0] || "?").toUpperCase())}</span>
+					<span class="pret-corps"><b>${esc(e.nom)}</b><span>${pluriel(e.n, "carte")} · ${esc(e.description || "")}</span></span>
+					${
+						dejaAjoute(e)
+							? `<span class="pret-ok"><i class="bx bx-check"></i></span>`
+							: `<button class="rond petit" data-action="pret-un" data-g="${gi}" data-p="${pi}" aria-label="Ajouter"><i class="bx bx-plus"></i></button>`
+					}
+				</div>`,
+					)
+					.join("")}
+			</div>`;
+			})
+			.join("")}
+		<button class="btn large secondaire" data-action="fermer">Fermer</button>`;
+	};
+	feuillePaquetsPrets.dessiner = dessiner;
+	feuillePaquetsPrets.cat = cat;
+	dessiner();
+}
+
+async function ajouterPrets(entrees) {
+	try {
+		for (const e of entrees) if (!dejaAjoute(e)) await ajouterPaquetPret(e);
+		sauver();
+		toast(entrees.length > 1 ? `${pluriel(entrees.length, "paquet ajouté", "paquets ajoutés")}` : "Paquet ajouté");
+	} catch {
+		sauver();
+		toast("Erreur de chargement, réessaie");
+	}
+	feuillePaquetsPrets.dessiner?.();
+	render();
 }
 
 /* ================= Actions (clics) ================= */
@@ -1716,6 +1872,9 @@ const actions = {
 	},
 	fermer: fermerFeuille,
 	"nouveau-paquet": feuilleNouveauPaquet,
+	"paquets-prets": feuillePaquetsPrets,
+	"pret-un": (el) => ajouterPrets([feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets[el.dataset.p]]),
+	"pret-tout": (el) => ajouterPrets(feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets),
 	exemple: () => {
 		const p = nouveauPaquet(PAQUET_EXEMPLE.nom, COULEURS[1]);
 		p.cartes = PAQUET_EXEMPLE.cartes.map(([r, v]) => nouvelleCarte(r, v));
@@ -1735,7 +1894,7 @@ const actions = {
 	reinitialiser: () => {
 		const p = paquetCourant();
 		confirmer({
-			titre: "Remettre à zéro ?",
+			titre: "Remettre à zéro ?",
 			texte: "Toutes les cartes redeviennent « jamais vues ». Les cartes elles-mêmes sont conservées.",
 			bouton: "Remettre à zéro",
 			danger: true,
@@ -1751,12 +1910,13 @@ const actions = {
 	"supprimer-paquet": () => {
 		const p = paquetCourant();
 		confirmer({
-			titre: `Supprimer « ${esc(p.nom)} » ?`,
+			titre: `Supprimer « ${esc(p.nom)} » ?`,
 			texte: `${pluriel(p.cartes.length, "carte")} et toute la progression seront effacées. Impossible de revenir en arrière.`,
 			bouton: "Supprimer",
 			danger: true,
 			surOk: () => {
 				state.paquets = state.paquets.filter((x) => x.id !== p.id);
+				delete state.apprendre[p.id];
 				sauver();
 				toast("Paquet supprimé");
 				aller("#/");
@@ -1841,41 +2001,33 @@ const actions = {
 	recommencer: () => {
 		const type = session?.type;
 		if (session?.timer) clearInterval(session.timer);
+		if (type === "apprendre") {
+			const p = paquetCourant();
+			const reset = () => {
+				delete state.apprendre[p.id];
+				sauver();
+				session = null;
+				render();
+			};
+			const b = session.b;
+			if (!b.file.length || !b.faites) return reset();
+			return confirmer({
+				titre: "Recommencer à zéro ?",
+				texte: `Tu en es à ${b.sues} / ${b.total} cartes sues. Ta progression dans Apprendre pour ce paquet repartira de zéro.`,
+				bouton: "Recommencer",
+				danger: true,
+				surOk: reset,
+			});
+		}
 		session = type === "cartes" ? { ids: melanger(cartesEntrainement(paquetCourant(), routeCourante).map((c) => c.id)) } : null;
 		render();
 	},
-	"ecrire-passer": () => {
-		const s = session;
-		s.resultat = { ok: false, passe: true, tape: "" };
-		s.ratees.add(s.file[0]);
-		render();
-	},
-	"ecrire-javais-bon": () => {
-		const s = session;
-		s.ratees.delete(s.file[0]);
-		s.resultat = { ...s.resultat, ok: true, note: "" };
-		actions["ecrire-suivante"]();
-	},
-	"ecrire-suivante": () => {
-		const s = session;
-		if (!s?.resultat) return;
-		const id = s.file.shift();
-		// Une carte ratée revient à la fin de la file jusqu'à ce qu'elle soit juste
-		if (s.resultat.ok) s.justes++;
-		else s.file.push(id);
-		s.resultat = null;
-		s.tape = "";
-		render();
-	},
-	"ecrire-ratees": () => {
-		session = { ids: [...session.ratees] };
-		render();
-	},
-	"quiz-choisir": (el) => choisirQuiz(+el.dataset.i),
-	"quiz-suivante": () => {
+	choisir: (el) => choisir(+el.dataset.i),
+	suivante: () => {
 		const s = session;
 		if (!s || s.choisi === null) return;
-		s.i++;
+		if (s.type === "quiz") s.i++;
+		else s.q = null;
 		s.choisi = null;
 		render();
 	},
@@ -1906,7 +2058,7 @@ const actions = {
 	},
 	"tout-effacer": () =>
 		confirmer({
-			titre: "Tout effacer ?",
+			titre: "Tout effacer ?",
 			texte: "Tous les paquets, toutes les cartes et toute la progression seront supprimés de cet appareil.",
 			bouton: "Tout effacer",
 			danger: true,
