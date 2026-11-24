@@ -1,0 +1,81 @@
+{
+ "groupes": [
+  {
+   "nom": "Civilisation britannique — dates",
+   "paquets": [
+    {
+     "id": "civi-early",
+     "fichier": "civi-early.json",
+     "nom": "Celts, Romans, Anglo-Saxons & Vikings",
+     "description": "From the first Celts to the Norman Conquest",
+     "couleur": "#12a594",
+     "n": 46
+    },
+    {
+     "id": "civi-nations",
+     "fichier": "civi-nations.json",
+     "nom": "The Four Nations & the Acts of Union",
+     "description": "Flags, patron saints, unions and partition",
+     "couleur": "#5b5bd6",
+     "n": 15
+    },
+    {
+     "id": "civi-tudors",
+     "fichier": "civi-tudors.json",
+     "nom": "The Reformation & the Tudors",
+     "description": "Henry VIII, Edward VI, Mary I, Elizabeth I",
+     "couleur": "#e5484d",
+     "n": 18
+    },
+    {
+     "id": "civi-stuarts",
+     "fichier": "civi-stuarts.json",
+     "nom": "The Stuarts, the Civil War & the Glorious Revolution",
+     "description": "From James I to the Bill of Rights",
+     "couleur": "#8e4ec6",
+     "n": 32
+    },
+    {
+     "id": "civi-empire",
+     "fichier": "civi-empire.json",
+     "nom": "The British Empire & the Commonwealth",
+     "description": "Three empires, decolonisation, the Commonwealth",
+     "couleur": "#f76b15",
+     "n": 56
+    },
+    {
+     "id": "civi-industrie",
+     "fichier": "civi-industrie.json",
+     "nom": "Industry, Society & Politics",
+     "description": "Industrial Revolution, the North, census, today's politics",
+     "couleur": "#ad7f58",
+     "n": 19
+    },
+    {
+     "id": "civi-devolution",
+     "fichier": "civi-devolution.json",
+     "nom": "Devolution: Wales & Scotland",
+     "description": "Referendums, assemblies, parties and leaders",
+     "couleur": "#30a46c",
+     "n": 19
+    },
+    {
+     "id": "civi-irlande",
+     "fichier": "civi-irlande.json",
+     "nom": "Ireland & Northern Ireland",
+     "description": "From the Plantation to the Celtic alliance",
+     "couleur": "#0090ff",
+     "n": 44
+    },
+    {
+     "id": "civi-immigration",
+     "fichier": "civi-immigration.json",
+     "nom": "Immigration & Multiculturalism",
+     "description": "Migrations, laws, census and anti-racism",
+     "couleur": "#d6409f",
+     "n": 33
+    }
+   ]
+  }
+ ]
+}

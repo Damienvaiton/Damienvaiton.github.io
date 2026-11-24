@@ -1,10 +1,11 @@
 # Le portfolio est public : moteurs de recherche et assistants IA sont les bienvenus.
-# Seules exceptions : edt/ et starac/, des applications à ne pas indexer.
+# Seules exceptions : edt/, starac/ et flashcards/, des applications à ne pas indexer.
 User-agent: *
 Allow: /
-# edt/ et starac/ sont des applications privées : à ne jamais indexer
+# edt/, starac/ et flashcards/ sont des applications privées : à ne jamais indexer
 Disallow: /edt/
 Disallow: /starac/
+Disallow: /flashcards/
 
 # Robots des moteurs et assistants IA, autorisés explicitement
 User-agent: GPTBot
@@ -21,5 +22,6 @@ User-agent: Bingbot
 Allow: /
 Disallow: /edt/
 Disallow: /starac/
+Disallow: /flashcards/
 
 Sitemap: https://damienvaiton.fr/sitemap.xml
