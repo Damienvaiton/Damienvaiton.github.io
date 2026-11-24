@@ -400,6 +400,38 @@ function faces(carte, sens) {
 
 const LIBELLES_SENS = { recto: "Terme → Définition", verso: "Définition → Terme", mixte: "Les deux, au hasard" };
 
+/* ================= Lexique des abréviations ================= */
+// Affiché sous la carte quand une abréviation apparaît dans la question
+// ou dans les réponses proposées (cours d'anglais : c., BC, IRA, SNP…).
+const LEXIQUE = [
+	{ abr: "c.", re: /(^|[^\p{L}])c\.(?=\s)/u, sens: "circa : vers, environ" },
+	{ abr: "BC", re: /\bBC\b/, sens: "Before Christ : avant J.-C." },
+	{ abr: "v.", re: /(^|[^\p{L}])v\.(?=\s)/u, sens: "versus : contre" },
+	{ abr: "St", re: /\bSt\b/, sens: "Saint" },
+	{ abr: "MPs", re: /\bMPs?\b/, sens: "Members of Parliament : députés" },
+	{ abr: "UK", re: /\bUK\b/, sens: "United Kingdom : Royaume-Uni" },
+	{ abr: "US", re: /\bUS\b/, sens: "United States : États-Unis" },
+	{ abr: "EU", re: /\bEU\b/, sens: "European Union : Union européenne" },
+	{ abr: "A10", re: /\bA10\b/, sens: "les 10 pays entrés dans l'UE en 2004 (surtout d'Europe de l'Est)" },
+	{ abr: "IRA", re: /\bIRA\b/, sens: "Irish Republican Army : armée républicaine irlandaise (indépendantistes)" },
+	{ abr: "SNP", re: /\bSNP\b/, sens: "Scottish National Party : parti indépendantiste écossais" },
+	{ abr: "DUP", re: /\bDUP\b/, sens: "Democratic Unionist Party : parti unioniste nord-irlandais (pour le maintien dans le Royaume-Uni)" },
+	{ abr: "NICRA", re: /\bNICRA\b/, sens: "Northern Ireland Civil Rights Association : association pour les droits civiques en Irlande du Nord" },
+	{ abr: "RUC", re: /\bRUC\b/, sens: "Royal Ulster Constabulary : la police d'Irlande du Nord" },
+	{ abr: "UVF", re: /\bUVF\b/, sens: "Ulster Volunteer Force : groupe paramilitaire loyaliste (pro-Royaume-Uni)" },
+	{ abr: "CRE", re: /\bCRE\b/, sens: "Commission for Racial Equality : commission pour l'égalité raciale" },
+	{ abr: "BAME", re: /\bBAME\b/, sens: "Black, Asian and Minority Ethnic : Noirs, Asiatiques et minorités ethniques" },
+];
+
+function lexiqueHtml(...textes) {
+	const t = textes.filter(Boolean).join("\n");
+	const trouves = LEXIQUE.filter((l) => l.re.test(t));
+	if (!trouves.length) return "";
+	return `<div class="lexique"><i class="bx bx-info-circle"></i><div>${trouves
+		.map((l) => `<p><b>${esc(l.abr)}</b> ${esc(l.sens)}</p>`)
+		.join("")}</div></div>`;
+}
+
 /* ================= Import / export texte ================= */
 const SEPARATEURS = {
 	auto: { label: "Automatique", re: null },
@@ -904,6 +936,7 @@ function renderReviser(app, paquet) {
 					: `<p class="ce-aide">Touche la carte pour voir la réponse</p>`
 			}
 		</div>
+		${lexiqueHtml(s.question, s.retournee && s.reponse)}
 		<div class="zone-notes">
 			${
 				s.retournee
@@ -1067,6 +1100,7 @@ function renderCartes(app, paquet, r) {
 				<div class="${tailleTexte(f.reponse)}">${esc(f.reponse)}</div>
 			</div>
 		</div>
+		${lexiqueHtml(f.question, f.reponse)}
 		<div class="tri-boutons">
 			<button class="tri rouge" data-action="trier" data-sait="0" aria-label="À revoir"><i class="bx bx-x"></i><span>À revoir</span></button>
 			<button class="tri neutre" data-action="tri-annuler" aria-label="Carte précédente" ${s.index ? "" : "disabled"}><i class="bx bx-undo"></i></button>
@@ -1262,6 +1296,7 @@ function renderQuiz(app, paquet, r) {
 		<div class="carte-etude statique">
 			<div class="ce-question ${tailleTexte(q.question)}">${esc(q.question)}</div>
 		</div>
+		${lexiqueHtml(q.question, ...q.choix)}
 		${choixHtml(q, s.choisi)}
 		${repondu && s.choisi !== q.bonne ? `<button class="btn large" data-action="suivante" id="btnSuivante">Continuer<i class="bx bx-right-arrow-alt"></i></button>` : ""}
 	</main>`;
@@ -1390,6 +1425,7 @@ function renderApprendre(app, paquet, r) {
 		<div class="carte-etude statique">
 			<div class="ce-question ${tailleTexte(q.question)}">${esc(q.question)}</div>
 		</div>
+		${lexiqueHtml(q.question, ...q.choix)}
 		${choixHtml(q, s.choisi)}
 		${repondu && s.choisi !== q.bonne ? `<button class="btn large" data-action="suivante" id="btnSuivante">Continuer<i class="bx bx-right-arrow-alt"></i></button>` : ""}
 	</main>`;
@@ -1531,6 +1567,13 @@ function renderReglages(app) {
 				<button class="btn large secondaire" data-action="sauvegarde-exporter"><i class="bx bx-download"></i>Exporter une sauvegarde</button>
 				<label class="btn large secondaire"><i class="bx bx-upload"></i>Importer une sauvegarde<input type="file" id="fichierSauvegarde" accept=".json,application/json" hidden /></label>
 				<button class="btn large danger" data-action="tout-effacer"><i class="bx bx-trash"></i>Tout effacer</button>
+			</div>
+		</section>
+
+		<section class="bloc">
+			<h2>Abréviations</h2>
+			<div class="bloc-texte explications">
+				${LEXIQUE.map((l) => `<p><b>${esc(l.abr)}</b> ${esc(l.sens)}</p>`).join("")}
 			</div>
 		</section>
 
@@ -2195,7 +2238,11 @@ document.addEventListener("keydown", (e) => {
 	if (clavier?.(e)) e.preventDefault();
 });
 
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", () => {
+	// une feuille ouverte (bouton retour du téléphone…) ne doit pas rester par-dessus la nouvelle page
+	fermerFeuille();
+	render();
+});
 
 /* ================= Démarrage ================= */
 render();

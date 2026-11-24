@@ -1655,3 +1655,30 @@ body.feuille-ouverte {
 	flex-shrink: 0;
 	accent-color: var(--paquet);
 }
+
+/* ---------------- Lexique des abréviations ---------------- */
+.lexique {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	padding: 10px 12px;
+	border-radius: 14px;
+	background: color-mix(in srgb, var(--paquet) 9%, white);
+	font-size: 0.8rem;
+	line-height: 1.4;
+	color: var(--encre-2);
+	margin-top: -6px;
+}
+.lexique i {
+	font-size: 1.05rem;
+	color: color-mix(in srgb, var(--paquet) 80%, black);
+	margin-top: 1px;
+	flex-shrink: 0;
+}
+.lexique p + p {
+	margin-top: 3px;
+}
+.lexique b {
+	color: var(--encre);
+	margin-right: 3px;
+}
