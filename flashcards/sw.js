@@ -1,4 +1,4 @@
-const CACHE_NAME = "flashcards-pwa-v2";
+const CACHE_NAME = "flashcards-pwa-v3";
 const ASSETS = [
 	"./",
 	"./index.html",

@@ -172,7 +172,8 @@ function nouveauPaquet(nom, couleur = COULEURS[0]) {
 
 function etatInitial() {
 	// apprendre : progression du mode Apprendre, par paquet
-	return { paquets: [], reglages: { nouvellesParJour: 20 }, journal: {}, apprendre: {} };
+	// mix : paquets exclus de « Tout mélanger » (les nouveaux paquets sont inclus d'office)
+	return { paquets: [], reglages: { nouvellesParJour: 20 }, journal: {}, apprendre: {}, mix: { exclus: [], meilleurAssocier: null } };
 }
 
 // Remet d'aplomb un état chargé (ancienne version, sauvegarde importée…)
@@ -182,6 +183,7 @@ function reparer(e) {
 	etat.reglages = { ...base.reglages, ...(etat.reglages || {}) };
 	etat.journal = etat.journal && typeof etat.journal === "object" ? etat.journal : {};
 	etat.apprendre = etat.apprendre && typeof etat.apprendre === "object" ? etat.apprendre : {};
+	etat.mix = { ...base.mix, ...(etat.mix || {}) };
 	etat.paquets = (Array.isArray(etat.paquets) ? etat.paquets : []).map((p) => {
 		const paquet = { ...nouveauPaquet(p.nom || "Sans titre"), ...p };
 		paquet.nouvellesDuJour = { jour: "", n: 0, bonus: 0, ...(p.nouvellesDuJour || {}) };
@@ -218,7 +220,29 @@ function sauver() {
 
 let state = charger();
 
-const trouverPaquet = (id) => state.paquets.find((p) => p.id === id);
+const ID_TOUT = "tout";
+
+// « Tout mélanger » : un paquet virtuel qui regroupe les cartes des paquets
+// choisis. Les cartes sont les mêmes objets que dans leurs paquets d'origine
+// (une étoile posée ici se retrouve là-bas).
+function paquetTout() {
+	const exclus = new Set(state.mix.exclus);
+	const inclus = state.paquets.filter((p) => !exclus.has(p.id));
+	return {
+		id: ID_TOUT,
+		virtuel: true,
+		nom: "Tous les paquets",
+		couleur: "#3e63dd",
+		sens: "recto",
+		nouvellesDuJour: { jour: "", n: 0, bonus: 0 },
+		meilleurAssocier: state.mix.meilleurAssocier,
+		inclus,
+		cartes: inclus.flatMap((p) => p.cartes),
+	};
+}
+
+const trouverPaquet = (id) =>
+	id === ID_TOUT ? (state.paquets.length ? paquetTout() : null) : state.paquets.find((p) => p.id === id);
 const trouverCarte = (paquet, id) => paquet.cartes.find((c) => c.id === id);
 
 /* ================= Répétition espacée ================= */
@@ -498,6 +522,7 @@ function render() {
 		quiz: renderQuiz,
 		associer: renderAssocier,
 	};
+	if (paquet.virtuel && (r.vue === "paquet" || r.vue === "reviser")) return renderTout(app, paquet);
 	(vues[r.vue] || renderPaquet)(app, paquet, r);
 }
 
@@ -548,6 +573,15 @@ function renderAccueil(app) {
 				</div>
 				<i class="bx bx-brain resume-ic"></i>
 			</section>
+			${
+				state.paquets.length >= 2
+					? `<button class="mix" data-action="ouvrir" data-id="${ID_TOUT}">
+				<span class="mix-ic"><i class="bx bx-shuffle"></i></span>
+				<span class="pret-corps"><b>Tout mélanger</b><span>${descMix()}</span></span>
+				<i class="bx bx-chevron-right mix-fleche"></i>
+			</button>`
+					: ""
+			}
 			<div class="titre-section"><h2>Mes paquets</h2></div>
 			<div class="liste-paquets">${listePaquets}</div>
 			<div class="actions-cartes">
@@ -583,13 +617,6 @@ function renderPaquet(app, paquet) {
 	const cartes = q
 		? paquet.cartes.filter((c) => normaliser(c.recto + " " + c.verso).includes(q))
 		: paquet.cartes;
-
-	const modes = [
-		{ mode: "apprendre", ic: "bx-bulb", nom: "Apprendre", desc: descApprendre(paquet), fort: true },
-		{ mode: "quiz", ic: "bx-list-check", nom: "Quiz", desc: "20 questions" },
-		{ mode: "cartes", ic: "bx-copy", nom: "Cartes", desc: "Retourner et trier" },
-		{ mode: "associer", ic: "bx-extension", nom: "Associer", desc: "Le jeu des paires" },
-	];
 
 	app.innerHTML = `
 	<header class="barre-haut wrap">
@@ -634,14 +661,7 @@ function renderPaquet(app, paquet) {
 					: ""
 			}
 		</div>
-		<div class="grille-modes">
-			${modes
-				.map(
-					(m) => `<a class="mode${m.fort ? " fort" : ""}" href="#/p/${paquet.id}/${m.mode}${suffixe}">
-				<i class="bx ${m.ic}"></i><b>${m.nom}</b><span>${m.desc}</span></a>`,
-				)
-				.join("")}
-		</div>
+		${grilleModes(paquet, suffixe)}
 
 		<section class="maitrise">
 			<div class="maitrise-barre">
@@ -684,6 +704,84 @@ function renderPaquet(app, paquet) {
 			);
 		});
 	}
+}
+
+function grilleModes(paquet, suffixe = "") {
+	const modes = [
+		{ mode: "apprendre", ic: "bx-bulb", nom: "Apprendre", desc: descApprendre(paquet), fort: true },
+		{ mode: "quiz", ic: "bx-list-check", nom: "Quiz", desc: "20 questions" },
+		{ mode: "cartes", ic: "bx-copy", nom: "Cartes", desc: "Retourner et trier" },
+		{ mode: "associer", ic: "bx-extension", nom: "Associer", desc: "Le jeu des paires" },
+	];
+	return `<div class="grille-modes">
+		${modes
+			.map(
+				(m) => `<a class="mode${m.fort ? " fort" : ""}" href="#/p/${paquet.id}/${m.mode}${suffixe}">
+			<i class="bx ${m.ic}"></i><b>${m.nom}</b><span>${m.desc}</span></a>`,
+			)
+			.join("")}
+	</div>`;
+}
+
+/* ================= Vue : tous les paquets mélangés ================= */
+function renderTout(app, paquet) {
+	const exclus = new Set(state.mix.exclus);
+	const nb = paquet.cartes.length;
+	app.innerHTML = `
+	<header class="barre-haut wrap">
+		<button class="rond" data-action="accueil" aria-label="Retour"><i class="bx bx-chevron-left"></i></button>
+		<span class="rond fantome"></span>
+	</header>
+	<main class="wrap">
+		<div class="paquet-tete">
+			<h1>Tous les paquets</h1>
+			<p>${pluriel(nb, "carte")} de ${pluriel(paquet.inclus.length, "paquet")}, mélangées</p>
+		</div>
+		${
+			nb
+				? grilleModes(paquet)
+				: `<section class="vide petit"><h2>Aucun paquet coché</h2><p>Coche au moins un paquet ci-dessous pour le mélanger.</p></section>`
+		}
+		<div class="titre-section"><h2>Paquets mélangés</h2>
+			${exclus.size ? `<button class="puce" data-action="mix-tous"><i class="bx bx-check-double"></i>Tout cocher</button>` : ""}
+		</div>
+		<div class="liste-cartes">
+			${state.paquets
+				.map(
+					(p) => `<label class="mix-ligne" style="--c:${p.couleur}">
+				<span class="paquet-pastille petite">${esc((p.nom.trim()[0] || "?").toUpperCase())}</span>
+				<span class="pret-corps"><b>${esc(p.nom)}</b><span>${pluriel(p.cartes.length, "carte")}</span></span>
+				<input type="checkbox" data-mix="${p.id}" ${exclus.has(p.id) ? "" : "checked"} />
+			</label>`,
+				)
+				.join("")}
+		</div>
+	</main>`;
+
+	app.querySelectorAll("[data-mix]").forEach((cb) =>
+		cb.addEventListener("change", () => {
+			const id = cb.dataset.mix;
+			state.mix.exclus = cb.checked ? state.mix.exclus.filter((x) => x !== id) : [...state.mix.exclus, id];
+			changerMelange();
+		}),
+	);
+}
+
+function descMix() {
+	const p = paquetTout();
+	const b = state.apprendre[ID_TOUT];
+	const prog = !b ? "" : b.file.length ? ` · Apprendre : ${b.sues} / ${b.total}` : " · Apprendre bouclé ✓";
+	return `${pluriel(p.cartes.length, "carte")} de ${pluriel(p.inclus.length, "paquet")}${prog}`;
+}
+
+// Le mélange a changé : la progression « Apprendre » du mélange repart de zéro
+function changerMelange() {
+	if (state.apprendre[ID_TOUT]) {
+		delete state.apprendre[ID_TOUT];
+		toast("Nouveau mélange : Apprendre repart de zéro");
+	}
+	sauver();
+	render();
 }
 
 function descApprendre(paquet) {
@@ -1329,6 +1427,7 @@ function renderAssocier(app, paquet, r) {
 		const nouveauRecord = !record || temps < record;
 		if (nouveauRecord && !s.recordEnregistre) {
 			paquet.meilleurAssocier = temps;
+			if (paquet.virtuel) state.mix.meilleurAssocier = temps;
 			s.recordEnregistre = true;
 			sauver();
 		}
@@ -1873,6 +1972,10 @@ const actions = {
 	fermer: fermerFeuille,
 	"nouveau-paquet": feuilleNouveauPaquet,
 	"paquets-prets": feuillePaquetsPrets,
+	"mix-tous": () => {
+		state.mix.exclus = [];
+		changerMelange();
+	},
 	"pret-un": (el) => ajouterPrets([feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets[el.dataset.p]]),
 	"pret-tout": (el) => ajouterPrets(feuillePaquetsPrets.cat.groupes[el.dataset.g].paquets),
 	exemple: () => {

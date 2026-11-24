@@ -1600,3 +1600,58 @@ body.feuille-ouverte {
 	color: var(--vert);
 	font-size: 1.4rem;
 }
+
+/* ---------------- Tout mélanger ---------------- */
+.mix {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+	text-align: left;
+	border: none;
+	margin-top: 14px;
+	padding: 14px;
+	border-radius: 18px;
+	background: linear-gradient(120deg, #3e63dd, #8e4ec6 55%, #d6409f);
+	color: #fff;
+	box-shadow: var(--ombre-forte);
+}
+.mix:active {
+	transform: scale(0.99);
+}
+.mix .pret-corps b {
+	font-size: 1rem;
+}
+.mix .pret-corps span {
+	color: rgba(255, 255, 255, 0.8);
+}
+.mix-ic {
+	width: 48px;
+	height: 48px;
+	flex-shrink: 0;
+	border-radius: 14px;
+	display: grid;
+	place-items: center;
+	font-size: 1.5rem;
+	background: rgba(255, 255, 255, 0.2);
+}
+.mix-fleche {
+	font-size: 1.5rem;
+	opacity: 0.8;
+}
+.mix-ligne {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 11px 14px;
+	cursor: pointer;
+}
+.mix-ligne + .mix-ligne {
+	border-top: 1px solid var(--ligne);
+}
+.mix-ligne input {
+	width: 22px;
+	height: 22px;
+	flex-shrink: 0;
+	accent-color: var(--paquet);
+}
