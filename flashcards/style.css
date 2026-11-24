@@ -1682,3 +1682,26 @@ body.feuille-ouverte {
 	color: var(--encre);
 	margin-right: 3px;
 }
+
+/* ---------------- Source de la carte (cours · diapo) ---------------- */
+.ce-source {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	right: 56px;
+	text-align: left;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	color: color-mix(in srgb, var(--paquet) 75%, black);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.lc-verso small,
+.fin-ligne small {
+	display: block;
+	font-size: 0.72rem;
+	color: var(--encre-3);
+	margin-top: 3px;
+}

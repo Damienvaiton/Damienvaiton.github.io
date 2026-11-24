@@ -149,13 +149,26 @@ function toast(msg) {
 /* ================= État & stockage ================= */
 const srsNeuf = () => ({ etat: "nouvelle", due: 0, iv: 0, fac: FACILITE_DEPART, etape: 0, reps: 0, oublis: 0 });
 
-const nouvelleCarte = (recto, verso) => ({
+// source : d'où vient la carte (« Lecture 3 (part 2) · diapo 11 »), facultatif
+const nouvelleCarte = (recto, verso, source) => ({
 	id: uid(),
 	recto: String(recto).trim(),
 	verso: String(verso).trim(),
+	...(source ? { source: String(source) } : {}),
 	etoile: false,
 	srs: srsNeuf(),
 });
+
+// Pastille d'un paquet : le numéro du cours (« Lecture 3 (part 2) » → 3b),
+// sinon la première lettre du nom
+function initiale(nom) {
+	const m = String(nom).match(/^(?:lecture|cours)\s+(\d+)(?:\s*\(part(?:ie)?\s*(\d+)\))?/i);
+	if (m) return m[1] + (m[2] ? "abcdefgh"[Number(m[2]) - 1] || "" : "");
+	return (String(nom).trim()[0] || "?").toUpperCase();
+}
+
+// Petite étiquette « Lecture 1 · diapo 15 » en haut de la carte
+const sourceHtml = (carte) => (carte?.source ? `<span class="ce-source">${esc(carte.source)}</span>` : "");
 
 function nouveauPaquet(nom, couleur = COULEURS[0]) {
 	return {
@@ -193,6 +206,7 @@ function reparer(e) {
 				id: c.id || uid(),
 				recto: String(c.recto ?? ""),
 				verso: String(c.verso ?? ""),
+				...(c.source ? { source: String(c.source) } : {}),
 				etoile: !!c.etoile,
 				srs: { ...srsNeuf(), ...(c.srs || {}) },
 			}));
@@ -572,7 +586,7 @@ function renderAccueil(app) {
 			const pct = st.total ? Math.round((st.maitrisees / st.total) * 100) : 0;
 			const du = st.aRevoir + st.nouvellesDispo;
 			return `<button class="paquet-item" data-action="ouvrir" data-id="${p.id}" style="--c:${p.couleur}">
-				<span class="paquet-pastille">${esc((p.nom.trim()[0] || "?").toUpperCase())}</span>
+				<span class="paquet-pastille">${esc(initiale(p.nom))}</span>
 				<span class="paquet-corps">
 					<span class="paquet-nom">${esc(p.nom)}</span>
 					<span class="paquet-meta">${pluriel(st.total, "carte")} · ${pct} % maîtrisées</span>
@@ -781,7 +795,7 @@ function renderTout(app, paquet) {
 			${state.paquets
 				.map(
 					(p) => `<label class="mix-ligne" style="--c:${p.couleur}">
-				<span class="paquet-pastille petite">${esc((p.nom.trim()[0] || "?").toUpperCase())}</span>
+				<span class="paquet-pastille petite">${esc(initiale(p.nom))}</span>
 				<span class="pret-corps"><b>${esc(p.nom)}</b><span>${pluriel(p.cartes.length, "carte")}</span></span>
 				<input type="checkbox" data-mix="${p.id}" ${exclus.has(p.id) ? "" : "checked"} />
 			</label>`,
@@ -829,7 +843,7 @@ function listeCartesHtml(cartes) {
 		.map(
 			(c) => `<button class="ligne-carte" data-action="editer-carte" data-id="${c.id}">
 			<span class="lc-recto">${esc(c.recto)}</span>
-			<span class="lc-verso">${esc(c.verso)}</span>
+			<span class="lc-verso">${esc(c.verso)}${c.source ? `<small>${esc(c.source)}</small>` : ""}</span>
 			<span class="lc-etat ${etatVisuel(c)}" title="${titreEtat(c)}"></span>
 			${c.etoile ? `<i class="bx bxs-star lc-etoile"></i>` : ""}
 		</button>`,
@@ -929,6 +943,7 @@ function renderReviser(app, paquet) {
 	<main class="wrap etude">
 		<div class="carte-etude ${s.retournee ? "ouverte" : ""}" data-action="retourner">
 			<button class="etoile-btn" data-action="etoile" data-id="${carte.id}" aria-label="Étoile"><i class="bx ${carte.etoile ? "bxs-star" : "bx-star"}"></i></button>
+			${sourceHtml(carte)}
 			<div class="ce-question ${tailleTexte(s.question)}">${esc(s.question)}</div>
 			${
 				s.retournee
@@ -1050,7 +1065,7 @@ function finEntrainement(app, { titre, texte, liste = [], titreListe = "À retra
 		${
 			liste.length
 				? `<div class="fin-liste"><p class="fin-liste-k">${titreListe}</p>${liste
-						.map((c) => `<div class="fin-ligne"><b>${esc(c.recto)}</b><span>${esc(c.verso)}</span></div>`)
+						.map((c) => `<div class="fin-ligne"><b>${esc(c.recto)}</b><span>${esc(c.verso)}${c.source ? `<small>${esc(c.source)}</small>` : ""}</span></div>`)
 						.join("")}</div>`
 				: ""
 		}
@@ -1093,6 +1108,7 @@ function renderCartes(app, paquet, r) {
 		<div class="flip ${s.retournee ? "retournee" : ""}" id="flip" data-action="retourner-flip">
 			<div class="flip-face recto">
 				<button class="etoile-btn" data-action="etoile" data-id="${carte.id}" aria-label="Étoile"><i class="bx ${carte.etoile ? "bxs-star" : "bx-star"}"></i></button>
+				${sourceHtml(carte)}
 				<div class="${tailleTexte(f.question)}">${esc(f.question)}</div>
 				<p class="ce-aide">Touche pour retourner</p>
 			</div>
@@ -1294,6 +1310,7 @@ function renderQuiz(app, paquet, r) {
 	${enteteEntrainement(`Quiz <span>${s.i + 1} / ${s.questions.length}</span>`, s.i / s.questions.length)}
 	<main class="wrap etude">
 		<div class="carte-etude statique">
+			${sourceHtml(trouverCarte(paquet, q.carteId))}
 			<div class="ce-question ${tailleTexte(q.question)}">${esc(q.question)}</div>
 		</div>
 		${lexiqueHtml(q.question, ...q.choix)}
@@ -1423,6 +1440,7 @@ function renderApprendre(app, paquet, r) {
 			${dejaRatee ? `<span class="tc orange">À revoir · ${b.serie[q.carteId] ? "plus qu'une fois" : "2 fois juste"}</span>` : ""}
 		</div>
 		<div class="carte-etude statique">
+			${sourceHtml(trouverCarte(paquet, q.carteId))}
 			<div class="ce-question ${tailleTexte(q.question)}">${esc(q.question)}</div>
 		</div>
 		${lexiqueHtml(q.question, ...q.choix)}
@@ -1936,7 +1954,7 @@ async function ajouterPaquetPret(entree) {
 	const p = nouveauPaquet(d.nom || entree.nom, d.couleur || entree.couleur);
 	p.sens = d.sens || "recto";
 	p.source = entree.id;
-	p.cartes = (d.cartes || []).map(([r, v]) => nouvelleCarte(r, v));
+	p.cartes = (d.cartes || []).map(([r, v, source]) => nouvelleCarte(r, v, source));
 	state.paquets.push(p);
 	return p;
 }
@@ -1965,7 +1983,7 @@ async function feuillePaquetsPrets() {
 				${g.paquets
 					.map(
 						(e, pi) => `<div class="pret" style="--c:${e.couleur}">
-					<span class="paquet-pastille petite">${esc((e.nom.trim()[0] || "?").toUpperCase())}</span>
+					<span class="paquet-pastille petite">${esc(initiale(e.nom))}</span>
 					<span class="pret-corps"><b>${esc(e.nom)}</b><span>${pluriel(e.n, "carte")} · ${esc(e.description || "")}</span></span>
 					${
 						dejaAjoute(e)
@@ -1985,16 +2003,41 @@ async function feuillePaquetsPrets() {
 	dessiner();
 }
 
+// Un paquet prêt peut en remplacer d'anciens (ex. les paquets « par thème »
+// remplacés par un paquet par cours) : on propose de les supprimer, sinon
+// « Tout mélanger » aurait chaque carte en double.
 async function ajouterPrets(entrees) {
+	const remplaces = new Set(entrees.filter((e) => !dejaAjoute(e)).flatMap((e) => e.remplace || []));
+	const anciens = state.paquets.filter((p) => p.source && remplaces.has(p.source));
+	if (!anciens.length) return ajouterEtRemplacer(entrees, []);
+	confirmer({
+		titre: "Remplacer les anciens paquets\u00a0?",
+		texte: `Ces paquets par cours remplacent ${pluriel(anciens.length, "ancien paquet", "anciens paquets")} par thème (${anciens
+			.map((p) => esc(p.nom))
+			.join(", ")}). Ils seront supprimés, avec leur progression, pour ne pas avoir les mêmes cartes en double.`,
+		bouton: "Remplacer",
+		surOk: () => ajouterEtRemplacer(entrees, anciens),
+	});
+}
+
+async function ajouterEtRemplacer(entrees, anciens) {
 	try {
 		for (const e of entrees) if (!dejaAjoute(e)) await ajouterPaquetPret(e);
+		if (anciens.length) {
+			const ids = new Set(anciens.map((p) => p.id));
+			state.paquets = state.paquets.filter((p) => !ids.has(p.id));
+			for (const id of ids) delete state.apprendre[id];
+			state.mix.exclus = state.mix.exclus.filter((id) => !ids.has(id));
+		}
+		// le mélange a changé : sa progression « Apprendre » repart de zéro
+		delete state.apprendre[ID_TOUT];
 		sauver();
 		toast(entrees.length > 1 ? `${pluriel(entrees.length, "paquet ajouté", "paquets ajoutés")}` : "Paquet ajouté");
 	} catch {
 		sauver();
 		toast("Erreur de chargement, réessaie");
 	}
-	feuillePaquetsPrets.dessiner?.();
+	if ($("#feuilleFond").classList.contains("ouvert")) feuillePaquetsPrets.dessiner?.();
 	render();
 }
 
