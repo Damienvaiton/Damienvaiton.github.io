@@ -2566,7 +2566,7 @@ const actions = {
 	},
 	"nouvelles-plus": () => {
 		state.reglages.nouvellesParJour = Math.min(
-			200,
+			400,
 			state.reglages.nouvellesParJour + 5,
 		);
 		sauver();
