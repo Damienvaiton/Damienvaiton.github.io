@@ -1,79 +1,107 @@
 {
  "groupes": [
   {
-   "nom": "Civilisation britannique — dates",
+   "nom": "Civilisation britannique — un paquet par cours",
    "paquets": [
     {
-     "id": "civi-early",
-     "fichier": "civi-early.json",
-     "nom": "Celts, Romans, Anglo-Saxons & Vikings",
-     "description": "From the first Celts to the Norman Conquest",
+     "id": "lecture-1",
+     "fichier": "lecture-1.json",
+     "nom": "Lecture 1 — The UK: Birth of England & Great Britain",
+     "description": "Celts, Romans, Anglo-Saxons, Vikings, Normans, the Acts of Union",
      "couleur": "#12a594",
-     "n": 46
+     "n": 68,
+     "remplace": [
+      "civi-early",
+      "civi-nations"
+     ]
     },
     {
-     "id": "civi-nations",
-     "fichier": "civi-nations.json",
-     "nom": "The Four Nations & the Acts of Union",
-     "description": "Flags, patron saints, unions and partition",
-     "couleur": "#5b5bd6",
-     "n": 15
-    },
-    {
-     "id": "civi-tudors",
-     "fichier": "civi-tudors.json",
-     "nom": "The Reformation & the Tudors",
-     "description": "Henry VIII, Edward VI, Mary I, Elizabeth I",
+     "id": "lecture-2",
+     "fichier": "lecture-2.json",
+     "nom": "Lecture 2 — Religion and Politics: Henry VIII to Charles I",
+     "description": "The Church of England, Elizabeth I, the road to the Civil War",
      "couleur": "#e5484d",
-     "n": 18
+     "n": 38,
+     "remplace": [
+      "civi-tudors"
+     ]
     },
     {
-     "id": "civi-stuarts",
-     "fichier": "civi-stuarts.json",
-     "nom": "The Stuarts, the Civil War & the Glorious Revolution",
-     "description": "From James I to the Bill of Rights",
+     "id": "lecture-2b",
+     "fichier": "lecture-2b.json",
+     "nom": "Lecture 2 (part 2) — Cromwell to the Glorious Revolution",
+     "description": "Cromwell, Ireland, the Restoration, the Glorious Revolution",
      "couleur": "#8e4ec6",
-     "n": 32
+     "n": 26,
+     "remplace": [
+      "civi-stuarts"
+     ]
     },
     {
-     "id": "civi-empire",
-     "fichier": "civi-empire.json",
-     "nom": "The British Empire & the Commonwealth",
-     "description": "Three empires, decolonisation, the Commonwealth",
+     "id": "lecture-3a",
+     "fichier": "lecture-3a.json",
+     "nom": "Lecture 3 (part 1) — The British Empire",
+     "description": "The 1st British Empire: East India Company, the 13 colonies, slavery",
      "couleur": "#f76b15",
-     "n": 56
+     "n": 13,
+     "remplace": [
+      "civi-empire"
+     ]
     },
     {
-     "id": "civi-industrie",
-     "fichier": "civi-industrie.json",
-     "nom": "Industry, Society & Politics",
-     "description": "Industrial Revolution, the North, census, today's politics",
-     "couleur": "#ad7f58",
-     "n": 19
-    },
-    {
-     "id": "civi-devolution",
-     "fichier": "civi-devolution.json",
-     "nom": "Devolution: Wales & Scotland",
-     "description": "Referendums, assemblies, parties and leaders",
-     "couleur": "#30a46c",
-     "n": 19
-    },
-    {
-     "id": "civi-irlande",
-     "fichier": "civi-irlande.json",
-     "nom": "Ireland & Northern Ireland",
-     "description": "From the Plantation to the Celtic alliance",
-     "couleur": "#0090ff",
-     "n": 44
-    },
-    {
-     "id": "civi-immigration",
-     "fichier": "civi-immigration.json",
-     "nom": "Immigration & Multiculturalism",
-     "description": "Migrations, laws, census and anti-racism",
+     "id": "lecture-3b",
+     "fichier": "lecture-3b.json",
+     "nom": "Lecture 3 (part 2) — The British Empire",
+     "description": "2nd and 3rd Empires: India, China, Africa, dominions, decolonisation, the Commonwealth",
      "couleur": "#d6409f",
-     "n": 33
+     "n": 50,
+     "remplace": [
+      "civi-empire"
+     ]
+    },
+    {
+     "id": "lecture-4",
+     "fichier": "lecture-4.json",
+     "nom": "Lecture 4 — England: the North-South Divide",
+     "description": "Industrial Revolution, decline of the North, the London pole",
+     "couleur": "#ad7f58",
+     "n": 19,
+     "remplace": [
+      "civi-industrie"
+     ]
+    },
+    {
+     "id": "lecture-5a",
+     "fichier": "lecture-5a.json",
+     "nom": "Lecture 5 (part 1) — The Celtic Fringe",
+     "description": "Devolution, Wales, Scotland, from Ireland to Northern Ireland",
+     "couleur": "#30a46c",
+     "n": 40,
+     "remplace": [
+      "civi-devolution"
+     ]
+    },
+    {
+     "id": "lecture-5b",
+     "fichier": "lecture-5b.json",
+     "nom": "Lecture 5 (part 2) — The Celtic Fringe: Northern Ireland",
+     "description": "Easter Rising, partition, the Troubles, the Good Friday Agreement",
+     "couleur": "#0090ff",
+     "n": 38,
+     "remplace": [
+      "civi-irlande"
+     ]
+    },
+    {
+     "id": "lecture-6",
+     "fichier": "lecture-6.json",
+     "nom": "Lecture 6 — Immigration and Multiculturalism",
+     "description": "Waves of immigration, multicultural society, laws and controversies",
+     "couleur": "#5b5bd6",
+     "n": 37,
+     "remplace": [
+      "civi-immigration"
+     ]
     }
    ]
   }
