@@ -186,7 +186,7 @@ function nouveauPaquet(nom, couleur = COULEURS[0]) {
 function etatInitial() {
 	// apprendre : progression du mode Apprendre, par paquet
 	// mix : paquets exclus de « Tout mélanger » (les nouveaux paquets sont inclus d'office)
-	return { paquets: [], reglages: { nouvellesParJour: 20 }, journal: {}, apprendre: {}, mix: { exclus: [], meilleurAssocier: null } };
+	return { paquets: [], reglages: { nouvellesParJour: 200 }, journal: {}, apprendre: {}, mix: { exclus: [], meilleurAssocier: null } };
 }
 
 // Remet d'aplomb un état chargé (ancienne version, sauvegarde importée…)
